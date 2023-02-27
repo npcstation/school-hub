@@ -1,16 +1,15 @@
 import { UnstyledButton, Group, ThemeIcon, Text } from "@mantine/core";
+import React from "react";
 
 interface SideLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
-  onClick: () => void;
 }
 
-export function SideLink({ icon, color, label, onClick }: SideLinkProps) {
+export function SideLink({ icon, color, label }: SideLinkProps) {
   return (
     <UnstyledButton
-      onClick={onClick}
       sx={(theme) => ({
         display: "block",
         width: "100%",
