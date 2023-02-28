@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { MantineProvider, ColorScheme, Text } from "@mantine/core";
+import { MantineProvider, ColorScheme } from "@mantine/core";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Root } from "./pages/Root";
 import HomePage from "./pages/HomePage";
+import ForumPage from "./pages/Forum";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -45,7 +46,7 @@ function App() {
           <Routes>
             <Route path="" element={<Root onThemeChange={onThemeChange} />}>
               <Route path="" element={<HomePage></HomePage>} />
-              <Route path="forum" element={<Text>Hello !</Text>} />
+              <Route path="forum" element={<ForumPage></ForumPage>} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -10,8 +10,18 @@ import {
 } from "@mantine/core";
 import { IconFileCertificate } from "@tabler/icons";
 import React from "react";
+import { Activity } from "../interfaces/activity";
+import axios from "axios";
 
 export default function HomePage() {
+  const [popularActivities, setPopularActivities] = React.useState<Activity[]>(
+    []
+  );
+
+  axios.get("http://localhost:3000/home/popular").then((res) => {
+    setPopularActivities(res.data);
+  });
+
   return (
     <>
       <Container>
@@ -44,10 +54,15 @@ export default function HomePage() {
               </Card.Section>
 
               <Grid grow mt="sm">
-                {[1, 2, 3, 4, 5].map((x, i) => (
-                  <Grid.Col md={6} key={i}>
+                {popularActivities.map((x) => (
+                  <Grid.Col md={6} key={x.id}>
                     <Card shadow="sm" p="md" radius="md" withBorder>
-                      这不是饼干，这是活动 {x}
+                      <Card.Section withBorder inheritPadding>
+                        <Group position="apart" mt="md" mb="xs">
+                          <Text weight={500}>{x.name}</Text>
+                        </Group>
+                      </Card.Section>
+                      <Text mt="md">{x.description}</Text>
                     </Card>
                   </Grid.Col>
                 ))}
