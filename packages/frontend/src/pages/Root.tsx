@@ -2,7 +2,7 @@ import { AppShell, Footer, Text } from "@mantine/core";
 import { IconUsers, IconHome } from "@tabler/icons";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { MainHeader } from "../components/MainHeader";
+import { AdvancedHeader } from "../components/AdvancedHeader";
 
 interface RootProps {
   onThemeChange: () => void;
@@ -11,10 +11,11 @@ interface RootProps {
 export function Root({ onThemeChange }: RootProps) {
   return (
     <AppShell
+      styles={{ main: { minHeight: "calc(100vh - 210px)" } }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       footer={
-        <Footer height={60} p="md">
+        <Footer styles={{root: {position: "relative"}}} fixed={false} height={60} p="md">
           <div
             style={{
               display: "flex",
@@ -29,7 +30,11 @@ export function Root({ onThemeChange }: RootProps) {
         </Footer>
       }
       header={
-        <MainHeader
+        <AdvancedHeader
+          user={{
+            name: "Username",
+            image: "/akarin.webp",
+          }}
           links={[
             {
               icon: <IconHome size={18} />,
@@ -45,7 +50,7 @@ export function Root({ onThemeChange }: RootProps) {
             },
           ]}
           onThemeChange={onThemeChange}
-        ></MainHeader>
+        ></AdvancedHeader>
       }
     >
       <Outlet />

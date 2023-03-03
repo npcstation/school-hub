@@ -6,6 +6,7 @@ interface SideLinkProps {
   icon: React.ReactNode;
   color: string;
   label: string;
+  display?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -14,10 +15,12 @@ export function SideLink({
   icon,
   color,
   label,
+  display,
   onClick,
 }: SideLinkProps) {
   return (
     <UnstyledButton
+      display={display}
       className={className}
       sx={(theme) => ({
         display: "block",
