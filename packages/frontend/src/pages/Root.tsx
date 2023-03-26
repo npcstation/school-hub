@@ -3,12 +3,16 @@ import { IconUsers, IconHome } from "@tabler/icons";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { AdvancedHeader } from "../components/AdvancedHeader";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
 
 interface RootProps {
   onThemeChange: () => void;
 }
 
 export function Root({ onThemeChange }: RootProps) {
+  const userState = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
+
   return (
     <AppShell
       styles={{ main: { minHeight: "calc(100vh - 210px)" } }}
@@ -32,7 +36,7 @@ export function Root({ onThemeChange }: RootProps) {
       header={
         <AdvancedHeader
           user={{
-            name: "Username",
+            name: userState.username,
             image: "/akarin.webp",
           }}
           links={[

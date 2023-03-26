@@ -59,6 +59,12 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  userLogin: {
+    [theme.fn.smallerThan("xs")]: {
+      display: "none",
+    },
+  },
+
   burgerUser: {
     color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
@@ -132,7 +138,11 @@ interface AdvancedHeaderProps {
   onThemeChange: () => void;
 }
 
-export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderProps) {
+export function AdvancedHeader({
+  user,
+  links,
+  onThemeChange,
+}: AdvancedHeaderProps) {
   const { classes, theme, cx } = useStyles();
   const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
@@ -232,25 +242,50 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
             withinPortal
           >
             <Menu.Target>
-              <UnstyledButton
-                display={userLoggedIn ? "" : "none"}
-                className={cx(classes.user, {
-                  [classes.userActive]: userMenuOpened,
-                })}
-              >
-                <Group spacing={7} p="xs">
-                  <Avatar
-                    src={user.image}
-                    alt={user.name}
-                    radius="xl"
-                    size={20}
-                  />
-                  <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                    {user.name}
-                  </Text>
-                  <IconChevronDown size="1rem" stroke={1.5} />
-                </Group>
-              </UnstyledButton>
+              <div className={cx(classes.userLogin)}>
+                {userLoggedIn ? (
+                  <UnstyledButton
+                    className={cx(classes.user, {
+                      [classes.userActive]: userMenuOpened,
+                    })}
+                  >
+                    <Group spacing={7} p="xs">
+                      <Avatar
+                        src={user.image}
+                        alt={user.name}
+                        radius="xl"
+                        size={20}
+                      />
+                      <Text
+                        weight={500}
+                        size="sm"
+                        sx={{ lineHeight: 1 }}
+                        mr={3}
+                      >
+                        {user.name}
+                      </Text>
+                      <IconChevronDown size="1rem" stroke={1.5} />
+                    </Group>
+                  </UnstyledButton>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => {
+                      setActive("/login");
+                    }}
+                  >
+                    <Button
+                      leftIcon={<IconLogin size={16} />}
+                      className={cx(classes.link, {
+                        [classes.linkActive]: active === "/login",
+                      })}
+                      variant="light"
+                    >
+                      <Text>登录 | 注册</Text>
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </Menu.Target>
             <Menu.Dropdown>{menuItems}</Menu.Dropdown>
           </Menu>
@@ -258,26 +293,6 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
       </Container>
       <Container>
         <Group spacing={10} className={classes.links}>
-          {userLoggedIn ? (
-            <></>
-          ) : (
-            <Link
-              to="/login"
-              onClick={() => {
-                setActive("/login");
-              }}
-            >
-              <Button
-                leftIcon={<IconLogin size={16} />}
-                className={cx(classes.link, {
-                  [classes.linkActive]: active === "/login",
-                })}
-                variant="light"
-              >
-                <Text>登录 | 注册</Text>
-              </Button>
-            </Link>
-          )}
           {headerItems}
           <ActionIcon variant="light" onClick={onThemeChange}>
             <IconSun
@@ -301,54 +316,56 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
       </Container>
       <Collapse className={classes.burger} in={opened} p="sm">
         <Paper>
-          <Link to="/login">
-            <SideLink
-              display={userLoggedIn ? "none" : ""}
-              color="purple"
-              icon={<IconLogin size={16} />}
-              onClick={() => {
-                setActive("/login");
-              }}
-              label="登录 | 注册"
-            ></SideLink>
-          </Link>
-          <Menu
-            width={240}
-            position="bottom-end"
-            transition="pop-top-right"
-            onClose={() => setUserMenuOpened(false)}
-            onOpen={() => setUserMenuOpened(true)}
-            withinPortal
-          >
-            <Menu.Target>
-              <UnstyledButton
-                display={userLoggedIn ? "" : "none"}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  margin: "0 auto",
+          {userLoggedIn ? (
+            <Menu
+              width={240}
+              position="bottom-end"
+              transition="pop-top-right"
+              onClose={() => setUserMenuOpened(false)}
+              onOpen={() => setUserMenuOpened(true)}
+              withinPortal
+            >
+              <Menu.Target>
+                <UnstyledButton
+                  display={userLoggedIn ? "" : "none"}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    margin: "0 auto",
+                  }}
+                  className={cx(classes.burgerUser, {
+                    [classes.userActive]: userMenuOpened,
+                  })}
+                >
+                  <Group spacing={7} p="xs">
+                    <Avatar
+                      src={user.image}
+                      alt={user.name}
+                      radius="xl"
+                      size={20}
+                    />
+                    <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
+                      {user.name}
+                    </Text>
+                    <IconChevronDown size="1rem" stroke={1.5} />
+                  </Group>
+                </UnstyledButton>
+              </Menu.Target>
+              <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+            </Menu>
+          ) : (
+            <Link to="/login">
+              <SideLink
+                color="purple"
+                icon={<IconLogin size={16} />}
+                onClick={() => {
+                  setActive("/login");
                 }}
-                className={cx(classes.burgerUser, {
-                  [classes.userActive]: userMenuOpened,
-                })}
-              >
-                <Group spacing={7} p="xs">
-                  <Avatar
-                    src={user.image}
-                    alt={user.name}
-                    radius="xl"
-                    size={20}
-                  />
-                  <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                    {user.name}
-                  </Text>
-                  <IconChevronDown size="1rem" stroke={1.5} />
-                </Group>
-              </UnstyledButton>
-            </Menu.Target>
-            <Menu.Dropdown>{menuItems}</Menu.Dropdown>
-          </Menu>
+                label="登录 | 注册"
+              ></SideLink>
+            </Link>
+          )}
           {burgerItems}
           <Container pb="sm">
             <ActionIcon

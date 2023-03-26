@@ -22,7 +22,11 @@ export default function HomePage() {
     axios
       .get("http://localhost:3000/home/popular")
       .then((res) => {
-        setPopularActivities(res.data);
+        if (res.data.code != 0) {
+          console.error(res.data.msg);
+        } else {
+          setPopularActivities(res.data.activities);
+        }
       })
       .catch((err) => {
         console.error(err);
