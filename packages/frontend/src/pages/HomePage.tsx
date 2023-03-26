@@ -19,9 +19,14 @@ export default function HomePage() {
   );
 
   useEffect(() => {
-    axios.get("http://localhost:3000/home/popular").then((res) => {
-      setPopularActivities(res.data);
-    });
+    axios
+      .get("http://localhost:3000/home/popular")
+      .then((res) => {
+        setPopularActivities(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   return (

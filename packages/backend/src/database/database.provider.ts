@@ -7,8 +7,8 @@ export const databaseProviders = [
     useFactory: (configService: ConfigService): Promise<typeof mongoose> =>
       mongoose.connect(
         `mongodb://${configService.get<string>(
-          "DATABASE.HOST",
-        )}/${configService.get<string>("DATABASE.DB")}` ||
+          "DATABASE_HOST",
+        )}/${configService.get<string>("DATABASE_DB")}` ||
           "mongodb://localhost:27017/hub",
       ),
     inject: [ConfigService],

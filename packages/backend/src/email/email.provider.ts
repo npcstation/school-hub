@@ -8,12 +8,12 @@ export const emailProviders = [
     useFactory: (configService: ConfigService): Mail =>
       createTransport(
         `smtps://${configService.get<string>(
-          "SMTP.USER",
+          "SMTP_USER",
         )}:${configService.get<string>(
-          "SMTP.PASS",
+          "SMTP_PASS",
         )}@${configService.get<string>(
-          "SMTP.HOST",
-        )}:${configService.get<string>("SMTP.PORT")}/?pool=true`,
+          "SMTP_HOST",
+        )}:${configService.get<string>("SMTP_PORT")}/?pool=true`,
       ),
     inject: [ConfigService],
   },
