@@ -8,7 +8,7 @@ import {
   Text,
   Timeline,
 } from "@mantine/core";
-import { IconFileCertificate } from "@tabler/icons";
+import { IconFileCertificate } from "@tabler/icons-react";
 import React, { useEffect } from "react";
 import { Activity } from "../interfaces/activity";
 import axios from "axios";

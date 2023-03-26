@@ -16,7 +16,7 @@ import { useDisclosure } from "@mantine/hooks";
 import React from "react";
 import { SideLink } from "./SideLink";
 import { Link } from "react-router-dom";
-import { IconSun, IconMoon } from "@tabler/icons";
+import { IconSun, IconMoon } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   header: {

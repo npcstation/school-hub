@@ -1,5 +1,5 @@
 import { AppShell, Footer, Text } from "@mantine/core";
-import { IconUsers, IconHome } from "@tabler/icons";
+import { IconUsers, IconHome } from "@tabler/icons-react";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { AdvancedHeader } from "../components/AdvancedHeader";

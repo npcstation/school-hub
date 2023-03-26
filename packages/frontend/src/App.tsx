@@ -7,7 +7,7 @@ import ForumPage from "./pages/Forum";
 import LoginPage from "./pages/Login";
 import store from "./store/store";
 import { Provider } from "react-redux";
-// import { Notifications } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -42,11 +42,10 @@ function App() {
           withGlobalStyles
           withNormalizeCSS
           theme={{
-            fontFamily: "Open Sans, sans serif",
-            spacing: { xs: 15, sm: 20, md: 25, lg: 30, xl: 40 },
             colorScheme: colorScheme as ColorScheme,
           }}
         >
+          <Notifications />
           <BrowserRouter>
             <Routes>
               <Route path="" element={<Root onThemeChange={onThemeChange} />}>

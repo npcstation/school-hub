@@ -24,7 +24,7 @@ import {
   IconLogout,
   IconSend,
   IconLogin,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { SideLink } from "./SideLink";
@@ -236,7 +236,7 @@ export function AdvancedHeader({
           <Menu
             width={260}
             position="bottom-end"
-            transition="pop-top-right"
+            transitionProps={{ transition: "pop-top-right" }}
             onClose={() => setUserMenuOpened(false)}
             onOpen={() => setUserMenuOpened(true)}
             withinPortal
@@ -320,7 +320,7 @@ export function AdvancedHeader({
             <Menu
               width={240}
               position="bottom-end"
-              transition="pop-top-right"
+              transitionProps={{ transition: "pop-top-right" }}
               onClose={() => setUserMenuOpened(false)}
               onOpen={() => setUserMenuOpened(true)}
               withinPortal
