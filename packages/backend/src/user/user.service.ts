@@ -26,4 +26,22 @@ export class UserService {
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
+
+  async findOccupiedEmail(email: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ email: email }).exec();
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async findOccupiedUsername(username: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ name: username }).exec();
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
