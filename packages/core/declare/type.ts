@@ -1,11 +1,11 @@
 export class BasicType {
-	vertify(data: any): boolean {
+	verify(data: any): boolean {
 		return true;
 	}
 }
 
 export class EmailType extends BasicType {
-	vertify(data: any): boolean {
+	verify(data: any): boolean {
 		if (typeof data !== 'string') {
 			return false;
 		}
@@ -14,30 +14,30 @@ export class EmailType extends BasicType {
 }
 
 export class StringType extends BasicType {
-    vertify(data: any): boolean {
+    verify(data: any): boolean {
         return typeof data === 'string';
     }
 }
 export class NumberType extends BasicType {
-    vertify(data: any): boolean {
+    verify(data: any): boolean {
         return typeof data === 'number';
     }
 }
 
-let TypeVertify = {};
+let TypeVerfiy = {};
 
 export function registerType(typename, TypeClass: BasicType) {
-	TypeVertify[typename] = {
-		vertify: TypeClass.vertify
+	TypeVerfiy[typename] = {
+		verify: TypeClass.verify
 	};
 }
 
 
-export function Vertify(typename, data) {
-	if (typeof TypeVertify[typename] === 'undefined') {
+export function Verfiy(typename, data) {
+	if (typeof TypeVerfiy[typename] === 'undefined') {
 		return true; // TODO: need good express
 	}
-	return TypeVertify[typename].vertify(data);
+	return TypeVerfiy[typename].verify(data);
 }
 
 

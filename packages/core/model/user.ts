@@ -1,11 +1,9 @@
-import { vertify } from "../utils/decorate";
+import { verify } from "../utils/decorate";
 
 export class user {
-	
-    @vertify('username', 'String')
-    @vertify('pwd', 'String')
-    @vertify('email', 'EmailType')
-	async create(username: string, pwd: string, email: string) {
 		
-	}
+    @verify("email", "EmailType")
+    @verify("username", "String")
+    @verify("pwd", "String")
+    async create(username: string, pwd: string, email: string) {}
 }
