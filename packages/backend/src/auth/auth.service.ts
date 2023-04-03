@@ -2,7 +2,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import Mail from "nodemailer/lib/mailer";
-import { SafeUser, User } from "src/user/interfaces/user.interface";
+import { SafeUser } from "src/user/interfaces/user.interface";
+import { UserDocument } from "src/user/schemas/user.schema";
 import { UserService } from "src/user/user.service";
 import { verifyEmailHtml } from "./verify.template";
 
@@ -47,7 +48,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: UserDocument) {
     const payload = { username: user.name, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
