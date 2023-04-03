@@ -24,20 +24,20 @@ export class NumberType extends BasicType {
     }
 }
 
-let TypeVerfiy = {};
+let TypeVerify = {};
 
 export function registerType(typename, TypeClass: BasicType) {
-	TypeVerfiy[typename] = {
+	TypeVerify[typename] = {
 		verify: TypeClass.verify
 	};
 }
 
 
-export function Verfiy(typename, data) {
-	if (typeof TypeVerfiy[typename] === 'undefined') {
+export function Verify(typename, data) {
+	if (typeof TypeVerify[typename] === 'undefined') {
 		return true; // TODO: need good express
 	}
-	return TypeVerfiy[typename].verify(data);
+	return TypeVerify[typename].verify(data);
 }
 
 
