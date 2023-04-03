@@ -1,24 +1,34 @@
 {
-  "name": "school-hub",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "front:dev": "pnpm --filter @hub/frontend run dev",
-    "front:build": "pnpm --filter @hub/frontend run build",
-    "front:preview": "pnpm --filter @hub/frontend run preview",
-    "back:build": "pnpm --filter @hub/backend run build",
-    "back:format": "pnpm --filter @hub/backend run format",
-    "back:start": "pnpm --filter @hub/backend run start",
-    "back:start:dev": "pnpm --filter @hub/backend run start:dev",
-    "back:start:debug": "pnpm --filter @hub/backend run start:debug",
-    "back:start:prod": "pnpm --filter @hub/backend run start:prod",
-    "back:lint": "pnpm --filter @hub/backend run lint",
-    "back:test": "pnpm --filter @hub/backend run test",
-    "back:test:watch": "pnpm --filter @hub/backend run test:watch",
-    "back:test:cov": "pnpm --filter @hub/backend run test:cov",
-    "back:test:debug": "pnpm --filter @hub/backend run test:debug",
-    "back:test:e2e": "pnpm --filter @hub/backend run test:e2e"
-  },
-  "author": "GoForceX"
+    "name": "school-hub",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "front:dev": "pnpm --filter @hub/frontend run dev",
+        "front:build": "pnpm --filter @hub/frontend run build",
+        "front:preview": "pnpm --filter @hub/frontend run preview",
+        "back:build": "pnpm --filter @hub/backend run build",
+        "back:format": "pnpm --filter @hub/backend run format",
+        "back:start": "pnpm --filter @hub/backend run start",
+        "back:start:dev": "pnpm --filter @hub/backend run start:dev",
+        "back:start:debug": "pnpm --filter @hub/backend run start:debug",
+        "back:start:prod": "pnpm --filter @hub/backend run start:prod",
+        "back:lint": "pnpm --filter @hub/backend run lint",
+        "back:test": "pnpm --filter @hub/backend run test",
+        "back:test:watch": "pnpm --filter @hub/backend run test:watch",
+        "back:test:cov": "pnpm --filter @hub/backend run test:cov",
+        "back:test:debug": "pnpm --filter @hub/backend run test:debug",
+        "back:test:e2e": "entry/index.js "
+    },
+    "author": "GoForceX",
+    "dependencies": {
+        "compare-versions": "^6.0.0-rc.1",
+        "esbuild": "^0.16.16",
+        "install": "^0.13.0",
+        "log4js": "^6.7.1",
+        "mongodb": "^5.1.0",
+        "mongoose": "^6.8.3",
+        "source-map-support": "^0.5.21",
+        "uuid": "^9.0.0",
+        "yargs": "^17.6.2"
+    }
 }
