@@ -24,5 +24,4 @@ dist-ssr
 *.sw?
 
 config.json
-*/test*.ts
-!/test*.ts
+test*.ts
