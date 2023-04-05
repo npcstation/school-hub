@@ -18,7 +18,6 @@ require('source-map-support').install({
 const major = +process.version.split('.')[0].split('v')[1];
 const minor = +process.version.split('.')[1];
 
-
 const tsconfigRaw = `{
   "compilerOptions": {
     "target": "es2020",

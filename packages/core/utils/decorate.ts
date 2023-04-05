@@ -1,3 +1,4 @@
+import { ValidatedError } from "../declare/error";
 import { BasicType, Verify } from "../declare/type";
 
 export function param(params) {
@@ -26,20 +27,11 @@ export function verify(param, Type) {
 		}
 		descriptor.verify[descriptor.paramNames.indexOf(param)] = Type;
 		descriptor.value = async function run(...args) {
-            let VerifyFlag = true;
             for (let i in descriptor.verify) {
-                console.log(i);
                 if (!Verify(descriptor.verify[i], args[i])) {
-					VerifyFlag = false;
-					break;
+					throw new ValidatedError(descriptor.verify[i]);
                 }
             }
-            //TODO throw type error.
-			if (VerifyFlag === false) {
-				console.log("verify error");
-				return;
-            }
-
             return await descriptor.originalMethod.apply(this, args);
         };
     };

@@ -1,5 +1,15 @@
-import { user } from "../model/user";
+import { user } from '../model/user';
+import { RError } from '../declare/error';
 
-let users = new user();
 
-users.create("a", "b", "c@qq.com");
+async function run() {
+	try {
+		console.log(await user.getbyId(1));
+	} catch (err: RError | any) {
+        if (err.errorType === 'exist') {
+            console.log('exist username');
+        }
+    }
+}
+
+run();

@@ -17,7 +17,7 @@
         "back:test:watch": "pnpm --filter @hub/backend run test:watch",
         "back:test:cov": "pnpm --filter @hub/backend run test:cov",
         "back:test:debug": "pnpm --filter @hub/backend run test:debug",
-        "back:test:e2e": "entry/index.js "
+		"start": "entry/index.js"
     },
     "author": "GoForceX",
     "dependencies": {

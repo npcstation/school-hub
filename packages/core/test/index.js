@@ -1,4 +1,7 @@
 require("../../../utils/requirets.js");
 
-require("./tests.ts");
+async function run() {
+	await require("./tests.ts");
+}
 
+run();

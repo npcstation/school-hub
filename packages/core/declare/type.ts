@@ -23,6 +23,11 @@ export class NumberType extends BasicType {
         return typeof data === 'number';
     }
 }
+export class BooleanType extends BasicType {
+    verify(data: any): boolean {
+        return typeof data === 'boolean';
+    }
+}
 
 let TypeVerify = {};
 
@@ -44,3 +49,4 @@ export function Verify(typename, data) {
 registerType('EmailType', new EmailType());
 registerType('Number', new NumberType());
 registerType("String", new StringType());
+registerType('Boolean', new BooleanType());
