@@ -9,9 +9,9 @@ export class usermodel {
     @verify('pwd', 'String')
     @verify('grade', 'Number')
     @verify('gender', 'Boolean')
-    @verify('gravaterLink', 'String')
+    @verify('gravatarLink', 'String')
     @verify('description', 'String')
-    async create(username: string, pwd: string, email: string, grade: number, gender: boolean, gravaterLink: string, description: string) {
+    async create(username: string, pwd: string, email: string, grade: number, gender: boolean, gravatarLink: string, description: string) {
         if (await this.nameExist(username)) {
             throw new ExistError();
 		}
@@ -23,7 +23,7 @@ export class usermodel {
             email,
             grade,
             gender,
-            gravaterLink,
+            gravatarLink,
             description,
 		});
 		return {
@@ -36,9 +36,9 @@ export class usermodel {
     @verify('pwd', 'String')
     @verify('grade', 'Number')
     @verify('gender', 'Boolean')
-    @verify('gravaterLink', 'String')
+    @verify('gravatarLink', 'String')
     @verify('description', 'String')
-    async update(username: string, pwd: string, email: string, grade: number, gender: boolean, gravaterLink: string, description: string) {
+    async updateall(username: string, pwd: string, email: string, grade: number, gender: boolean, gravatarLink: string, description: string) {
         if (await this.nameExist(username)) {
             throw new ExistError();
 		}
@@ -50,12 +50,23 @@ export class usermodel {
             email,
             grade,
             gender,
-            gravaterLink,
+            gravatarLink,
             description,
 		});
 		return {
 			id
 		};
+	}
+
+	@verify('id', 'Number')
+	async update(id: number, data: any) {
+		if (await this.idExist(id) === false) {
+			//TODO: no exist error
+		}
+		await db.update('user', {
+			id
+		}, data);
+		return;
 	}
 	
 	async genId() {
@@ -66,6 +77,7 @@ export class usermodel {
 		await db.update('count', { type: 'uid' }, { count: newID });
 		return newID;
 	}
+
 
     @verify('username', 'String')
     async nameExist(username: string) {
