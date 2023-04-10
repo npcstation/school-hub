@@ -15,6 +15,8 @@ import {
   Box,
   Popover,
   Progress,
+  Select,
+  Switch,
 } from "@mantine/core";
 import React, { useState } from "react";
 import { IconCheck, IconX } from "@tabler/icons-react";
@@ -64,14 +66,18 @@ export default function LoginPage(props: PaperProps) {
   const registerForm = useForm({
     initialValues: {
       email: "",
+      grade: "2007",
       name: "",
       password: "",
+      gender: "male",
       terms: true,
     },
 
     validate: {
       email: (val) => {
-        return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(val) ? null : "不符合邮箱规则";
+        return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(val)
+          ? null
+          : "不符合邮箱规则";
       },
       name: (val) => {
         if (val.length < 4) {
@@ -106,7 +112,11 @@ export default function LoginPage(props: PaperProps) {
     },
   });
 
-  const largeScreen = useMediaQuery('(min-width: 512px)');
+  const currDate = new Date();
+  const minBirthYear =
+    currDate.getFullYear() - (currDate.getMonth() + 1 < 9 ? 18 : 17);
+
+  const largeScreen = useMediaQuery("(min-width: 512px)");
   return (
     <>
       <Container>
@@ -136,6 +146,80 @@ export default function LoginPage(props: PaperProps) {
                   placeholder="hello@bjbybbs.com"
                   radius="md"
                   {...registerForm.getInputProps("email")}
+                />
+
+                <Select
+                  data={[
+                    {
+                      label: `一年级 (${minBirthYear + 11})`,
+                      value: `${minBirthYear + 11}`,
+                    },
+                    {
+                      label: `二年级 (${minBirthYear + 10})`,
+                      value: `${minBirthYear + 10}`,
+                    },
+                    {
+                      label: `三年级 (${minBirthYear + 9})`,
+                      value: `${minBirthYear + 9}`,
+                    },
+                    {
+                      label: `四年级 (${minBirthYear + 8})`,
+                      value: `${minBirthYear + 8}`,
+                    },
+                    {
+                      label: `五年级 (${minBirthYear + 7})`,
+                      value: `${minBirthYear + 7}`,
+                    },
+                    {
+                      label: `六年级 (${minBirthYear + 6})`,
+                      value: `${minBirthYear + 6}`,
+                    },
+                    {
+                      label: `初一年级 (${minBirthYear + 5})`,
+                      value: `${minBirthYear + 5}`,
+                    },
+                    {
+                      label: `初二年级 (${minBirthYear + 4})`,
+                      value: `${minBirthYear + 4}`,
+                    },
+                    {
+                      label: `初三年级 (${minBirthYear + 3})`,
+                      value: `${minBirthYear + 3}`,
+                    },
+                    {
+                      label: `高一年级 (${minBirthYear + 2})`,
+                      value: `${minBirthYear + 2}`,
+                    },
+                    {
+                      label: `高二年级 (${minBirthYear + 1})`,
+                      value: `${minBirthYear + 1}`,
+                    },
+                    {
+                      label: `高三年级 (${minBirthYear})`,
+                      value: `${minBirthYear}`,
+                    },
+                  ]}
+                  required
+                  label="年级"
+                  radius="md"
+                  {...registerForm.getInputProps("grade")}
+                />
+
+                <Select
+                  data={[
+                    {
+                      label: "男",
+                      value: "male",
+                    },
+                    {
+                      label: "女",
+                      value: "female",
+                    },
+                  ]}
+                  required
+                  label="性别"
+                  radius="md"
+                  {...registerForm.getInputProps("gender")}
                 />
 
                 <Box mx="0">
