@@ -60,6 +60,9 @@ async function run() {
 
     async function RunAll(packages, paths, type) {	
         for (const pack in packages) {
+            if (!pack.endsWith('.ts') && !pack.endsWith('.js')) {
+                continue
+            }
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const runner = require(path.join(process.cwd(), paths, packages[pack]));
 			if (type === 'service') {
@@ -87,7 +90,7 @@ async function run() {
             await Updated.run();
             await RunFile(path.join(global.Project.core, 'handle'), 'handle', 'handle');
             const Handler = await fs.readdirSync(path.join(global.Project.core, 'handler'));
-            await RunAll(Handler, path.join(global.Project.core, 'handler	'), 'handler');
+            await RunAll(Handler, path.join(global.Project.core, 'handler'), 'handler');
         } else {
             logger.info(`without prepare! please do not use it in PROD.`);
         }

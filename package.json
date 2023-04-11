@@ -17,13 +17,14 @@
         "back:test:watch": "pnpm --filter @hub/backend run test:watch",
         "back:test:cov": "pnpm --filter @hub/backend run test:cov",
         "back:test:debug": "pnpm --filter @hub/backend run test:debug",
-		"start": "entry/index.js"
+        "start": "entry/index.js"
     },
     "author": "GoForceX",
     "dependencies": {
         "compare-versions": "^6.0.0-rc.1",
         "esbuild": "^0.16.16",
         "install": "^0.13.0",
+        "lodash": "^4.17.21",
         "log4js": "^6.7.1",
         "mongodb": "^5.1.0",
         "mongoose": "^6.8.3",
