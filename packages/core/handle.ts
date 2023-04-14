@@ -24,6 +24,10 @@ function transWord(word: string) {
     return firstLetterCap + remainingLetters;
 }
 
+export class Handler {
+	ctx: KoaContext;
+}
+
 async function handle(ctx: KoaContext, Handler) {
     const body = ctx.request.body;
     const method = ctx.method.toLowerCase();
@@ -32,27 +36,23 @@ async function handle(ctx: KoaContext, Handler) {
         operation = transWord(body.operation);
     }
     const h = new Handler();
-    const args = {};
+	const args = {};
+	h.ctx = ctx;
     Object.assign(args, body);
     Object.assign(args, ctx.params);
     try {
         const steps = [method, ...(operation ? [`post${operation}`] : []), 'after'];
         let cur = 0;
-        const length = steps.length;
-        ctx.body = '';
-        const _res = {};
+		const length = steps.length;
+		h.ctx.body = '';
         while (cur < length) {
             const step = steps[cur];
             cur++;
             if (typeof h[step] === 'function') {
-                const value = await h[step](args);
-                if (value?.status) {
-                    Object.assign(_res, value);
-                    ctx.response.status = value.code || ctx.response.status || 200;
-                }
+				await h[step](args);
             }
         }
-        ctx.body = _res;
+		ctx = h.ctx;
     } catch (err) {
         ctx.body = JSON.stringify({
             error: err,
