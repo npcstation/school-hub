@@ -24,10 +24,12 @@
         "compare-versions": "^6.0.0-rc.1",
         "esbuild": "^0.16.16",
         "install": "^0.13.0",
+        "ioredis": "^5.3.1",
         "lodash": "^4.17.21",
         "log4js": "^6.7.1",
         "mongodb": "^5.1.0",
         "mongoose": "^6.8.3",
+        "redis": "^4.6.5",
         "source-map-support": "^0.5.21",
         "uuid": "^9.0.0",
         "yargs": "^17.6.2"

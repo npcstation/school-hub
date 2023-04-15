@@ -56,12 +56,15 @@ async function run() {
     global.Project.CoreJSON = JSON.parse((await fs.readFileSync(path.join(global.Project.core, 'package.json'))).toString());
     global.Project.log = {
         main: logger,
+	};
+	global.Project.redis = {
+        
     };
 
     async function RunAll(packages, paths, type) {	
-        for (const pack in packages) {
-            if (!pack.endsWith('.ts') && !pack.endsWith('.js')) {
-                continue
+		for (const pack in packages) {
+            if (!packages[pack].endsWith('.ts') && !packages[pack].endsWith('.js')) {
+                continue;
             }
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const runner = require(path.join(process.cwd(), paths, packages[pack]));
@@ -69,6 +72,10 @@ async function run() {
 				if (typeof runner['apply'] !== 'undefined') {
 					ctxs[packages[pack]] = await runner['apply'](ctxs);
 				}
+			} else {
+				if (typeof runner['apply'] !== 'undefined') {
+                    await runner['apply'](ctxs);
+                }
 			}
             logger.info(`${type} ${packages[pack]} Loaded.`);
         }
@@ -76,8 +83,8 @@ async function run() {
 
     async function RunFile(pack, packname, type) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const runner = require(path.join(process.cwd(), pack));
-        runner.apply(ctxs);
+		const runner = require(path.join(process.cwd(), pack));
+		await runner.apply(ctxs);
         logger.info(`${type} ${packname} Loaded.`);
     }
 
@@ -92,7 +99,7 @@ async function run() {
             const Handler = await fs.readdirSync(path.join(global.Project.core, 'handler'));
             await RunAll(Handler, path.join(global.Project.core, 'handler'), 'handler');
         } else {
-            logger.info(`without prepare! please do not use it in PROD.`);
+            logger.info(`without prepare! do not use it in PROD.`);
         }
         argv.test ? await require(path.join(process.cwd(), global.Project.core, 'test', 'index.js')) : {};
 		// if (argv.test && argv.stopAfterTest) {
