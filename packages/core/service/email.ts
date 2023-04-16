@@ -58,12 +58,12 @@ export class EmailService {
         });
     }
 
-    async sendTemplatedMail(
-        transporter: string,
-        to: string,
-        type: 'verify',
-        template: VerifyOverwrite
-    );
+    // async sendTemplatedMail(
+    //     transporter: string,
+    //     to: string,
+    //     type: 'verify',
+    //     template: VerifyOverwrite
+    // );
 
     async sendTemplatedMail(
         transporter: string,
