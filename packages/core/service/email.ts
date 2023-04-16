@@ -75,7 +75,7 @@ export class EmailService {
         if (type === 'verify') {
             overwritten = verifyTemplate
                 .replace('<!--USERNAME-->', template.username)
-                .replace('<!--LINK-->', template.username);
+                .replace('<!--LINK-->', template.link);
             subject = '验证您的邮箱';
         }
 
