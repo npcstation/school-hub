@@ -11,8 +11,8 @@ interface RunModel {
     port: string;
     current: string;
     test: boolean;
-	noprepare: boolean;
-	stopAfterTest: boolean;
+    noprepare: boolean;
+    stopAfterTest: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -46,9 +46,7 @@ if (argv.current) {
     global.Project.currentVersion = argv.current;
 }
 
-const ctxs = {
-
-};
+const ctxs = {};
 
 async function run() {
     const logger = await log4js.getLogger('main');
@@ -56,35 +54,33 @@ async function run() {
     global.Project.CoreJSON = JSON.parse((await fs.readFileSync(path.join(global.Project.core, 'package.json'))).toString());
     global.Project.log = {
         main: logger,
-	};
-	global.Project.redis = {
-        
     };
+    global.Project.redis = {};
 
-    async function RunAll(packages, paths, type) {	
-		for (const pack in packages) {
+    async function RunAll(packages, paths, type) {
+        for (const pack in packages) {
             if (!packages[pack].endsWith('.ts') && !packages[pack].endsWith('.js')) {
                 continue;
             }
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const runner = require(path.join(process.cwd(), paths, packages[pack]));
-			if (type === 'service') {
-				if (typeof runner['apply'] !== 'undefined') {
-					ctxs[packages[pack]] = await runner['apply'](ctxs);
-				}
-			} else {
-				if (typeof runner['apply'] !== 'undefined') {
+            if (type === 'service') {
+                if (typeof runner['apply'] !== 'undefined') {
+                    ctxs[packages[pack]] = await runner['apply'](ctxs);
+                }
+            } else {
+                if (typeof runner['apply'] !== 'undefined') {
                     await runner['apply'](ctxs);
                 }
-			}
+            }
             logger.info(`${type} ${packages[pack]} Loaded.`);
         }
     }
 
     async function RunFile(pack, packname, type) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-		const runner = require(path.join(process.cwd(), pack));
-		await runner.apply(ctxs);
+        const runner = require(path.join(process.cwd(), pack));
+        await runner.apply(ctxs);
         logger.info(`${type} ${packname} Loaded.`);
     }
 
@@ -102,10 +98,10 @@ async function run() {
             logger.info(`without prepare! do not use it in PROD.`);
         }
         argv.test ? await require(path.join(process.cwd(), global.Project.core, 'test', 'index.js')) : {};
-		// if (argv.test && argv.stopAfterTest) {
-		// 	process.exit(0);
-		// }
-	} catch (err) {
+        // if (argv.test && argv.stopAfterTest) {
+        // 	process.exit(0);
+        // }
+    } catch (err) {
         console.log(err);
     }
 }
