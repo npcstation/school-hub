@@ -1,3 +1,14 @@
 {
-    "mongo": "mongodb://xxx"
+    "mongo": "mongodb://xxx",
+    "smtp": {
+        "xxx": {
+            "host": "xxx",
+            "port": 465,
+            "secure": true,
+            "auth": {
+                "user": "xxx",
+                "pass": "xxx"
+            }
+        }
+    }
 }
