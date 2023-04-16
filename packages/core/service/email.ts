@@ -85,6 +85,6 @@ export async function apply() {
     await emails.init();
 }
 
-export const emails = new EmailService(from, urls, (err, res) => {
-    console.log(res);
+export const emails = new EmailService(from, urls, () => {
+	
 });
