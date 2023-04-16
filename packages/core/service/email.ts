@@ -15,7 +15,8 @@ class SMTPConfig {
 
 export class VerifyOverwrite {
     username: string;
-    link: string;
+	link: string;
+	errorlink: string;
 }
 
 export class EmailService {
@@ -75,6 +76,7 @@ export class EmailService {
         if (type === 'verify') {
             overwritten = verifyTemplate
                 .replace('<!--USERNAME-->', template.username)
+                .replace('<!--ERRORLINK-->', template.errorlink)
                 .replace('<!--LINK-->', template.link);
             subject = '验证您的邮箱';
         }

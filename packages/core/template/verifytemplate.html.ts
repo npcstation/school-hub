@@ -16,7 +16,7 @@ const content = `<body>
 
 		<div style="padding: 15px;" ></div>
 		
-		若存在无法验证问题, 请尝试与 errorlink 联系。<br>
+		若存在无法验证问题, 请尝试与 <!--ERRORLINK--> 联系。<br>
 		谢谢。<br>
 		NPC Station.
 		<div style='
