@@ -24,7 +24,7 @@ export class EmailService {
 
     async init() {
         for (const key in this.configs) {
-            this.transporters.set(key, createTransport(this.configs[key]));
+            await this.transporters.set(key, createTransport(this.configs[key]));
         }
     }
 
