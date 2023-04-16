@@ -25,7 +25,7 @@ function transWord(word: string) {
 }
 
 export class Handler {
-	ctx: KoaContext;
+    ctx: KoaContext;
 }
 
 async function handle(ctx: KoaContext, Handler) {
@@ -36,23 +36,23 @@ async function handle(ctx: KoaContext, Handler) {
         operation = transWord(body.operation);
     }
     const h = new Handler();
-	const args = {};
-	h.ctx = ctx;
+    const args = {};
+    h.ctx = ctx;
     Object.assign(args, body);
     Object.assign(args, ctx.params);
     try {
         const steps = [method, ...(operation ? [`post${operation}`] : []), 'after'];
         let cur = 0;
-		const length = steps.length;
-		h.ctx.body = '';
+        const length = steps.length;
+        h.ctx.body = '';
         while (cur < length) {
             const step = steps[cur];
             cur++;
             if (typeof h[step] === 'function') {
-				await h[step](args);
+                await h[step](args);
             }
         }
-		ctx = h.ctx;
+        ctx = h.ctx;
     } catch (err) {
         ctx.body = JSON.stringify({
             error: err,
