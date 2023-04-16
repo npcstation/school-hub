@@ -1,5 +1,8 @@
 {
     "mongo": "mongodb://xxx",
+    "email": {
+        "from": "xxx@xxx.com"
+    },
     "smtp": {
         "xxx": {
             "host": "xxx",

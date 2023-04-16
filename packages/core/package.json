@@ -33,6 +33,7 @@
         "yargs": "^17.6.2"
     },
     "devDependencies": {
+        "@types/ioredis": "^5.0.0",
         "@types/nodemailer": "^6.4.7"
     }
 }

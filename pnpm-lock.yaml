@@ -249,6 +249,9 @@ importers:
         specifier: ^17.6.2
         version: 17.7.1
     devDependencies:
+      '@types/ioredis':
+        specifier: ^5.0.0
+        version: registry.npmmirror.com/@types/ioredis@5.0.0
       '@types/nodemailer':
         specifier: ^6.4.7
         version: registry.npmmirror.com/@types/nodemailer@6.4.7
@@ -3547,7 +3550,7 @@ packages:
     dependencies:
       '@typescript-eslint/typescript-estree': 5.54.1(typescript@4.9.5)
       '@typescript-eslint/utils': 5.54.1(eslint@8.36.0)(typescript@4.9.5)
-      debug: 4.3.4
+      debug: registry.npmmirror.com/debug@4.3.4
       eslint: 8.36.0
       tsutils: 3.21.0(typescript@4.9.5)
       typescript: 4.9.5
@@ -3594,7 +3597,7 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.54.1
       '@typescript-eslint/visitor-keys': 5.54.1
-      debug: 4.3.4
+      debug: registry.npmmirror.com/debug@4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.3.8
@@ -9953,7 +9956,6 @@ packages:
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@ioredis/commands/-/commands-1.2.0.tgz}
     name: '@ioredis/commands'
     version: 1.2.0
-    dev: false
 
   registry.npmmirror.com/@redis/bloom@1.2.0(@redis/client@1.5.6):
     resolution: {integrity: sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@redis/bloom/-/bloom-1.2.0.tgz}
@@ -10021,6 +10023,17 @@ packages:
       '@redis/client': registry.npmmirror.com/@redis/client@1.5.6
     dev: false
 
+  registry.npmmirror.com/@types/ioredis@5.0.0:
+    resolution: {integrity: sha512-zJbJ3FVE17CNl5KXzdeSPtdltc4tMT3TzC6fxQS0sQngkbFZ6h+0uTafsRqu+eSLIugf6Yb0Ea0SUuRr42Nk9g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/ioredis/-/ioredis-5.0.0.tgz}
+    name: '@types/ioredis'
+    version: 5.0.0
+    deprecated: This is a stub types definition. ioredis provides its own type definitions, so you do not need this installed.
+    dependencies:
+      ioredis: registry.npmmirror.com/ioredis@5.3.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   registry.npmmirror.com/@types/node@18.11.18:
     resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-18.11.18.tgz}
     name: '@types/node'
@@ -10039,7 +10052,6 @@ packages:
     name: cluster-key-slot
     version: 1.1.2
     engines: {node: '>=0.10.0'}
-    dev: false
 
   registry.npmmirror.com/debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/debug/-/debug-2.6.9.tgz}
@@ -10084,7 +10096,6 @@ packages:
     name: denque
     version: 2.1.0
     engines: {node: '>=0.10'}
-    dev: false
 
   registry.npmmirror.com/dtrace-provider@0.8.8:
     resolution: {integrity: sha512-b7Z7cNtHPhH9EJhNNbbeqTcXB8LGFFZhq1PGgEvpeHlzd36bhbdTWoE/Ba/YguqpBSlAPKnARWhVlhunCMwfxg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dtrace-provider/-/dtrace-provider-0.8.8.tgz}
@@ -10136,19 +10147,16 @@ packages:
       standard-as-callback: registry.npmmirror.com/standard-as-callback@2.1.0
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   registry.npmmirror.com/lodash.defaults@4.2.0:
     resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz}
     name: lodash.defaults
     version: 4.2.0
-    dev: false
 
   registry.npmmirror.com/lodash.isarguments@3.1.0:
     resolution: {integrity: sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz}
     name: lodash.isarguments
     version: 3.1.0
-    dev: false
 
   registry.npmmirror.com/lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lodash/-/lodash-4.17.21.tgz}
@@ -10203,7 +10211,6 @@ packages:
     name: redis-errors
     version: 1.2.0
     engines: {node: '>=4'}
-    dev: false
 
   registry.npmmirror.com/redis-parser@3.0.0:
     resolution: {integrity: sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redis-parser/-/redis-parser-3.0.0.tgz}
@@ -10212,7 +10219,6 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       redis-errors: registry.npmmirror.com/redis-errors@1.2.0
-    dev: false
 
   registry.npmmirror.com/redis@4.6.5:
     resolution: {integrity: sha512-O0OWA36gDQbswOdUuAhRL6mTZpHFN525HlgZgDaVNgCJIAZR3ya06NTESb0R+TUZ+BFaDpz6NnnVvoMx9meUFg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/redis/-/redis-4.6.5.tgz}
@@ -10250,7 +10256,6 @@ packages:
     resolution: {integrity: sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/standard-as-callback/-/standard-as-callback-2.1.0.tgz}
     name: standard-as-callback
     version: 2.1.0
-    dev: false
 
   registry.npmmirror.com/typescript@5.0.2:
     resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/typescript/-/typescript-5.0.2.tgz}
