@@ -15,8 +15,8 @@ class SMTPConfig {
 
 export class VerifyOverwrite {
     username: string;
-	link: string;
-	errorlink: string;
+    link: string;
+    errorlink: string;
 }
 
 export class EmailService {
@@ -25,11 +25,7 @@ export class EmailService {
     configs: Map<string, SMTPConfig>;
     callback: Function;
 
-    constructor(
-        from: string,
-        configs: Map<string, SMTPConfig>,
-        callbackFunction: Function
-    ) {
+    constructor(from: string, configs: Map<string, SMTPConfig>, callbackFunction: Function) {
         this.from = from;
         this.transporters = new Map();
         this.configs = configs;
@@ -42,19 +38,14 @@ export class EmailService {
         }
     }
 
-    async sendMail(
-        transporter: string,
-        mailOptions: Mail.Options
-    ): Promise<boolean> {
+    async sendMail(transporter: string, mailOptions: Mail.Options): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.transporters
-                .get(transporter)
-                .sendMail(mailOptions, (err, res) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(true);
-                });
+            this.transporters.get(transporter).sendMail(mailOptions, (err, res) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(true);
+            });
         });
     }
 
@@ -65,12 +56,7 @@ export class EmailService {
     //     template: VerifyOverwrite
     // );
 
-    async sendTemplatedMail(
-        transporter: string,
-        to: string,
-        type: 'verify',
-        template: VerifyOverwrite
-    ) {
+    async sendTemplatedMail(transporter: string, to: string, type: 'verify', template: VerifyOverwrite) {
         var overwritten = '';
         var subject = '';
         if (type === 'verify') {
