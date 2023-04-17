@@ -1,6 +1,7 @@
 import { verify } from '../utils/decorate';
 import { db } from '../service/db';
 import { ExistError, NotFoundError } from '../declare/error';
+import { isNull } from 'lodash';
 
 export class usermodel {
     @verify('email', 'EmailType')
@@ -101,30 +102,27 @@ export class usermodel {
     @verify('username', 'String')
     async nameExist(username: string) {
         return (
-            (
-                await db.getall(
+            !isNull(
+                await db.getone(
                     'user',
                     {
                         username,
-                    },
-                    {}
+                    }
                 )
-            ).length > 0
+            )
         );
     }
 
     @verify('id', 'Number')
     async idExist(id: number) {
-        return (
-            (
-                await db.getall(
-                    'user',
-                    {
-                        id,
-                    },
-                    {}
-                )
-            ).length > 0
+        return !isNull(
+			await db.getall(
+				'user',
+				{
+					id,
+				},
+				{}
+			)
         );
     }
 
@@ -140,7 +138,7 @@ export class usermodel {
         const idData = await db.getone('user', {
             id,
         });
-        if (!idData) {
+        if (isNull(idData)) {
             throw new NotFoundError('id', id);
         }
         return this.handle(idData);
@@ -151,7 +149,7 @@ export class usermodel {
         const nameData = await db.getone('user', {
             username,
         });
-        if (!nameData) {
+        if (isNull(nameData)) {
             throw new NotFoundError('username', username);
         }
         return this.handle(nameData);
@@ -162,7 +160,7 @@ export class usermodel {
         const emailData = await db.getone('user', {
             email,
         });
-        if (!emailData) {
+        if (isNull(emailData)) {
             throw new NotFoundError('email', email);
         }
         return this.handle(emailData);
