@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { createStyles, Header, Container, Group, Burger, rem, Transition, Paper } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import React from 'react';
-import { ClassNames } from '@emotion/react';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -104,7 +103,7 @@ export function Navbar({ links, title }: HeadersProps) {
     ));
 
     return (
-        <Header  height={50} mb={0} className={classes.Header} withBorder={false}>
+        <Header height={50} mb={0} className={classes.Header} withBorder={false}>
             <Container className={classes.header}>
                 <span className={classes.titleStyle}>{title}</span>
                 <div style={{ padding: '2%' }}></div>

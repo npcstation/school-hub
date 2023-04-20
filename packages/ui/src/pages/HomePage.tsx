@@ -1,5 +1,4 @@
-import { Badge, Card, Container, Grid, Group, Space, Text, Timeline, useMantineTheme } from '@mantine/core';
-import { IconFileCertificate } from '@tabler/icons-react';
+import { Badge, Container, Space, useMantineTheme } from '@mantine/core';
 import React, { useEffect } from 'react';
 import { Activity } from '../interfaces/activity';
 import axios from 'axios';

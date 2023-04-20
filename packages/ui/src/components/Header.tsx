@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import { createStyles, Header, Container, Group, Burger, rem, Center } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { Link, NavLink } from 'react-router-dom';
+import { createStyles, Header } from '@mantine/core';
 import React from 'react';
 
 const useStyles = createStyles((theme) => ({

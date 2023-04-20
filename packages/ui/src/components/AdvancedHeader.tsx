@@ -1,7 +1,30 @@
 import { useState } from 'react';
-import { createStyles, Container, Avatar, UnstyledButton, Group, Text, Menu, Burger, Title, ActionIcon, Collapse, Paper, Button } from '@mantine/core';
+import {
+    createStyles,
+    Container,
+    Avatar,
+    UnstyledButton,
+    Group,
+    Text,
+    Menu,
+    Burger,
+    Title,
+    ActionIcon,
+    Collapse,
+    Paper,
+    Button,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconHeart, IconSettings, IconChevronDown, IconMoon, IconSun, IconLogout, IconSend, IconLogin } from '@tabler/icons-react';
+import {
+    IconHeart,
+    IconSettings,
+    IconChevronDown,
+    IconMoon,
+    IconSun,
+    IconLogout,
+    IconSend,
+    IconLogin,
+} from '@tabler/icons-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SideLink } from './SideLink';
@@ -9,7 +32,10 @@ import { SideLink } from './SideLink';
 const useStyles = createStyles((theme) => ({
     header: {
         paddingTop: theme.spacing.xs,
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+        backgroundColor:
+            theme.colorScheme === 'dark'
+                ? theme.colors.dark[6]
+                : theme.colors.gray[0],
         paddingBottom: theme.spacing.xs,
     },
 
@@ -18,13 +44,17 @@ const useStyles = createStyles((theme) => ({
     },
 
     user: {
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+        color:
+            theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
         padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
         borderRadius: theme.radius.sm,
         transition: 'background-color 100ms ease',
 
         '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+            backgroundColor:
+                theme.colorScheme === 'dark'
+                    ? theme.colors.dark[8]
+                    : theme.white,
         },
 
         [theme.fn.smallerThan('xs')]: {
@@ -39,13 +69,17 @@ const useStyles = createStyles((theme) => ({
     },
 
     burgerUser: {
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+        color:
+            theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
         padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
         borderRadius: theme.radius.sm,
         transition: 'background-color 100ms ease',
 
         '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+            backgroundColor:
+                theme.colorScheme === 'dark'
+                    ? theme.colors.dark[8]
+                    : theme.white,
         },
     },
 
@@ -56,7 +90,8 @@ const useStyles = createStyles((theme) => ({
     },
 
     userActive: {
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+        backgroundColor:
+            theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
     },
 
     links: {
@@ -71,12 +106,18 @@ const useStyles = createStyles((theme) => ({
         padding: '8px 12px',
         borderRadius: theme.radius.sm,
         textDecoration: 'none',
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+        color:
+            theme.colorScheme === 'dark'
+                ? theme.colors.dark[0]
+                : theme.colors.gray[7],
         fontSize: theme.fontSizes.sm,
         fontWeight: 500,
 
         '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+            backgroundColor:
+                theme.colorScheme === 'dark'
+                    ? theme.colors.dark[6]
+                    : theme.colors.gray[0],
         },
     },
 
@@ -86,7 +127,10 @@ const useStyles = createStyles((theme) => ({
                 variant: 'light',
                 color: theme.primaryColor,
             }).background,
-            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+            color: theme.fn.variant({
+                variant: 'light',
+                color: theme.primaryColor,
+            }).color,
         },
     },
 }));
@@ -102,7 +146,11 @@ interface AdvancedHeaderProps {
     onThemeChange: () => void;
 }
 
-export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderProps) {
+export function AdvancedHeader({
+    user,
+    links,
+    onThemeChange,
+}: AdvancedHeaderProps) {
     const { classes, theme, cx } = useStyles();
     const [opened, { toggle }] = useDisclosure(false);
     const [active, setActive] = useState(links[0].link);
@@ -122,7 +170,7 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                 className={cx(classes.link, {
                     [classes.linkActive]: active === link.link,
                 })}
-                variant='light'
+                variant="light"
             >
                 <Text>{link.label}</Text>
             </Button>
@@ -144,25 +192,70 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
 
     const menuItems = (
         <>
-            <Menu.Item icon={<IconHeart size='0.9rem' color={theme.colors.red[6]} stroke={1.5} />}>关注的活动</Menu.Item>
-            <Menu.Item icon={<IconSend size='0.9rem' color={theme.colors.yellow[6]} stroke={1.5} />}>发布的活动</Menu.Item>
+            <Menu.Item
+                icon={
+                    <IconHeart
+                        size="0.9rem"
+                        color={theme.colors.red[6]}
+                        stroke={1.5}
+                    />
+                }
+            >
+                关注的活动
+            </Menu.Item>
+            <Menu.Item
+                icon={
+                    <IconSend
+                        size="0.9rem"
+                        color={theme.colors.yellow[6]}
+                        stroke={1.5}
+                    />
+                }
+            >
+                发布的活动
+            </Menu.Item>
             <Menu.Label>设置</Menu.Label>
-            <Menu.Item icon={<IconSettings size='0.9rem' color={theme.colors.blue[6]} stroke={1.5} />}>用户设置</Menu.Item>
-            <Menu.Item icon={<IconLogout size='0.9rem' color={theme.colors.blue[6]} stroke={1.5} />}>退出登录</Menu.Item>
+            <Menu.Item
+                icon={
+                    <IconSettings
+                        size="0.9rem"
+                        color={theme.colors.blue[6]}
+                        stroke={1.5}
+                    />
+                }
+            >
+                用户设置
+            </Menu.Item>
+            <Menu.Item
+                icon={
+                    <IconLogout
+                        size="0.9rem"
+                        color={theme.colors.blue[6]}
+                        stroke={1.5}
+                    />
+                }
+            >
+                退出登录
+            </Menu.Item>
         </>
     );
 
     return (
         <div className={classes.header}>
             <Container className={classes.mainSection}>
-                <Group position='apart'>
+                <Group position="apart">
                     <Title order={3}>在线校园</Title>
 
-                    <Burger opened={opened} onClick={toggle} className={classes.burger} size='sm' />
+                    <Burger
+                        opened={opened}
+                        onClick={toggle}
+                        className={classes.burger}
+                        size="sm"
+                    />
 
                     <Menu
                         width={260}
-                        position='bottom-end'
+                        position="bottom-end"
                         transitionProps={{ transition: 'pop-top-right' }}
                         onClose={() => setUserMenuOpened(false)}
                         onOpen={() => setUserMenuOpened(true)}
@@ -173,20 +266,34 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                                 {userLoggedIn ? (
                                     <UnstyledButton
                                         className={cx(classes.user, {
-                                            [classes.userActive]: userMenuOpened,
+                                            [classes.userActive]:
+                                                userMenuOpened,
                                         })}
                                     >
-                                        <Group spacing={7} p='xs'>
-                                            <Avatar src={user.image} alt={user.name} radius='xl' size={20} />
-                                            <Text weight={500} size='sm' sx={{ lineHeight: 1 }} mr={3}>
+                                        <Group spacing={7} p="xs">
+                                            <Avatar
+                                                src={user.image}
+                                                alt={user.name}
+                                                radius="xl"
+                                                size={20}
+                                            />
+                                            <Text
+                                                weight={500}
+                                                size="sm"
+                                                sx={{ lineHeight: 1 }}
+                                                mr={3}
+                                            >
                                                 {user.name}
                                             </Text>
-                                            <IconChevronDown size='1rem' stroke={1.5} />
+                                            <IconChevronDown
+                                                size="1rem"
+                                                stroke={1.5}
+                                            />
                                         </Group>
                                     </UnstyledButton>
                                 ) : (
                                     <Link
-                                        to='/login'
+                                        to="/login"
                                         onClick={() => {
                                             setActive('/login');
                                         }}
@@ -194,9 +301,10 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                                         <Button
                                             leftIcon={<IconLogin size={16} />}
                                             className={cx(classes.link, {
-                                                [classes.linkActive]: active === '/login',
+                                                [classes.linkActive]:
+                                                    active === '/login',
                                             })}
-                                            variant='light'
+                                            variant="light"
                                         >
                                             <Text>登录 | 注册</Text>
                                         </Button>
@@ -211,11 +319,14 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
             <Container>
                 <Group spacing={10} className={classes.links}>
                     {headerItems}
-                    <ActionIcon variant='light' onClick={onThemeChange}>
+                    <ActionIcon variant="light" onClick={onThemeChange}>
                         <IconSun
                             size={16}
                             display={(() => {
-                                if (localStorage.getItem('colorScheme') === 'light') {
+                                if (
+                                    localStorage.getItem('colorScheme') ===
+                                    'light'
+                                ) {
                                     return 'none';
                                 }
                             })()}
@@ -223,7 +334,10 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                         <IconMoon
                             size={16}
                             display={(() => {
-                                if (localStorage.getItem('colorScheme') === 'dark') {
+                                if (
+                                    localStorage.getItem('colorScheme') ===
+                                    'dark'
+                                ) {
                                     return 'none';
                                 }
                             })()}
@@ -231,12 +345,12 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                     </ActionIcon>
                 </Group>
             </Container>
-            <Collapse className={classes.burger} in={opened} p='sm'>
+            <Collapse className={classes.burger} in={opened} p="sm">
                 <Paper>
                     {userLoggedIn ? (
                         <Menu
                             width={240}
-                            position='bottom-end'
+                            position="bottom-end"
                             transitionProps={{ transition: 'pop-top-right' }}
                             onClose={() => setUserMenuOpened(false)}
                             onOpen={() => setUserMenuOpened(true)}
@@ -255,34 +369,47 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                                         [classes.userActive]: userMenuOpened,
                                     })}
                                 >
-                                    <Group spacing={7} p='xs'>
-                                        <Avatar src={user.image} alt={user.name} radius='xl' size={20} />
-                                        <Text weight={500} size='sm' sx={{ lineHeight: 1 }} mr={3}>
+                                    <Group spacing={7} p="xs">
+                                        <Avatar
+                                            src={user.image}
+                                            alt={user.name}
+                                            radius="xl"
+                                            size={20}
+                                        />
+                                        <Text
+                                            weight={500}
+                                            size="sm"
+                                            sx={{ lineHeight: 1 }}
+                                            mr={3}
+                                        >
                                             {user.name}
                                         </Text>
-                                        <IconChevronDown size='1rem' stroke={1.5} />
+                                        <IconChevronDown
+                                            size="1rem"
+                                            stroke={1.5}
+                                        />
                                     </Group>
                                 </UnstyledButton>
                             </Menu.Target>
                             <Menu.Dropdown>{menuItems}</Menu.Dropdown>
                         </Menu>
                     ) : (
-                        <Link to='/login'>
+                        <Link to="/login">
                             <SideLink
-                                color='purple'
+                                color="purple"
                                 icon={<IconLogin size={16} />}
                                 onClick={() => {
                                     setActive('/login');
                                 }}
-                                label='登录 | 注册'
+                                label="登录 | 注册"
                             ></SideLink>
                         </Link>
                     )}
                     {burgerItems}
-                    <Container pb='sm'>
+                    <Container pb="sm">
                         <ActionIcon
                             size={32}
-                            variant='light'
+                            variant="light"
                             onClick={onThemeChange}
                             style={{
                                 margin: '0 auto',
@@ -291,7 +418,10 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                             <IconSun
                                 size={24}
                                 display={(() => {
-                                    if (localStorage.getItem('colorScheme') === 'light') {
+                                    if (
+                                        localStorage.getItem('colorScheme') ===
+                                        'light'
+                                    ) {
                                         return 'none';
                                     }
                                 })()}
@@ -299,7 +429,10 @@ export function AdvancedHeader({ user, links, onThemeChange }: AdvancedHeaderPro
                             <IconMoon
                                 size={24}
                                 display={(() => {
-                                    if (localStorage.getItem('colorScheme') === 'dark') {
+                                    if (
+                                        localStorage.getItem('colorScheme') ===
+                                        'dark'
+                                    ) {
                                         return 'none';
                                     }
                                 })()}
