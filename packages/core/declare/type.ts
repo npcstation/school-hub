@@ -29,24 +29,24 @@ export class BooleanType extends BasicType {
     }
 }
 
-let TypeVerify = {};
-
-export function registerType(typename, TypeClass: BasicType) {
-	TypeVerify[typename] = {
-		verify: TypeClass.verify
-	};
+export function Verify(Types, data) {
+	return Types.verify(data);
 }
 
-
-export function Verify(typename, data) {
-	if (typeof TypeVerify[typename] === 'undefined') {
-		return true; // TODO: need good express
+export function NumberLimitIn(...prop) {
+	return {
+		verify: (data) => {
+			if (typeof data !== 'number') {
+				return false;
+			}
+			return prop.includes(data);
+		}
 	}
-	return TypeVerify[typename].verify(data);
 }
 
-
-registerType('EmailType', new EmailType());
-registerType('Number', new NumberType());
-registerType("String", new StringType());
-registerType('Boolean', new BooleanType());
+export const DefualtType = {
+	Email: new EmailType(),
+	Number: new NumberType(),
+	String: new StringType(),
+	Boolean: new BooleanType()
+}

@@ -1,5 +1,5 @@
 import { ValidatedError } from "../declare/error";
-import { BasicType, Verify } from "../declare/type";
+import { BasicType, DefualtType, Verify } from "../declare/type";
 
 export function param(params) {
     return function (target: any, methodName: string, descriptor: any) {
@@ -25,7 +25,7 @@ export function verify(param, Type) {
 			const paramNames = paramList.map((param) => param.trim());
 			descriptor.paramNames = paramNames;
 		}
-		descriptor.verify[descriptor.paramNames.indexOf(param)] = Type;
+		descriptor.verify[descriptor.paramNames.indexOf(param)] = Type || DefualtType[Type.toString()];
 		descriptor.value = async function run(...args) {
             for (let i in descriptor.verify) {
                 if (!Verify(descriptor.verify[i], args[i])) {

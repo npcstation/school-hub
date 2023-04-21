@@ -3,8 +3,8 @@ export class RError extends Error {
 }
 
 export class ValidatedError extends RError {
-    constructor(valuename: string) {
-        super(`Validated Error. ${valuename} have not correct validated.`);
+    constructor(valuename: any) {
+        super(`Validated Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
     }
     public errorType = 'validated';
 }

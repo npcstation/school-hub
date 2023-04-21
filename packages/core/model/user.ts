@@ -2,24 +2,18 @@ import { verify } from '../utils/decorate';
 import { db } from '../service/db';
 import { ExistError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
+import { DefualtType, NumberLimitIn } from '../declare/type';
 
 export class usermodel {
-    @verify('email', 'EmailType')
-    @verify('username', 'String')
-    @verify('pwd', 'String')
-    @verify('grade', 'Number')
-    @verify('gender', 'Boolean')
-    @verify('gravatarLink', 'String')
-    @verify('description', 'String')
-    async create(
-        username: string,
-        pwd: string,
-        email: string,
-        grade: number,
-        gender: boolean,
-        gravatarLink: string,
-        description: string
-    ) {
+
+    @verify('email', DefualtType.Email)
+    @verify('username', DefualtType.String)
+    @verify('pwd', DefualtType.String)
+    @verify('grade', DefualtType.Number)
+    @verify('gender', NumberLimitIn(0, 1))
+    @verify('gravatarLink', DefualtType.String)
+    @verify('description', DefualtType.String)
+    async create(username: string, pwd: string, email: string, grade: number, gender: 0 | 1, gravatarLink: string, description: string) {
         if (await this.nameExist(username)) {
             throw new ExistError();
         }
@@ -39,22 +33,14 @@ export class usermodel {
         };
     }
 
-    @verify('email', 'EmailType')
-    @verify('username', 'String')
-    @verify('pwd', 'String')
-    @verify('grade', 'Number')
-    @verify('gender', 'Boolean')
-    @verify('gravatarLink', 'String')
-    @verify('description', 'String')
-    async updateall(
-        username: string,
-        pwd: string,
-        email: string,
-        grade: number,
-        gender: boolean,
-        gravatarLink: string,
-        description: string
-    ) {
+    @verify('email', DefualtType.Email)
+    @verify('username', DefualtType.String)
+    @verify('pwd', DefualtType.String)
+    @verify('grade', DefualtType.Number)
+    @verify('gender', NumberLimitIn(0, 1))
+    @verify('gravatarLink', DefualtType.String)
+    @verify('description', DefualtType.String)
+    async updateall(username: string, pwd: string, email: string, grade: number, gender: 0 | 1, gravatarLink: string, description: string) {
         if (await this.nameExist(username)) {
             throw new ExistError();
         }
@@ -74,7 +60,7 @@ export class usermodel {
         };
     }
 
-    @verify('id', 'Number')
+    @verify('id', DefualtType.Number)
     async update(id: number, data: any) {
         if ((await this.idExist(id)) === false) {
             //TODO: no exist error
@@ -90,8 +76,7 @@ export class usermodel {
     }
 
     async genId() {
-        const newID =
-            (await db.getone('count', { type: 'uid' }))?.count + 1 || 1;
+        const newID = (await db.getone('count', { type: 'uid' }))?.count + 1 || 1;
         if (newID === 1) {
             await db.insert('count', { type: 'uid', count: newID });
         }
@@ -99,30 +84,25 @@ export class usermodel {
         return newID;
     }
 
-    @verify('username', 'String')
+    @verify('username', DefualtType.String)
     async nameExist(username: string) {
-        return (
-            !isNull(
-                await db.getone(
-                    'user',
-                    {
-                        username,
-                    }
-                )
-            )
+        return !isNull(
+            await db.getone('user', {
+                username,
+            })
         );
     }
 
-    @verify('id', 'Number')
+    @verify('id', DefualtType.Number)
     async idExist(id: number) {
         return !isNull(
-			await db.getall(
-				'user',
-				{
-					id,
-				},
-				{}
-			)
+            await db.getall(
+                'user',
+                {
+                    id,
+                },
+                {}
+            )
         );
     }
 
@@ -133,7 +113,7 @@ export class usermodel {
         return data;
     }
 
-    @verify('id', 'Number')
+    @verify('id', DefualtType.Number)
     async getbyId(id: number) {
         const idData = await db.getone('user', {
             id,
@@ -144,7 +124,7 @@ export class usermodel {
         return this.handle(idData);
     }
 
-    @verify('username', 'string')
+    @verify('username', DefualtType.String)
     async getbyUsername(username: string) {
         const nameData = await db.getone('user', {
             username,
@@ -155,7 +135,7 @@ export class usermodel {
         return this.handle(nameData);
     }
 
-    @verify('email', 'EmailType')
+    @verify('email', 'DefualtType.Email')
     async getbyEmail(email: string) {
         const emailData = await db.getone('user', {
             email,
