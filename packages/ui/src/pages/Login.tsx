@@ -4,7 +4,6 @@ import {
     TextInput,
     PasswordInput,
     Text,
-    Paper,
     Group,
     PaperProps,
     Button,
@@ -16,13 +15,11 @@ import {
     Popover,
     Progress,
     Select,
-    Switch,
-	useMantineTheme,
-	Badge,
+    useMantineTheme,
+    rem,
 } from '@mantine/core';
 import React, { useState } from 'react';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useTheme } from '@emotion/react';
 import { StandardCard } from '../components/Card';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
@@ -52,9 +49,9 @@ function getStrength(password: string) {
     return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 }
 
-export default function LoginPage(props: PaperProps) {
-	const [type, toggle] = useToggle(['登录', '注册']);
-	const theme = useMantineTheme();
+export default function LoginPage() {
+    const [type, toggle] = useToggle(['登录', '注册']);
+    const theme = useMantineTheme();
     const registerForm = useForm({
         initialValues: {
             email: '',
@@ -95,7 +92,7 @@ export default function LoginPage(props: PaperProps) {
         initialValues: {
             email: '',
             password: '',
-		},
+        },
     });
 
     const currDate = new Date();
@@ -103,9 +100,9 @@ export default function LoginPage(props: PaperProps) {
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
     return (
-        <Container w={largeScreen ? '50%' : '97%'}>
-			<StandardCard
-				pt='5px'
+        <Container maw={rem(768)}>
+            <StandardCard
+                pt='5px'
                 title=''
                 content={
                     <>
@@ -115,15 +112,20 @@ export default function LoginPage(props: PaperProps) {
 
                         {type === '注册' ? (
                             <form
-								onSubmit={() => {
-									console.log('qwq');
-									registerForm.onSubmit(() => {
-										console.log(114514);
-									})
-								}}
+                                onSubmit={() => {
+                                    console.log('qwq');
+                                    registerForm.onSubmit(() => {
+                                        console.log(114514);
+                                    });
+                                }}
                             >
                                 <Stack>
-                                    <TextInput required={type === '注册'} label='用户名' placeholder='您的用户名' {...registerForm.getInputProps('name')} />
+                                    <TextInput
+                                        required={type === '注册'}
+                                        label='用户名'
+                                        placeholder='您的用户名'
+                                        {...registerForm.getInputProps('name')}
+                                    />
 
                                     <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
 
@@ -186,7 +188,8 @@ export default function LoginPage(props: PaperProps) {
                                                 // applies styles to selected item
                                                 '&[data-selected]': {
                                                     '&, &:hover': {
-                                                        backgroundColor: theme.colorScheme === 'dark' ? `${theme.colors.indigo[9]}55` : theme.colors.indigo[0],
+                                                        backgroundColor:
+                                                            theme.colorScheme === 'dark' ? `${theme.colors.indigo[9]}55` : theme.colors.indigo[0],
                                                         color: theme.colorScheme === 'dark' ? theme.white : theme.colors.indigo[9],
                                                     },
                                                 },
@@ -266,7 +269,12 @@ export default function LoginPage(props: PaperProps) {
                                 <Stack>
                                     <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
 
-                                    <PasswordInput required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
+                                    <PasswordInput
+                                        required
+                                        label='密码'
+                                        placeholder='您的密码（要保密！）'
+                                        {...loginForm.getInputProps('password')}
+                                    />
                                 </Stack>
 
                                 <Group position='apart' mt='xl'>
