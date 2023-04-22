@@ -45,7 +45,7 @@ function App() {
                         globalStyles: (theme) => ({
                             body: {
                                 backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : '#f7f7f7',
-                            },
+							}
                         }),
                         shadows: {
                             xs: '0 4px 10px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.1);',

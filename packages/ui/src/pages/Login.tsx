@@ -95,7 +95,7 @@ export default function LoginPage(props: PaperProps) {
         initialValues: {
             email: '',
             password: '',
-        },
+		},
     });
 
     const currDate = new Date();
@@ -103,8 +103,9 @@ export default function LoginPage(props: PaperProps) {
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
     return (
-        <Container w={'50%'}>
-            <StandardCard
+        <Container w={largeScreen ? '50%' : '97%'}>
+			<StandardCard
+				pt='5px'
                 title=''
                 content={
                     <>
@@ -114,9 +115,12 @@ export default function LoginPage(props: PaperProps) {
 
                         {type === '注册' ? (
                             <form
-                                onSubmit={registerForm.onSubmit(() => {
-                                    console.log(114514);
-                                })}
+								onSubmit={() => {
+									console.log('qwq');
+									registerForm.onSubmit(() => {
+										console.log(114514);
+									})
+								}}
                             >
                                 <Stack>
                                     <TextInput required={type === '注册'} label='用户名' placeholder='您的用户名' {...registerForm.getInputProps('name')} />
@@ -177,6 +181,20 @@ export default function LoginPage(props: PaperProps) {
                                         searchable
                                         required
                                         label='年级'
+                                        styles={(theme) => ({
+                                            item: {
+                                                // applies styles to selected item
+                                                '&[data-selected]': {
+                                                    '&, &:hover': {
+                                                        backgroundColor: theme.colorScheme === 'dark' ? `${theme.colors.indigo[9]}55` : theme.colors.indigo[0],
+                                                        color: theme.colorScheme === 'dark' ? theme.white : theme.colors.indigo[9],
+                                                    },
+                                                },
+
+                                                // applies styles to hovered item (with mouse or keyboard)
+                                                '&[data-hovered]': {},
+                                            },
+                                        })}
                                         {...registerForm.getInputProps('grade')}
                                     />
 

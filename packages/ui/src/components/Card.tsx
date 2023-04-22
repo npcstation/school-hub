@@ -9,7 +9,8 @@ export function StandardCard({
 }: {
     title: string | React.ReactNode;
     content: React.ReactNode;
-    subtitle?: React.ReactNode;
+	subtitle?: React.ReactNode;
+	pt?: string | number;
 }) {
     const theme = useMantineTheme();
     return (
