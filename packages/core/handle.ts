@@ -79,23 +79,7 @@ export async function apply() {
         await app.use(KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'assets'), {
             route: 'assets'
         }));
-    } else {
-        const vite = await import('vite');
-        const server = await vite.createServer({
-            server: { middlewareMode: true },
-            appType: 'custom',
-            root: path.join(__dirname, '..', 'ui')
-        })
-        app.use(KoaConnect(server.middlewares));
-        app.use(async (ctx) => {
-            console.log('qwq');
-            let template = await server.transformIndexHtml(ctx.path, path.join(__dirname, '..', 'ui', 'index.html'));
-            ctx.type = 'text/html';
-            console.log(template);
-            console.log('done');
-            ctx.body = template;
-        });
-    }
+    } 
     await app.listen(global.Project.port);
     handleLogger.info(`Backend listen :${global.Project.port}`);
 }
