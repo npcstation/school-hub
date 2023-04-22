@@ -44,7 +44,7 @@ export function NumberLimitIn(...prop) {
 	}
 }
 
-export const DefualtType = {
+export const DefaultType = {
 	Email: new EmailType(),
 	Number: new NumberType(),
 	String: new StringType(),
