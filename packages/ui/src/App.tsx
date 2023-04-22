@@ -9,6 +9,12 @@ import store from './store/store';
 import { Provider } from 'react-redux';
 import { Notifications } from '@mantine/notifications';
 
+declare global {
+    interface Window {
+        web?: any;
+    }
+}
+
 function App() {
     const [colorScheme, setColorScheme] = useState('light');
     const beforeColorScheme = localStorage.getItem('colorScheme');
