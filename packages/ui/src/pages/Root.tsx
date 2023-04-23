@@ -2,7 +2,6 @@ import { AppShell, Footer, Text, useMantineTheme, Button } from '@mantine/core';
 import { IconBrandGithub } from '@tabler/icons-react';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 import { Outlet } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { Navbar } from '../components/NavBar';
 import React from 'react';
 import { AppFooter } from '../components/Footer';
@@ -12,8 +11,6 @@ interface RootProps {
 }
 
 export function Root({ onThemeChange }: RootProps) {
-    const userState = useAppSelector((state) => state.user);
-    const dispatch = useAppDispatch();
     const mainLinks = [
         { link: '/', label: '主页' },
         { link: '/login', label: '登录' },

@@ -56,25 +56,28 @@ export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
                                         <IconSun
                                             size={16}
                                             display={(() => {
-                                                if (
-                                                    localStorage.getItem(
-                                                        'colorScheme'
-                                                    ) === 'light'
-                                                ) {
-                                                    return 'none';
-                                                }
+                                                // if (
+                                                //     localStorage.getItem(
+                                                //         'colorScheme'
+                                                //     ) === 'light'
+                                                // ) {
+                                                //     return 'none';
+                                                // }
+
+                                                return 'block';
                                             })()}
                                         />
                                         <IconMoon
                                             size={16}
                                             display={(() => {
-                                                if (
-                                                    localStorage.getItem(
-                                                        'colorScheme'
-                                                    ) === 'dark'
-                                                ) {
-                                                    return 'none';
-                                                }
+                                                // if (
+                                                //     localStorage.getItem(
+                                                //         'colorScheme'
+                                                //     ) === 'dark'
+                                                // ) {
+                                                //     return 'none';
+                                                // }
+                                                return 'none';
                                             })()}
                                         />
                                     </>

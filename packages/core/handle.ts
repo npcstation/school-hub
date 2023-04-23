@@ -6,6 +6,9 @@ import * as log4js from 'log4js';
 import KoaStatic from 'awesome-static';
 import * as path from 'path';
 import KoaConnect from 'koa-connect';
+const { renderPage } = require('vite-plugin-ssr/server');
+
+import '../ui/dist/server/importBuild.cjs';
 
 export const app = new Koa();
 const router = new KoaRouter();
@@ -44,8 +47,7 @@ async function handle(ctx: KoaContext, Handler) {
     Object.assign(args, body);
     Object.assign(args, ctx.params);
     try {
-        const steps = [
-            method,...(operation ? [`post${operation}`] : []),'after'];
+        const steps = [method, ...(operation ? [`post${operation}`] : []), 'after'];
         let cur = 0;
         const length = steps.length;
         h.ctx.body = '';
@@ -75,11 +77,42 @@ export function Route(name: string, link: string, Handler) {
 export async function apply() {
     const handleLogger = log4js.getLogger('handler');
     handleLogger.level = global.Project.loglevel;
+    // if (global.Project.env === 'prod') {
+    //     await app.use(KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'assets'), {
+    //         route: 'assets'
+    //     }));
+    // }
+
     if (global.Project.env === 'prod') {
-        await app.use(KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'assets'), {
-            route: 'assets'
-        }));
-    } 
+        app.use(
+            KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'client', 'assets'), {
+                route: 'assets',
+            })
+        );
+    } else {
+        const vite = await import('vite');
+        const server = await vite.createServer({
+            server: { middlewareMode: true },
+            root: path.join(__dirname, '..', 'ui'),
+        });
+        app.use(KoaConnect(server.middlewares));
+    }
+
+    process.env.NODE_ENV = global.Project.env;
+
+    app.use(async (ctx, next) => {
+        const pageContextInit = {
+            urlOriginal: ctx.request.url,
+        };
+        const pageContext = await renderPage(pageContextInit);
+        const { httpResponse } = pageContext;
+        if (!httpResponse) return next();
+        const { body, statusCode, contentType, earlyHints } = httpResponse;
+        if (ctx.response.writeEarlyHints) ctx.response.writeEarlyHints({ link: earlyHints.map((e) => e.earlyHintLink) });
+        ctx.response.statusCode = statusCode;
+        ctx.response.type = contentType;
+        ctx.body = body;
+    });
     await app.listen(global.Project.port);
     handleLogger.info(`Backend listen :${global.Project.port}`);
 }
