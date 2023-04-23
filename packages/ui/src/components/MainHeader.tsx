@@ -109,7 +109,7 @@ export function MainHeader({ links, onThemeChange }: MainHeaderProps) {
     ));
 
     const burgerItems = links.map((link) => (
-        <Link key={link.label} to={link.link}>
+        <Link reloadDocument key={link.label} to={link.link}>
             <SideLink
                 color={link.color}
                 icon={link.icon}

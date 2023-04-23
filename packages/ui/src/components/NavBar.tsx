@@ -108,7 +108,7 @@ export function Navbar({ links, title }: HeadersProps) {
     const { classes, cx, theme } = useStyles();
 
     const items = links.map((item) => (
-        <NavLink key={item.label} to={item.link} className={(state) => cx(classes.link, state.isActive ? classes.linkActive : '')}>
+        <NavLink reloadDocument key={item.label} to={item.link} className={(state) => cx(classes.link, state.isActive ? classes.linkActive : '')}>
             {item.label}
         </NavLink>
     ));

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MantineProvider, ColorScheme } from '@mantine/core';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom';
 import { Root } from './pages/Root';
 import HomePage from './pages/HomePage';
 import ForumPage from './pages/Forum';
@@ -40,6 +40,33 @@ function App() {
         }
     }
 
+    /*
+<Route path='' element={<HomePage></HomePage>} />
+<Route path='forum' element={<ForumPage></ForumPage>} />
+<Route path='login' element={<LoginPage></LoginPage>} />
+    */
+
+    const router = createBrowserRouter([
+        {
+            element: <Root onThemeChange={onThemeChange} />,
+            
+            children: [
+                {
+                    element: <HomePage />,
+                    path: '',
+                },
+                {
+                    element: <ForumPage />,
+                    path: 'forum',
+                },
+                {
+                    element: <LoginPage />,
+                    path: 'login',
+                },
+            ],
+        },
+    ]);
+
     return (
         <>
             <Provider store={store}>
@@ -51,7 +78,7 @@ function App() {
                         globalStyles: (theme) => ({
                             body: {
                                 backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : '#f7f7f7',
-							}
+                            },
                         }),
                         shadows: {
                             xs: '0 4px 10px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.1);',
@@ -59,15 +86,22 @@ function App() {
                     }}
                 >
                     <Notifications />
-                    <BrowserRouter>
+                    {/* <BrowserRouter
+                        force
+                    >
                         <Routes>
-                            <Route path='' element={<Root onThemeChange={onThemeChange} />}>
-                                <Route path='' element={<HomePage></HomePage>} />
-                                <Route path='forum' element={<ForumPage></ForumPage>} />
-                                <Route path='login' element={<LoginPage></LoginPage>} />
+                            <Route
+                                loader={async (args) => {
+                                    console.log(args);
+                                }}
+                                path=''
+                                element={<Root onThemeChange={onThemeChange} />}
+                            >
+                                
                             </Route>
                         </Routes>
-                    </BrowserRouter>
+                    </BrowserRouter> */}
+                    <RouterProvider router={router} />
                 </MantineProvider>
             </Provider>
         </>

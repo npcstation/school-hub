@@ -1,5 +1,6 @@
 import { Handler, Route } from '../handle';
 import { user } from '../model/user';
+import { RenderFromPage } from '../service/render';
 import { param } from '../utils/decorate';
 
 class RegisterHandler extends Handler {
@@ -26,6 +27,16 @@ class RegisterHandler extends Handler {
     }
 }
 
+class LoginHandler extends Handler {
+    async get() {
+        this.ctx.type = 'text/html';
+        this.ctx.body = await RenderFromPage('index.html', {
+            test: 'test2',
+        });
+    }
+}
+
 export function apply(ctx) {
     Route('SignUp', '/register', RegisterHandler);
+    Route('SignIn', '/login', LoginHandler);
 }
