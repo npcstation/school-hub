@@ -19,7 +19,7 @@ class RegisterHandler extends Handler {
         } catch (err) {
             this.ctx.body = {
                 status: 'error',
-                type: err?.errorType || 'unknow',
+                type: err?.errorType || 'unknown',
                 msg: err.toString()
             }
         }
