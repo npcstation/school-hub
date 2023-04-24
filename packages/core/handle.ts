@@ -8,8 +8,6 @@ import * as path from 'path';
 import KoaConnect from 'koa-connect';
 const { renderPage } = require('vite-plugin-ssr/server');
 
-import '../ui/dist/server/importBuild.cjs';
-
 export const app = new Koa();
 const router = new KoaRouter();
 
