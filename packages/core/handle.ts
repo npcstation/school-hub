@@ -3,6 +3,9 @@ import KoaBody from 'koa-body';
 import bodyParser from 'koa-bodyparser';
 import KoaRouter from 'koa-router';
 import * as log4js from 'log4js';
+import KoaStatic from 'awesome-static';
+import * as path from 'path';
+import KoaConnect from 'koa-connect';
 
 export const app = new Koa();
 const router = new KoaRouter();
@@ -41,7 +44,8 @@ async function handle(ctx: KoaContext, Handler) {
     Object.assign(args, body);
     Object.assign(args, ctx.params);
     try {
-        const steps = [method, ...(operation ? [`post${operation}`] : []), 'after'];
+        const steps = [
+            method,...(operation ? [`post${operation}`] : []),'after'];
         let cur = 0;
         const length = steps.length;
         h.ctx.body = '';
@@ -71,6 +75,11 @@ export function Route(name: string, link: string, Handler) {
 export async function apply() {
     const handleLogger = log4js.getLogger('handler');
     handleLogger.level = global.Project.loglevel;
+    if (global.Project.env === 'prod') {
+        await app.use(KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'assets'), {
+            route: 'assets'
+        }));
+    } 
     await app.listen(global.Project.port);
     handleLogger.info(`Backend listen :${global.Project.port}`);
 }
