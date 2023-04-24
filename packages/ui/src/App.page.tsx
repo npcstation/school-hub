@@ -9,6 +9,9 @@ import LoginPage from './pages/Login';
 // import { Provider } from 'react-redux';
 import { Notifications } from '@mantine/notifications';
 import ssrCache from './renderer/emotionCache';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './store/store';
+import { toggleTheme } from './store/uiSlice';
 
 declare global {
     interface Window {
@@ -17,10 +20,13 @@ declare global {
 }
 
 function Page() {
+    const theme = useSelector((state: RootState) => state.ui.theme);
+    const dispatch = useDispatch();
+
     const [colorScheme, setColorScheme] = useState('light');
-    const beforeColorScheme = 'light'; // localStorage.getItem('colorScheme');
+    const beforeColorScheme = theme;
     if (beforeColorScheme === null) {
-        // localStorage.setItem('colorScheme', 'light');
+        dispatch(toggleTheme())
         setColorScheme('light');
     } else {
         if (beforeColorScheme !== colorScheme) {
