@@ -1,24 +1,28 @@
-import { Card, Group, Text, useMantineTheme, createStyles } from '@mantine/core';
+import { Card, Group, Text, useMantineTheme, createStyles, TextProps } from '@mantine/core';
 import React from 'react';
+import * as utils from '@mantine/utils';
 
 const useStyles = createStyles((theme) => ({
     standardCard: {
         fontWeight: 700,
         color: theme.colors.gray[5],
-        size: 12.5,
+        fontSize: 12.5,
     }
 }));
+
 
 export function StandardCard({
     title,
     content,
     subtitle,
+    children,
     ...props
 }: {
-    title: string | React.ReactNode;
-    content: React.ReactNode;
+    title?: string | React.ReactNode;
+    content?: React.ReactNode;
 	subtitle?: React.ReactNode;
-	pt?: string | number;
+    pt?: string | number;
+    children?: JSX.Element[] | JSX.Element | string;
 }) {
     const { classes, cx, theme } = useStyles();
     
@@ -32,7 +36,7 @@ export function StandardCard({
                     {subtitle}
                 </Group>
             </Card.Section>
-            {content}
+            {content || children}
         </Card>
     );
 }

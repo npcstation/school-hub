@@ -14,17 +14,19 @@ import {
     Popover,
     Progress,
     Select,
-    useMantineTheme,
     rem,
     createStyles
 } from '@mantine/core';
 import React, { useState } from 'react';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
+import { standardSelect } from '../styles/select';
+import { standardTitleColor } from '../styles/color';
 
 const useStyles = createStyles((theme) => ({
     
 }));
+
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
     return (
         <Text color={meets ? 'teal' : 'red'} sx={{ display: 'flex', alignItems: 'center' }} mt={7} size='sm'>
@@ -105,184 +107,165 @@ export default function LoginPage() {
 
     return (
         <Container maw={rem(768)}>
-            <StandardCard
-                pt={theme.spacing.xs}
-                title=''
-                content={
-                    <>
-                        <Text size='lg' weight={700} c={theme.colorScheme === 'dark' ? 'white' : theme.colors.gray[7]} mb='sm'>
-                            {type}
-                        </Text>
+            <StandardCard pt={theme.spacing.xs}>
+                <Text size='lg' weight={700} c={standardTitleColor(theme)} mb='sm'>
+                    {type}
+                </Text>
+                {type === '注册' ? (
+                    <form
+                        onSubmit={() => {
+                            console.log('qwq');
+                            registerForm.onSubmit(() => {
+                                console.log(114514);
+                            });
+                        }}
+                    >
+                        <Stack>
+                            <TextInput required={type === '注册'} label='用户名' placeholder='您的用户名' {...registerForm.getInputProps('name')} />
 
-                        {type === '注册' ? (
-                            <form
-                                onSubmit={() => {
-                                    console.log('qwq');
-                                    registerForm.onSubmit(() => {
-                                        console.log(114514);
-                                    });
-                                }}
-                            >
-                                <Stack>
-                                    <TextInput required={type === '注册'} label='用户名' placeholder='您的用户名' {...registerForm.getInputProps('name')} />
+                            <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
 
-                                    <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
+                            <Select
+                                data={[
+                                    {
+                                        label: `一年级 (${minBirthYear + 11})`,
+                                        value: `${minBirthYear + 11}`,
+                                    },
+                                    {
+                                        label: `二年级 (${minBirthYear + 10})`,
+                                        value: `${minBirthYear + 10}`,
+                                    },
+                                    {
+                                        label: `三年级 (${minBirthYear + 9})`,
+                                        value: `${minBirthYear + 9}`,
+                                    },
+                                    {
+                                        label: `四年级 (${minBirthYear + 8})`,
+                                        value: `${minBirthYear + 8}`,
+                                    },
+                                    {
+                                        label: `五年级 (${minBirthYear + 7})`,
+                                        value: `${minBirthYear + 7}`,
+                                    },
+                                    {
+                                        label: `六年级 (${minBirthYear + 6})`,
+                                        value: `${minBirthYear + 6}`,
+                                    },
+                                    {
+                                        label: `初一年级 (${minBirthYear + 5})`,
+                                        value: `${minBirthYear + 5}`,
+                                    },
+                                    {
+                                        label: `初二年级 (${minBirthYear + 4})`,
+                                        value: `${minBirthYear + 4}`,
+                                    },
+                                    {
+                                        label: `初三年级 (${minBirthYear + 3})`,
+                                        value: `${minBirthYear + 3}`,
+                                    },
+                                    {
+                                        label: `高一年级 (${minBirthYear + 2})`,
+                                        value: `${minBirthYear + 2}`,
+                                    },
+                                    {
+                                        label: `高二年级 (${minBirthYear + 1})`,
+                                        value: `${minBirthYear + 1}`,
+                                    },
+                                    {
+                                        label: `高三年级 (${minBirthYear})`,
+                                        value: `${minBirthYear}`,
+                                    },
+                                ]}
+                                searchable
+                                required
+                                label='年级'
+                                styles={standardSelect}
+                                {...registerForm.getInputProps('grade')}
+                            />
 
-                                    <Select
-                                        data={[
-                                            {
-                                                label: `一年级 (${minBirthYear + 11})`,
-                                                value: `${minBirthYear + 11}`,
-                                            },
-                                            {
-                                                label: `二年级 (${minBirthYear + 10})`,
-                                                value: `${minBirthYear + 10}`,
-                                            },
-                                            {
-                                                label: `三年级 (${minBirthYear + 9})`,
-                                                value: `${minBirthYear + 9}`,
-                                            },
-                                            {
-                                                label: `四年级 (${minBirthYear + 8})`,
-                                                value: `${minBirthYear + 8}`,
-                                            },
-                                            {
-                                                label: `五年级 (${minBirthYear + 7})`,
-                                                value: `${minBirthYear + 7}`,
-                                            },
-                                            {
-                                                label: `六年级 (${minBirthYear + 6})`,
-                                                value: `${minBirthYear + 6}`,
-                                            },
-                                            {
-                                                label: `初一年级 (${minBirthYear + 5})`,
-                                                value: `${minBirthYear + 5}`,
-                                            },
-                                            {
-                                                label: `初二年级 (${minBirthYear + 4})`,
-                                                value: `${minBirthYear + 4}`,
-                                            },
-                                            {
-                                                label: `初三年级 (${minBirthYear + 3})`,
-                                                value: `${minBirthYear + 3}`,
-                                            },
-                                            {
-                                                label: `高一年级 (${minBirthYear + 2})`,
-                                                value: `${minBirthYear + 2}`,
-                                            },
-                                            {
-                                                label: `高二年级 (${minBirthYear + 1})`,
-                                                value: `${minBirthYear + 1}`,
-                                            },
-                                            {
-                                                label: `高三年级 (${minBirthYear})`,
-                                                value: `${minBirthYear}`,
-                                            },
-                                        ]}
-                                        searchable
-                                        required
-                                        label='年级'
-                                        styles={(theme) => ({
-                                            item: {
-                                                // applies styles to selected item
-                                                '&[data-selected]': {
-                                                    '&, &:hover': {
-                                                        backgroundColor: theme.colorScheme === 'dark' ? `${theme.colors.indigo[9]}55` : theme.colors.indigo[0],
-                                                        color: theme.colorScheme === 'dark' ? theme.white : theme.colors.indigo[9],
-                                                    },
-                                                },
+                            <Select
+                                data={[
+                                    {
+                                        label: '男',
+                                        value: 'male',
+                                    },
+                                    {
+                                        label: '女',
+                                        value: 'female',
+                                    },
+                                ]}
+                                required
+                                label='性别'
+                                styles={standardSelect}
+                                {...registerForm.getInputProps('gender')}
+                            />
 
-                                                // applies styles to hovered item (with mouse or keyboard)
-                                                '&[data-hovered]': {},
-                                            },
-                                        })}
-                                        {...registerForm.getInputProps('grade')}
-                                    />
+                            <Box mx='0'>
+                                <Popover
+                                    opened={popoverOpened}
+                                    position='bottom-start'
+                                    width={largeScreen ? '20rem' : 'target'}
+                                    transitionProps={{ transition: 'pop' }}
+                                >
+                                    <Popover.Target>
+                                        <div onFocusCapture={() => setPopoverOpened(true)} onBlurCapture={() => setPopoverOpened(false)}>
+                                            <PasswordInput
+                                                required
+                                                label='密码'
+                                                placeholder='您的密码（要保密！）'
+                                                {...registerForm.getInputProps('password')}
+                                            />
+                                        </div>
+                                    </Popover.Target>
+                                    <Popover.Dropdown>
+                                        <Progress color={color} value={strength} size={5} mb='xs' />
+                                        <PasswordRequirement label='至少 8 位密码' meets={registerForm.values.password.length >= 8} />
+                                        <PasswordRequirement label='至多 36 位密码' meets={registerForm.values.password.length <= 36} />
+                                        {checks}
+                                    </Popover.Dropdown>
+                                </Popover>
+                            </Box>
 
-                                    <Select
-                                        data={[
-                                            {
-                                                label: '男',
-                                                value: 'male',
-                                            },
-                                            {
-                                                label: '女',
-                                                value: 'female',
-                                            },
-                                        ]}
-                                        required
-                                        label='性别'
-                                        {...registerForm.getInputProps('gender')}
-                                    />
+                            <Checkbox
+                                required={type === '注册'}
+                                label='我同意用户条款'
+                                checked={registerForm.values.terms}
+                                {...registerForm.getInputProps('terms')}
+                            />
+                        </Stack>
 
-                                    <Box mx='0'>
-                                        <Popover
-                                            opened={popoverOpened}
-                                            position='bottom-start'
-                                            width={largeScreen ? '20rem' : 'target'}
-                                            transitionProps={{ transition: 'pop' }}
-                                        >
-                                            <Popover.Target>
-                                                <div onFocusCapture={() => setPopoverOpened(true)} onBlurCapture={() => setPopoverOpened(false)}>
-                                                    <PasswordInput
-                                                        required
-                                                        label='密码'
-                                                        placeholder='您的密码（要保密！）'
-                                                        {...registerForm.getInputProps('password')}
-                                                    />
-                                                </div>
-                                            </Popover.Target>
-                                            <Popover.Dropdown>
-                                                <Progress color={color} value={strength} size={5} mb='xs' />
-                                                <PasswordRequirement label='至少 8 位密码' meets={registerForm.values.password.length >= 8} />
-                                                <PasswordRequirement label='至多 36 位密码' meets={registerForm.values.password.length <= 36} />
-                                                {checks}
-                                            </Popover.Dropdown>
-                                        </Popover>
-                                    </Box>
+                        <Group position='apart' mt='xl'>
+                            <Anchor component='button' type='button' color='dimmed' onClick={() => toggle()} size='xs'>
+                                {type === '注册' ? '已经有账号了? 点这里登录' : '还没有账号吗? 点这里注册'}
+                            </Anchor>
+                            <Button type='submit' radius='xl'>
+                                {upperFirst(type)}
+                            </Button>
+                        </Group>
+                    </form>
+                ) : (
+                    <form
+                        onSubmit={loginForm.onSubmit(() => {
+                            console.log(114514);
+                        })}
+                    >
+                        <Stack>
+                            <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
 
-                                    <Checkbox
-                                        required={type === '注册'}
-                                        label='我同意用户条款'
-                                        checked={registerForm.values.terms}
-                                        {...registerForm.getInputProps('terms')}
-                                    />
-                                </Stack>
+                            <PasswordInput required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
+                        </Stack>
 
-                                <Group position='apart' mt='xl'>
-                                    <Anchor component='button' type='button' color='dimmed' onClick={() => toggle()} size='xs'>
-                                        {type === '注册' ? '已经有账号了? 点这里登录' : '还没有账号吗? 点这里注册'}
-                                    </Anchor>
-                                    <Button type='submit' radius='xl'>
-                                        {upperFirst(type)}
-                                    </Button>
-                                </Group>
-                            </form>
-                        ) : (
-                            <form
-                                onSubmit={loginForm.onSubmit(() => {
-                                    console.log(114514);
-                                })}
-                            >
-                                <Stack>
-                                    <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
-
-                                    <PasswordInput required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
-                                </Stack>
-
-                                <Group position='apart' mt='xl'>
-                                    <Anchor component='button' type='button' color='dimmed' onClick={() => toggle()} size='xs'>
-                                        {type === '注册' ? '已经有账号了? 点这里登录' : '还没有账号吗? 点这里注册'}
-                                    </Anchor>
-                                    <Button type='submit' radius='xl'>
-                                        {upperFirst(type)}
-                                    </Button>
-                                </Group>
-                            </form>
-                        )}
-                    </>
-                }
-            />
+                        <Group position='apart' mt='xl'>
+                            <Anchor component='button' type='button' color='dimmed' onClick={() => toggle()} size='xs'>
+                                {type === '注册' ? '已经有账号了? 点这里登录' : '还没有账号吗? 点这里注册'}
+                            </Anchor>
+                            <Button type='submit' radius='xl'>
+                                {upperFirst(type)}
+                            </Button>
+                        </Group>
+                    </form>
+                )}
+            </StandardCard>
         </Container>
     );
 }

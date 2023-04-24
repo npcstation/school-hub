@@ -40,7 +40,11 @@ class RegisterHandler extends Handler {
     }
 }
 
+class LoginHandler extends Handler {
+}
+
 export function apply(ctx) {
     Route('SignUp', '/register', RegisterHandler);
-    Route('SignUp', '/register/:id', RegisterHandler);
+    Route('SignUp-Id', '/register/:id', RegisterHandler);
+    Route('SignIn', '/login', LoginHandler);
 }

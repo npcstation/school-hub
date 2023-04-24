@@ -24,7 +24,7 @@ export function Root({ onThemeChange }: RootProps) {
         <AppShell
             styles={{
                 main: {
-                    minHeight: 'calc(100vh - 175px)',
+                    minHeight: 'calc(100vh - 135px)',
                     paddingTop: '25px',
                     paddingBottom: 'calc(var(--mantine-header-height, 0px) + 0.05rem)',
                 },

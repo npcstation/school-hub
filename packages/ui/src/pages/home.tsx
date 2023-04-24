@@ -1,4 +1,4 @@
-import { createStyles, Badge, Container, Space } from '@mantine/core';
+import { createStyles, Badge, Container, Space, Table, Grid } from '@mantine/core';
 import React from 'react';
 import { StandardCard } from '../components/card';
 
@@ -8,21 +8,34 @@ const useStyles = createStyles((theme) => ({
 
 export default function HomePage() {
     const { classes, cx, theme } = useStyles();
+    const rows = (<>
+        <tr>
+            <td>测试公告</td>
+            <td>2023.12.31</td>
+        </tr>
+    </>)
     return (
         <>
             <Container>
-                <StandardCard
-                    title='公告列表'
-                    subtitle={
-                        <Badge color='blue' variant='light'>
-                            测试
-                        </Badge>
-                    }
-					content={
-						'qwq'
-					}
-                />
-                <Space h='md' />
+                <Grid>
+                    <Grid.Col sm={12} xs={12} lg={9}>
+                        <StandardCard title='公告列表'>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th style={{ width: '75%' }}>标题</th>
+                                        <th>发布日期</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{rows}</tbody>
+                            </Table>
+                        </StandardCard>
+                    </Grid.Col>
+                    <Grid.Col sm={12} xs={12} lg={3}>
+                        <StandardCard title='还不知道是什么'>996</StandardCard>
+                    </Grid.Col>
+                    <Space h='md' />
+                </Grid>
             </Container>
         </>
     );

@@ -30,6 +30,11 @@ function transWord(word: string) {
 
 export class Handler {
     ctx: KoaContext;
+    async get() {
+        this.ctx.type = 'text/html';
+        this.ctx.body = await RenderFromPage();
+        return;
+    }
 }
 
 async function handle(ctx: KoaContext, Handler) {
@@ -46,8 +51,7 @@ async function handle(ctx: KoaContext, Handler) {
     Object.assign(args, ctx.params);
     Object.assign(args, ctx.request.query);
     try {
-        const steps = [
-            method,...(operation ? [`post${operation}`] : []),'after'];
+        const steps = [method, ...(operation ? [`post${operation}`] : []), 'after'];
         let cur = 0;
         const length = steps.length;
         h.ctx.body = '';
@@ -78,10 +82,12 @@ export async function apply() {
     const handleLogger = log4js.getLogger('handler');
     handleLogger.level = global.Project.loglevel;
     if (global.Project.env === 'prod') {
-        await app.use(KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'assets'), {
-            route: 'assets'
-        }));
-    } 
+        await app.use(
+            KoaStatic(path.join(__dirname, '..', 'ui', 'dist', 'assets'), {
+                route: 'assets',
+            })
+        );
+    }
     await app.listen(global.Project.port);
     handleLogger.info(`Backend listen :${global.Project.port}`);
 }
