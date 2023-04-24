@@ -3,11 +3,6 @@ import { user } from '../model/user';
 import { param } from '../utils/decorate';
 
 class RegisterHandler extends Handler {
-    @param('t')
-    get(t: string) {
-        this.ctx.body = 'Hello ' + t;
-    }
-
     @param('username')
     @param('password')
     @param('gender')
@@ -47,4 +42,5 @@ class RegisterHandler extends Handler {
 
 export function apply(ctx) {
     Route('SignUp', '/register', RegisterHandler);
+    Route('SignUp', '/register/:id', RegisterHandler);
 }
