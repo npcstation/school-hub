@@ -44,6 +44,7 @@ async function handle(ctx: KoaContext, Handler) {
     h.ctx = ctx;
     Object.assign(args, body);
     Object.assign(args, ctx.params);
+    Object.assign(args, ctx.request.query);
     try {
         const steps = [
             method,...(operation ? [`post${operation}`] : []),'after'];
