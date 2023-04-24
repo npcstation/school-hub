@@ -5,7 +5,6 @@ import {
     PasswordInput,
     Text,
     Group,
-    PaperProps,
     Button,
     Checkbox,
     Anchor,
@@ -17,11 +16,15 @@ import {
     Select,
     useMantineTheme,
     rem,
+    createStyles
 } from '@mantine/core';
 import React, { useState } from 'react';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { StandardCard } from '../components/Card';
+import { StandardCard } from '../components/card';
 
+const useStyles = createStyles((theme) => ({
+    
+}));
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
     return (
         <Text color={meets ? 'teal' : 'red'} sx={{ display: 'flex', alignItems: 'center' }} mt={7} size='sm'>
@@ -51,7 +54,7 @@ function getStrength(password: string) {
 
 export default function LoginPage() {
     const [type, toggle] = useToggle(['登录', '注册']);
-    const theme = useMantineTheme();
+    const { classes, cx, theme } = useStyles();
     const registerForm = useForm({
         initialValues: {
             email: '',
@@ -99,10 +102,11 @@ export default function LoginPage() {
     const minBirthYear = currDate.getFullYear() - (currDate.getMonth() + 1 < 9 ? 18 : 17);
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
+
     return (
         <Container maw={rem(768)}>
             <StandardCard
-                pt='5px'
+                pt={theme.spacing.xs}
                 title=''
                 content={
                     <>
@@ -120,12 +124,7 @@ export default function LoginPage() {
                                 }}
                             >
                                 <Stack>
-                                    <TextInput
-                                        required={type === '注册'}
-                                        label='用户名'
-                                        placeholder='您的用户名'
-                                        {...registerForm.getInputProps('name')}
-                                    />
+                                    <TextInput required={type === '注册'} label='用户名' placeholder='您的用户名' {...registerForm.getInputProps('name')} />
 
                                     <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
 
@@ -188,8 +187,7 @@ export default function LoginPage() {
                                                 // applies styles to selected item
                                                 '&[data-selected]': {
                                                     '&, &:hover': {
-                                                        backgroundColor:
-                                                            theme.colorScheme === 'dark' ? `${theme.colors.indigo[9]}55` : theme.colors.indigo[0],
+                                                        backgroundColor: theme.colorScheme === 'dark' ? `${theme.colors.indigo[9]}55` : theme.colors.indigo[0],
                                                         color: theme.colorScheme === 'dark' ? theme.white : theme.colors.indigo[9],
                                                     },
                                                 },
@@ -269,12 +267,7 @@ export default function LoginPage() {
                                 <Stack>
                                     <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
 
-                                    <PasswordInput
-                                        required
-                                        label='密码'
-                                        placeholder='您的密码（要保密！）'
-                                        {...loginForm.getInputProps('password')}
-                                    />
+                                    <PasswordInput required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
                                 </Stack>
 
                                 <Group position='apart' mt='xl'>

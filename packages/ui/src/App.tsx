@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import { MantineProvider, ColorScheme } from '@mantine/core';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Root } from './pages/Root';
-import HomePage from './pages/HomePage';
-import ForumPage from './pages/Forum';
-import LoginPage from './pages/Login';
+import { Root } from './structure/root';
+import HomePage from './pages/home';
+import LoginPage from './pages/login';
 import store from './store/store';
 import { Provider } from 'react-redux';
 import { Notifications } from '@mantine/notifications';
 
-declare global {
-    interface Window {
-        web?: any;
-    }
-}
-
 function App() {
     const [colorScheme, setColorScheme] = useState('light');
     const beforeColorScheme = localStorage.getItem('colorScheme');
+    
     if (beforeColorScheme === null) {
         localStorage.setItem('colorScheme', 'light');
         setColorScheme('light');
@@ -26,6 +20,7 @@ function App() {
             setColorScheme(beforeColorScheme);
         }
     }
+
     function onThemeChange() {
         if (colorScheme === 'light') {
             setColorScheme('dark');
@@ -63,7 +58,6 @@ function App() {
                         <Routes>
                             <Route path='' element={<Root onThemeChange={onThemeChange} />}>
                                 <Route path='' element={<HomePage></HomePage>} />
-                                <Route path='forum' element={<ForumPage></ForumPage>} />
                                 <Route path='login' element={<LoginPage></LoginPage>} />
                             </Route>
                         </Routes>

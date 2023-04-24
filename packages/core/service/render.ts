@@ -6,9 +6,8 @@ export const templateHTML = {
 };
 export let manifest = {};
 
-export async function RenderFromPage(pageid, data) {
-    let html = templateHTML['RenderHTML'].replace('<!--RENDER-->', `window.web = ${JSON.stringify(data)}`);
-    html = html.replace(
+export async function RenderFromPage() {
+    const html = templateHTML['RenderHTML'].replace(
         '<!--DEVSERVER-->',
         global.Project.env === 'prod'
             ? `

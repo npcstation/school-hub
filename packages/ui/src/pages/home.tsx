@@ -1,12 +1,13 @@
-import { Badge, Container, Space, useMantineTheme } from '@mantine/core';
+import { createStyles, Badge, Container, Space } from '@mantine/core';
 import React from 'react';
-import { Activity } from '../interfaces/activity';
-import { StandardCard } from '../components/Card';
+import { StandardCard } from '../components/card';
+
+const useStyles = createStyles((theme) => ({
+    
+}));
 
 export default function HomePage() {
-    const [popularActivities, setPopularActivities] = React.useState<Activity[]>([]);
-	const theme = useMantineTheme();
-
+    const { classes, cx, theme } = useStyles();
     return (
         <>
             <Container>

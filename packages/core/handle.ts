@@ -6,6 +6,7 @@ import * as log4js from 'log4js';
 import KoaStatic from 'awesome-static';
 import * as path from 'path';
 import KoaConnect from 'koa-connect';
+import { RenderFromPage } from './service/render';
 
 export const app = new Koa();
 const router = new KoaRouter();

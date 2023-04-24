@@ -6,9 +6,8 @@ import { RenderFromPage } from "../service/render";
 class MainPageHandler extends Handler {
     async get() {
         this.ctx.type = 'text/html'
-        this.ctx.body = await RenderFromPage('index.html', {
-            'test': 'test'
-        })
+        this.ctx.body = await RenderFromPage();
+        return;
     }
 }
 
