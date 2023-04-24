@@ -4,16 +4,20 @@ import { ExistError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
 import { DefaultType, NumberLimitIn } from '../declare/type';
 
-export class usermodel {
+export class UserSchema {
+    username: string;
+    pwd: string;
+    email: string;
+    grade: number;
+    gender: number;
+    gravatarLink: string;
+    description: string;
+}
 
-    @verify('email', DefaultType.Email)
-    @verify('username', DefaultType.String)
-    @verify('pwd', DefaultType.String)
-    @verify('grade', DefaultType.Number)
-    @verify('gender', NumberLimitIn(0, 1))
-    @verify('gravatarLink', DefaultType.String)
-    @verify('description', DefaultType.String)
-    async create(username: string, pwd: string, email: string, grade: number, gender: 0 | 1, gravatarLink: string, description: string) {
+export class UserModel {
+    @verify('user', DefaultType.User)
+    async create(user: UserSchema) {
+        const { username, pwd, email, grade, gender, gravatarLink, description } = user;
         if (await this.nameExist(username)) {
             throw new ExistError();
         }
@@ -33,14 +37,9 @@ export class usermodel {
         };
     }
 
-    @verify('email', DefaultType.Email)
-    @verify('username', DefaultType.String)
-    @verify('pwd', DefaultType.String)
-    @verify('grade', DefaultType.Number)
-    @verify('gender', NumberLimitIn(0, 1))
-    @verify('gravatarLink', DefaultType.String)
-    @verify('description', DefaultType.String)
-    async updateall(username: string, pwd: string, email: string, grade: number, gender: 0 | 1, gravatarLink: string, description: string) {
+    @verify('user', DefaultType.User)
+    async updateall(user: UserSchema) {
+        const { username, pwd, email, grade, gender, gravatarLink, description } = user;
         if (await this.nameExist(username)) {
             throw new ExistError();
         }
@@ -135,7 +134,7 @@ export class usermodel {
         return this.handle(nameData);
     }
 
-    @verify('email', 'DefualtType.Email')
+    @verify('email', DefaultType.Email)
     async getbyEmail(email: string) {
         const emailData = await db.getone('user', {
             email,
@@ -147,4 +146,4 @@ export class usermodel {
     }
 }
 
-export const user = new usermodel();
+export const user = new UserModel();

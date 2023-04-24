@@ -1,18 +1,17 @@
-import { MongoClient } from 'mongodb';
-
+import { Filter, MongoClient, UpdateFilter } from 'mongodb';
 
 class dbClass {
-	url: string;
-	dbname: string;
-	options: any;
+    url: string;
+    dbname: string;
+    options: any;
 
-	constructor(url, dbname, options) {
-		this.url = url
-		this.dbname = dbname
-		this.options = options
-	}
+    constructor(url: string, dbname: string, options: any) {
+        this.url = url;
+        this.dbname = dbname;
+        this.options = options;
+    }
 
-    async insert(model, data: [any] | object) {
+    async insert(model: string, data: [any] | object) {
         let insertMore = false;
         if (Array.isArray(data)) {
             insertMore = true;
@@ -24,41 +23,41 @@ class dbClass {
         client.close();
     }
 
-    async getone(model, query, options = {}) {
+    async getone(model: string, query: Filter<Document>, options = {}) {
         const client = new MongoClient(this.url);
-        const database = client.db(this.dbname);
-		const coll = database.collection(model);
-		const res = await coll.findOne(query, options);
-		client.close();
-		return res;
-    }
-
-    async getall(model, query, options = {}) {
-        const client = new MongoClient(this.url);
-        const database = client.db(this.dbname);
-		const coll = database.collection(model);
-		const res = await coll.find(query, options).toArray();
-		client.close();
-		return res;
-	}
-	
-	async update(model, where, data, options = {}) {
-		const client = new MongoClient(this.url);
         const database = client.db(this.dbname);
         const coll = database.collection(model);
-		const res = await coll.updateOne(where, { $set: data }, options);
+        const res = await coll.findOne(query, options);
         client.close();
         return res;
-	}
+    }
 
-	async change(model, where, newdata, options = {}) {
-		const client = new MongoClient(this.url);
+    async getall(model: string, query: Filter<Document>, options = {}) {
+        const client = new MongoClient(this.url);
+        const database = client.db(this.dbname);
+        const coll = database.collection(model);
+        const res = await coll.find(query, options).toArray();
+        client.close();
+        return res;
+    }
+
+    async update(model: string, where: Filter<Document>, data: any, options = {}) {
+        const client = new MongoClient(this.url);
+        const database = client.db(this.dbname);
+        const coll = database.collection(model);
+        const res = await coll.updateOne(where, { $set: data }, options);
+        client.close();
+        return res;
+    }
+
+    async change(model: string, where: Filter<Document>, newdata: UpdateFilter<Document>, options = {}) {
+        const client = new MongoClient(this.url);
         const database = client.db(this.dbname);
         const coll = database.collection(model);
         const res = await coll.updateOne(where, newdata, options);
         client.close();
         return res;
-	}
+    }
 }
 
 const url = global.Project.config.mongo;
