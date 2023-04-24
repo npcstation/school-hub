@@ -25,15 +25,25 @@ global.Project = {
     core: 'packages/core',
     currentVersion: '0',
     port: '8060',
-    uiport: '5173',
 };
-
-Object.assign(global.Project, argv);
-
-
 if (argv.debug) {
     global.Project.env = 'dev';
     global.Project.loglevel = 'DEBUG';
+}
+if (argv.loglevel) {
+    global.Project.loglevel = argv.loglevel;
+}
+if (argv.config) {
+    global.Project.config = argv.config;
+}
+if (argv.core) {
+    global.Project.core = argv.core;
+}
+if (argv.port) {
+    global.Project.port = argv.port;
+}
+if (argv.current) {
+    global.Project.currentVersion = argv.current;
 }
 
 const ctxs = {};
