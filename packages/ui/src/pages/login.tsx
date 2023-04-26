@@ -198,7 +198,7 @@ export default function LoginPage() {
                                 ]}
                                 required
                                 label='性别'
-                                name='grade'
+                                name='gender'
                                 styles={standardSelect}
                                 {...registerForm.getInputProps('gender')}
                             />

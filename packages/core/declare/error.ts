@@ -2,9 +2,9 @@ export class RError extends Error {
     public errorType;
 }
 
-export class ValidatedError extends RError {
+export class ValidationError extends RError {
     constructor(valuename: any) {
-        super(`Validated Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
+        super(`Validation Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
     }
     public errorType = 'validated';
 }

@@ -15,9 +15,9 @@ export class UserSchema {
 }
 
 export class UserModel {
-    @verify('user', DefaultType.User)
-    async create(user: UserSchema) {
-        const { username, pwd, email, grade, gender, gravatarLink, description } = user;
+    @verify('data', DefaultType.User)
+    async create(data: UserSchema) {
+        const { username, pwd, email, grade, gender, gravatarLink, description } = data;
         if (await this.nameExist(username)) {
             throw new ExistError();
         }
@@ -37,9 +37,9 @@ export class UserModel {
         };
     }
 
-    @verify('user', DefaultType.User)
-    async updateall(user: UserSchema) {
-        const { username, pwd, email, grade, gender, gravatarLink, description } = user;
+    @verify('data', DefaultType.User)
+    async updateall(data: UserSchema) {
+        const { username, pwd, email, grade, gender, gravatarLink, description } = data;
         if (await this.nameExist(username)) {
             throw new ExistError();
         }

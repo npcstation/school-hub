@@ -1,4 +1,4 @@
-import { ValidatedError } from "../declare/error";
+import { ValidationError } from "../declare/error";
 import { BasicType, DefaultType, Verify } from "../declare/type";
 
 export function param(params) {
@@ -29,7 +29,7 @@ export function verify(param, Type) {
 		descriptor.value = async function run(...args) {
             for (let i in descriptor.verify) {
                 if (!Verify(descriptor.verify[i], args[i])) {
-					throw new ValidatedError(descriptor.verify[i]);
+					throw new ValidationError(descriptor.verify[i]);
                 }
             }
             return await descriptor.originalMethod.apply(this, args);

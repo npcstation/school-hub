@@ -10,7 +10,7 @@ class RegisterHandler extends Handler {
     @param('grade')
     @param('email')
     @param('description')
-    async postCreate(username: string, password: string, gender: string | number, grade: number, email: string, description: string) {
+    async postCreate(username: string, password: string, gender: string | number, grade: string, email: string, description: string) {
         try {
             var parsedGender: number = 0;
             if (typeof gender === 'string') {
@@ -18,11 +18,12 @@ class RegisterHandler extends Handler {
             } else {
                 parsedGender = gender;
             }
+            const numGrade = parseInt(grade);
             const data = await user.create({
                 username,
                 pwd: password,
                 email,
-                grade,
+                grade: numGrade,
                 gender: parsedGender,
                 gravatarLink: 'default',
                 description: description || 'default',
@@ -45,7 +46,7 @@ class RegisterHandler extends Handler {
     @param('gender')
     @param('grade')
     @param('email')
-    async postCreateUI(username: string, password: string, gender: string | number, grade: number, email: string) {
+    async postCreateUI(username: string, password: string, gender: string | number, grade: string, email: string) {
         console.log('233');
         try {
             var parsedGender: number = 0;
@@ -54,11 +55,12 @@ class RegisterHandler extends Handler {
             } else {
                 parsedGender = gender;
             }
+            const numGrade = parseInt(grade);
             const data = await user.create({
                 username,
                 pwd: password,
                 email,
-                grade,
+                grade: numGrade,
                 gender: parsedGender,
                 gravatarLink: 'default',
                 description: 'default',
