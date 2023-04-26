@@ -23,6 +23,7 @@ export function StandardCard({
 	subtitle?: React.ReactNode;
     pt?: string | number;
     children?: JSX.Element[] | JSX.Element | string;
+        w?: string;
 }) {
     const { classes, cx, theme } = useStyles();
     

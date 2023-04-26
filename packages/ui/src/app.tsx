@@ -7,11 +7,18 @@ import LoginPage from './pages/login';
 import store from './store/store';
 import { Provider } from 'react-redux';
 import { Notifications } from '@mantine/notifications';
+import * as Direct from './interfaces/interface';
+
+declare global {
+    interface Window {
+        web?: any;
+    }
+}
 
 function App() {
     const [colorScheme, setColorScheme] = useState('light');
     const beforeColorScheme = localStorage.getItem('colorScheme');
-    
+
     if (beforeColorScheme === null) {
         localStorage.setItem('colorScheme', 'light');
         setColorScheme('light');
@@ -46,22 +53,33 @@ function App() {
                         globalStyles: (theme) => ({
                             body: {
                                 backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : '#f7f7f7',
-							}
+                            },
                         }),
                         shadows: {
                             xs: '0 4px 10px rgba(0,0,0,0.05), 0 0 1px rgba(0,0,0,0.1);',
                         },
                     }}
                 >
-                    <Notifications />
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path='' element={<Root onThemeChange={onThemeChange} />}>
-                                <Route path='' element={<HomePage></HomePage>} />
-                                <Route path='login' element={<LoginPage></LoginPage>} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                    {window?.web?.type === 'back' ? (
+                        <Root onThemeChange={onThemeChange} type='direct'>
+                            {
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                (Direct as any)[window?.web?.template](window?.web?.data)
+                            }
+                        </Root>
+                    ) : (
+                        <>
+                            <Notifications />
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route path='' element={<Root type='route' onThemeChange={onThemeChange} />}>
+                                        <Route path='' element={<HomePage></HomePage>} />
+                                        <Route path='login' element={<LoginPage></LoginPage>} />
+                                    </Route>
+                                </Routes>
+                            </BrowserRouter>
+                        </>
+                    )}
                 </MantineProvider>
             </Provider>
         </>

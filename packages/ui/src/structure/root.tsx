@@ -11,11 +11,13 @@ const useStyles = createStyles((theme) => ({
 
 interface RootProps {
     onThemeChange: () => void;
+    type: 'route' | 'direct';
+    children?: JSX.Element[] | JSX.Element | string;
 }
 
-export function Root({ onThemeChange }: RootProps) {
+export function Root({ onThemeChange, type, children }: RootProps) {
     const { classes, cx, theme } = useStyles();
-    const userState = useAppSelector((state) => state.user);
+    // const userState = useAppSelector((state) => state.user);
     const mainLinks = [
         { link: '/', label: '主页' },
         { link: '/login', label: '登录' },
@@ -35,10 +37,11 @@ export function Root({ onThemeChange }: RootProps) {
                 <Navbar
                     title='在线校园'
                     links={mainLinks}
+                    type={type}
                 ></Navbar>
             }
         >
-            <Outlet />
+            {type === 'route' ? <Outlet /> : children}
         </AppShell>
     );
 }

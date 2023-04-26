@@ -6,13 +6,16 @@ export const templateHTML = {
 };
 export let manifest = {};
 
-export async function RenderFromPage() {
+export async function RenderFromPage(datas = {}, type = 'render') {
+    
     const html = templateHTML['RenderHTML'].replace(
         '<!--DEVSERVER-->',
         global.Project.env === 'prod'
             ? `
         <link rel="stylesheet" href="/${manifest['index.css'].file}" />
-        <script type="module" src="/${manifest['index.html'].file}"></script>`
+        <script type="module" src="/${manifest['index.html'].file}"></script>
+        <script>window.web = ${JSON.stringify(datas)}</script>
+        `
             : `
             <script type="module">
                 import RefreshRuntime from 'http://localhost:${global.Project.uiport}/@react-refresh'
@@ -21,6 +24,7 @@ export async function RenderFromPage() {
                 window.$RefreshSig$ = () => (type) => type
                 window.__vite_plugin_react_preamble_installed__ = true
             </script>
+            <script>window.web = ${JSON.stringify(datas)}</script>
             <script type="module" src="http://localhost:${global.Project.uiport}/src/main.tsx"></script>
             <script type="module" src="http://localhost:${global.Project.uiport}/@vite/client"></script>
         `

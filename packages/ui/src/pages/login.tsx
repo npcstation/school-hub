@@ -24,7 +24,9 @@ import { standardSelect } from '../styles/select';
 import { standardTitleColor } from '../styles/color';
 
 const useStyles = createStyles((theme) => ({
-    
+    nodisplay: {
+        display: 'none'
+    }
 }));
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
@@ -104,28 +106,28 @@ export default function LoginPage() {
     const minBirthYear = currDate.getFullYear() - (currDate.getMonth() + 1 < 9 ? 18 : 17);
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
-
+    const largestScreen = useMediaQuery('(min-width: 700px)');
+    
     return (
-        <Container maw={rem(768)}>
+        <Container miw={rem(400)} w={largestScreen ? '30%' : '95%'}>
             <StandardCard pt={theme.spacing.xs}>
                 <Text size='lg' weight={700} c={standardTitleColor(theme)} mb='sm'>
                     {type}
                 </Text>
                 {type === '注册' ? (
-                    <form
-                        onSubmit={() => {
-                            console.log('qwq');
-                            registerForm.onSubmit(() => {
-                                console.log(114514);
-                            });
-                        }}
-                    >
+                    <form action='register' method='POST'>
+                        <input name='operation' className={classes.nodisplay} value={'createUI'} />
                         <Stack>
-                            <TextInput required={type === '注册'} label='用户名' placeholder='您的用户名' {...registerForm.getInputProps('name')} />
-
-                            <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
-
+                            <TextInput
+                                name='username'
+                                required={type === '注册'}
+                                label='用户名'
+                                placeholder='您的用户名'
+                                {...registerForm.getInputProps('name')}
+                            />
+                            <TextInput name='email' required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
                             <Select
+                                name='grade'
                                 data={[
                                     {
                                         label: `一年级 (${minBirthYear + 11})`,
@@ -196,6 +198,7 @@ export default function LoginPage() {
                                 ]}
                                 required
                                 label='性别'
+                                name='grade'
                                 styles={standardSelect}
                                 {...registerForm.getInputProps('gender')}
                             />
@@ -211,6 +214,7 @@ export default function LoginPage() {
                                         <div onFocusCapture={() => setPopoverOpened(true)} onBlurCapture={() => setPopoverOpened(false)}>
                                             <PasswordInput
                                                 required
+                                                name='password'
                                                 label='密码'
                                                 placeholder='您的密码（要保密！）'
                                                 {...registerForm.getInputProps('password')}
@@ -244,15 +248,12 @@ export default function LoginPage() {
                         </Group>
                     </form>
                 ) : (
-                    <form
-                        onSubmit={loginForm.onSubmit(() => {
-                            console.log(114514);
-                        })}
-                    >
+                    <form action='login' method='POST'>
+                        <input name='operation' className={classes.nodisplay} value={'loginCheck'} />
                         <Stack>
-                            <TextInput required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
+                            <TextInput name='email' required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
 
-                            <PasswordInput required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
+                            <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
                         </Stack>
 
                         <Group position='apart' mt='xl'>

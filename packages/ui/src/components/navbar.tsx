@@ -101,17 +101,25 @@ const useStyles = createStyles((theme) => ({
 interface HeadersProps {
     links: { link: string; label: string }[];
     title: string;
+    type: 'route' | 'direct';
 }
 
-export function Navbar({ links, title }: HeadersProps) {
+export function Navbar({ links, title, type }: HeadersProps) {
     const [opened, { toggle }] = useDisclosure(false);
     const { classes, cx, theme } = useStyles();
-
-    const items = links.map((item) => (
-        <NavLink key={item.label} to={item.link} className={(state) => cx(classes.link, state.isActive ? classes.linkActive : '')}>
-            {item.label}
-        </NavLink>
-    ));
+    
+    const items =
+        type === 'route'
+            ? links.map((item) => (
+                <NavLink key={item.label} to={item.link} className={(state) => cx(classes.link, state.isActive ? classes.linkActive : '')}>
+                    {item.label}
+                </NavLink>
+            ))
+            : links.map((item) => (
+                <a key={item.label} href={item.link} className={classes.link} >
+                    {item.label}
+                </a>
+            ));
 
     return (
         <Header height={50} mb={0} className={classes.Header} withBorder={false}>
