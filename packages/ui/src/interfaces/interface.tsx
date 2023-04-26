@@ -1,7 +1,7 @@
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
 import React from 'react';
-import { Button, Container, createStyles, Text } from '@mantine/core';
+import { Alert, Button, Container, createStyles, Text } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     feedbackSuccess: {
@@ -36,7 +36,7 @@ export function Feedback({ status, title, msg, links }: any) {
     ).map((item) => (
         <>
             <a href={item.link}>
-                <Button mr={2} color={item.color || 'indigo'} variant={item.style || 'filled'}>{item.title}</Button>
+                <Button mr={4} color={item.color || 'indigo'} variant={item.style || 'filled'}>{item.title}</Button>
             </a>
         </>
     ));
@@ -45,17 +45,17 @@ export function Feedback({ status, title, msg, links }: any) {
             <StandardCard title='结果信息'>
                 {status === 'success' ? (
                     <>
-                        <IconCheck className={classes.feedbackIcon} size={25} color={theme.colors.green[6]} stroke={3} />
-                        <span className={classes.feedbackSuccess}>{title}</span>
+                        <Alert icon={<IconCheck size='1rem' />} title={title} color='green'>
+                            {msg}
+                        </Alert>
                     </>
                 ) : (
                     <>
-                        <IconX className={classes.feedbackIcon} size={25} color={theme.colors.red[6]} stroke={3} />
-                        <span className={classes.feedbackError}>{title}</span>
+                        <Alert icon={<IconX size='1rem' />} title={title} color='red'>
+                            {msg}
+                        </Alert>
                     </>
                 )}
-                <Text p={theme.spacing.xs}></Text>
-                <Text>信息：{msg}</Text>
                 <Text pt={theme.spacing.xs}></Text>
                 {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any

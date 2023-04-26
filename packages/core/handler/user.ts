@@ -75,8 +75,8 @@ class RegisterHandler extends Handler {
                     msg: `您的提交已经成功。您的ID是:${data.id}`,
                     links: [
                         {
-                            title: '返回主页',
-                            link: '/',
+                            title: '前往登录',
+                            link: '/login',
                             style: 'light',
                         },
                     ],
