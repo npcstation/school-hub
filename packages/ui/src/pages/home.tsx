@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createStyles, Badge, Container, Space, Table, Grid } from '@mantine/core';
 import React from 'react';
 import { StandardCard } from '../components/card';

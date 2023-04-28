@@ -3,6 +3,7 @@ export class RError extends Error {
 }
 
 export class ValidationError extends RError {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(valuename: any) {
         super(`Validation Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
     }

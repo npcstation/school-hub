@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Filter, MongoClient, UpdateFilter } from 'mongodb';
 
 class dbClass {

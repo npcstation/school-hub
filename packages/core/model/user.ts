@@ -2,7 +2,7 @@ import { verify } from '../utils/decorate';
 import { db } from '../service/db';
 import { ExistError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
-import { DefaultType, NumberLimitIn } from '../declare/type';
+import { DefaultType } from '../declare/type';
 
 export class UserSchema {
     username: string;
@@ -60,7 +60,9 @@ export class UserModel {
     }
 
     @verify('id', DefaultType.Number)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async update(id: number, data: any) {
+        //TODO: 补全
         if ((await this.idExist(id)) === false) {
             //TODO: no exist error
         }
@@ -105,7 +107,9 @@ export class UserModel {
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handle(data: any) {
+        //TODO: 补全
         if (typeof data.gender === 'boolean') {
             data.gender = data.gender ? 'male' : 'female';
         }

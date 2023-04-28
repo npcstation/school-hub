@@ -1,6 +1,8 @@
-import { UserSchema } from '../model/user';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import { UserSchema } from '../model/user';
 
 export class BasicType {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     verify(data: any): boolean {
         return true;
     }

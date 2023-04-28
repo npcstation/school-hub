@@ -1,7 +1,7 @@
 import { Transporter, createTransport } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import verifyTemplate from '../template/verifytemplate.html';
-import { verify } from '../utils/decorate';
+// import { verify } from '../utils/decorate';
 
 class SMTPConfig {
     host: string;
@@ -23,17 +23,14 @@ export class EmailService {
     from: string;
     transporters: Map<string, Transporter>;
     configs: Map<string, SMTPConfig>;
-    callback: Function;
 
     constructor(
         from: string,
-        configs: Map<string, SMTPConfig>,
-        callbackFunction: Function
+        configs: Map<string, SMTPConfig>
     ) {
         this.from = from;
         this.transporters = new Map();
         this.configs = configs;
-        this.callback = callbackFunction;
     }
 
     async init() {
@@ -53,6 +50,7 @@ export class EmailService {
         return new Promise((resolve, reject) => {
             this.transporters
                 .get(transporter)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 .sendMail(mailOptions, (err, res) => {
                     if (err) {
                         reject(err);
@@ -75,8 +73,7 @@ export class EmailService {
         type: 'verify',
         template: VerifyOverwrite
     ) {
-        var overwritten = '';
-        var subject = '';
+        let overwritten = '', subject = '';
         if (type === 'verify') {
             overwritten = verifyTemplate
                 .replace(/<!--USERNAME-->/g, template.username)
@@ -103,6 +100,4 @@ export async function apply() {
     await emails.init();
 }
 
-export const emails = new EmailService(from, urls, () => {
-	
-});
+export const emails = new EmailService(from, urls);

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
 import React from 'react';
@@ -25,7 +27,6 @@ const useStyles = createStyles((theme) => ({
 
 export function Feedback({ status, title, msg, links }: any) {
     const { classes, cx, theme } = useStyles();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const link = (
         links as {
             link: string;

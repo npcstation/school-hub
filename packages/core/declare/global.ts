@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type GlobalProjectProp = {
 	env: 'prod' | 'dev' | string,
 	loglevel: 'INFO' | 'DEBUG' | 'WARNING' | 'ERROR' | 'CRITIAL',

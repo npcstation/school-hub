@@ -6,8 +6,7 @@ export const templateHTML = {
 };
 export let manifest = {};
 
-export async function RenderFromPage(datas = {}, type = 'render') {
-    
+export async function RenderFromPage(datas = {}) {
     const html = templateHTML['RenderHTML'].replace(
         '<!--DEVSERVER-->',
         global.Project.env === 'prod'

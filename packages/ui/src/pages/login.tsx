@@ -20,11 +20,12 @@ import {
     createStyles
 } from '@mantine/core';
 import React, { useState } from 'react';
-import { IconCheck, IconInfoCircle, IconInfoSmall, IconX } from '@tabler/icons-react';
+import { IconCheck, IconInfoSmall, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
 import { standardSelect } from '../styles/select';
 import { standardTitleColor } from '../styles/color';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const useStyles = createStyles((theme) => ({
     nodisplay: {
         display: 'none'
@@ -60,6 +61,7 @@ function getStrength(password: string) {
 
 export default function LoginPage() {
     const [type, toggle] = useToggle(['登录', '注册']);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { classes, cx, theme } = useStyles();
     const registerForm = useForm({
         initialValues: {

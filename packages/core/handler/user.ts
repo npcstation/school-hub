@@ -11,7 +11,7 @@ class RegisterHandler extends Handler {
     @param('email')
     async postCreate(username: string, password: string, gender: string | number, grade: string, email: string) {
         try {
-            var parsedGender: number = 0;
+            let parsedGender = 0;
             if (typeof gender === 'string') {
                 parsedGender = gender === 'female' ? 0 : 1;
             } else {
@@ -47,7 +47,7 @@ class RegisterHandler extends Handler {
     @param('email')
     async postCreateUI(username: string, password: string, gender: string | number, grade: string, email: string) {
         try {
-            var parsedGender: number = 0;
+            let parsedGender = 0;
             if (typeof gender === 'string') {
                 parsedGender = gender === 'female' ? 0 : 1;
             } else {
@@ -146,6 +146,7 @@ class LoginHandler extends Handler {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function apply(ctx) {
     Route('SignUp', '/register', RegisterHandler);
     Route('SignUp-Id', '/register/:id', RegisterHandler);

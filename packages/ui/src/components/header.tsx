@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createStyles, Header } from '@mantine/core';
 import React from 'react';
 

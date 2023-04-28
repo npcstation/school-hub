@@ -3,11 +3,9 @@ import {Redis} from 'ioredis'
 export class RedisService {
 	redis: Redis;
 	url: string;
-	callback: Function;
 
-	constructor(url, callbackFunction) {
+	constructor(url) {
 		this.url = url;
-		this.callback = callbackFunction;
     }
 
 	async init() {
@@ -35,7 +33,7 @@ export class RedisService {
 	async get(model, id) {
 		return await this.redis.get(`${model}-${id}`);
 	}
-};
+}
 
 const url = global.Project.redis.url || 'redis://127.0.0.1:6379/';
 
@@ -43,6 +41,4 @@ export async function apply() {
 	await rdis.init();
 }
 
-export const rdis = new RedisService(url, (err, res) => {
-	console.log(res);
-});
+export const rdis = new RedisService(url);

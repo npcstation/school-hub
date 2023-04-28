@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createStyles, AppShell } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../store/hooks';

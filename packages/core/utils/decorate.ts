@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValidationError } from "../declare/error";
-import { BasicType, DefaultType, Verify } from "../declare/type";
+import { DefaultType, Verify } from "../declare/type";
 
 export function param(params) {
     return function (target: any, methodName: string, descriptor: any) {
@@ -27,7 +28,7 @@ export function verify(param, Type) {
 		}
 		descriptor.verify[descriptor.paramNames.indexOf(param)] = Type || DefaultType[Type.toString()];
 		descriptor.value = async function run(...args) {
-            for (let i in descriptor.verify) {
+            for (const i in descriptor.verify) {
                 if (!Verify(descriptor.verify[i], args[i])) {
 					throw new ValidationError(descriptor.verify[i]);
                 }

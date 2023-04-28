@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { createStyles, Header, Container, Group, Burger, Transition, Paper } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
