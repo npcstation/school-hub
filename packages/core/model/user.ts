@@ -4,8 +4,6 @@ import { ExistError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
 import { DefaultType } from '../declare/type';
 
-const testCI = '';
-
 export class UserSchema {
     username: string;
     pwd: string;
