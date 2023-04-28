@@ -1,5 +1,7 @@
 import { useToggle, upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { handleRegister } from './loginHandler';
+import { notifications } from '@mantine/notifications';
 import {
     TextInput,
     PasswordInput,
@@ -18,7 +20,7 @@ import {
     createStyles
 } from '@mantine/core';
 import React, { useState } from 'react';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconInfoCircle, IconInfoSmall, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
 import { standardSelect } from '../styles/select';
 import { standardTitleColor } from '../styles/color';
@@ -63,7 +65,7 @@ export default function LoginPage() {
         initialValues: {
             email: '',
             grade: '2007',
-            name: '',
+            username: '',
             password: '',
             gender: 'male',
             terms: true,
@@ -73,7 +75,7 @@ export default function LoginPage() {
             email: (val) => {
                 return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(val) ? null : '不符合邮箱规则';
             },
-            name: (val) => {
+            username: (val) => {
                 if (val.length < 4) {
                     return '用户名需要至少 4 位！';
                 } else if (val.length > 36) {
@@ -109,13 +111,42 @@ export default function LoginPage() {
     const largestScreen = useMediaQuery('(min-width: 700px)');
     
     return (
-        <Container miw={rem(400)} w={largestScreen ? '30%' : '95%'}>
+        <Container miw={rem(400)} w={!largestScreen ? '95%' : '30%'}>
             <StandardCard pt={theme.spacing.xs}>
                 <Text size='lg' weight={700} c={standardTitleColor(theme)} mb='sm'>
                     {type}
                 </Text>
                 {type === '注册' ? (
-                    <form action='register' method='POST'>
+                    <form onSubmit={registerForm.onSubmit((data) => {
+                        handleRegister(data, (value) => {
+                            notifications.show({
+                                title: value.status === 'error' ? '注册失败' : '注册成功',
+                                message:
+                                    value.status === 'error'
+                                        ? `错误！${value.type}。相关结果已在控制台显示。`
+                                        : `🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。`,
+                                color: value.status === 'error' ? 'red' : 'green',
+                                icon: value.status === 'error' ? <IconX /> : <IconCheck />,
+                                withCloseButton: false
+                            });
+                            console.log(`技术参数`);
+                            console.log(value);
+                            if (value.status === 'success') {
+                                setTimeout(() => {
+                                    if (window.web?.disableJump !== true) {
+                                        location.href = '/login';
+                                    } else {
+                                        notifications.show({
+                                            title: '通知',
+                                            message: `跳转请求已忽略。`,
+                                            color: 'blue',
+                                            icon: <IconInfoSmall />,
+                                        });
+                                    }
+                                }, 2000);
+                            }
+                        });
+                    })}>
                         <input name='operation' className={classes.nodisplay} value={'createUI'} />
                         <Stack>
                             <TextInput
@@ -123,7 +154,7 @@ export default function LoginPage() {
                                 required={type === '注册'}
                                 label='用户名'
                                 placeholder='您的用户名'
-                                {...registerForm.getInputProps('name')}
+                                {...registerForm.getInputProps('username')}
                             />
                             <TextInput name='email' required label='邮箱' placeholder='hello@bjbybbs.com' {...registerForm.getInputProps('email')} />
                             <Select
@@ -251,7 +282,7 @@ export default function LoginPage() {
                     <form action='login' method='POST'>
                         <input name='operation' className={classes.nodisplay} value={'loginCheck'} />
                         <Stack>
-                            <TextInput name='email' required label='邮箱' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
+                            <TextInput name='email' required label='用户名 / 邮箱 / 学号' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
 
                             <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
                         </Stack>

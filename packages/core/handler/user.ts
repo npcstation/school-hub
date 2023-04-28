@@ -9,8 +9,7 @@ class RegisterHandler extends Handler {
     @param('gender')
     @param('grade')
     @param('email')
-    @param('description')
-    async postCreate(username: string, password: string, gender: string | number, grade: string, email: string, description: string) {
+    async postCreate(username: string, password: string, gender: string | number, grade: string, email: string) {
         try {
             var parsedGender: number = 0;
             if (typeof gender === 'string') {
@@ -26,7 +25,7 @@ class RegisterHandler extends Handler {
                 grade: numGrade,
                 gender: parsedGender,
                 gravatarLink: 'default',
-                description: description || 'default',
+                description: 'default',
             });
             this.ctx.body = {
                 status: 'success',
@@ -47,7 +46,6 @@ class RegisterHandler extends Handler {
     @param('grade')
     @param('email')
     async postCreateUI(username: string, password: string, gender: string | number, grade: string, email: string) {
-        console.log('233');
         try {
             var parsedGender: number = 0;
             if (typeof gender === 'string') {
@@ -72,7 +70,7 @@ class RegisterHandler extends Handler {
                 data: {
                     status: 'success',
                     title: `成功`,
-                    msg: `您的提交已经成功。您的ID是:${data.id}`,
+                    msg: `恭喜, 您的帐号注册完毕。您的ID是:${data.id}`,
                     links: [
                         {
                             title: '前往登录',
@@ -112,6 +110,31 @@ class RegisterHandler extends Handler {
                 },
             });
         }
+    }
+
+    async get() {
+        this.ctx.type = 'text/html';
+        this.ctx.body = await RenderFromPage({
+            type: 'back',
+            template: 'Feedback',
+            status: 'error',
+            data: {
+                status: 'error',
+                title: `错误`,
+                msg: `该页面无法直接访问。`,
+                links: [
+                    {
+                        title: '登录页',
+                        link: '/login',
+                    },
+                    {
+                        title: '主页',
+                        link: '/',
+                        style: 'light',
+                    },
+                ],
+            },
+        });
     }
 }
 

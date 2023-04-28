@@ -69,7 +69,7 @@ function App() {
                         </Root>
                     ) : (
                         <>
-                            <Notifications />
+                            <Notifications position='top-center' />
                             <BrowserRouter>
                                 <Routes>
                                     <Route path='' element={<Root type='route' onThemeChange={onThemeChange} />}>

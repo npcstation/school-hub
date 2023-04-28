@@ -33,12 +33,13 @@ export class BooleanType extends BasicType {
 
 export class UserType extends BasicType {
     verify(data: any): boolean {
+        console.log(data);
         return (
             typeof data.username === 'string' &&
             typeof data.pwd === 'string' &&
             typeof data.email === 'string' &&
             typeof data.grade === 'number' &&
-            typeof data.gender === 'number' &&
+            (typeof data.gender === 'number' || typeof data.gender === 'string') &&
             typeof data.gravatarLink === 'string' &&
             typeof data.description === 'string'
         );
