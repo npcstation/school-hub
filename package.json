@@ -6,7 +6,9 @@
         "ui:dev": "pnpm --filter ui run dev",
         "ui:build": "pnpm --filter ui run build",
         "ui:preview": "pnpm --filter ui run preview",
-        "start": "entry/index.js"
+        "start": "entry/index.js",
+        "lint": "eslint packages/",
+        "lint:fix": "eslint packages/ --fix"
     },
     "author": "GoForceX",
     "dependencies": {

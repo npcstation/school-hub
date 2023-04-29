@@ -1,6 +1,6 @@
 import { useToggle, upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { handleRegister } from './loginHandler';
+import { handleRegister, registerError } from './loginHandler';
 import { notifications } from '@mantine/notifications';
 import {
     TextInput,
@@ -125,14 +125,14 @@ export default function LoginPage() {
                             notifications.show({
                                 title: value.status === 'error' ? '注册失败' : '注册成功',
                                 message:
-                                    value.status === 'error'
-                                        ? `错误！${value.msg}。相关结果已在控制台显示。`
-                                        : `🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。`,
+                                    value.status === 'success'
+                                        ? '🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。'
+                                        : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] || ''}。若您还需要知道更多信息请查看控制台。`,
                                 color: value.status === 'error' ? 'red' : 'green',
                                 icon: value.status === 'error' ? <IconX /> : <IconCheck />,
                                 withCloseButton: false,
                             });
-                            console.log(`技术参数`);
+                            console.log('技术参数');
                             console.log(value);
                             if (value.status === 'success') {
                                 setTimeout(() => {
@@ -141,7 +141,7 @@ export default function LoginPage() {
                                     } else {
                                         notifications.show({
                                             title: '通知',
-                                            message: `跳转请求已忽略。`,
+                                            message: '跳转请求已忽略。',
                                             color: 'blue',
                                             icon: <IconInfoSmall />,
                                         });

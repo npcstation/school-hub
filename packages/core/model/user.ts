@@ -1,6 +1,6 @@
 import { verify } from '../utils/decorate';
 import { db } from '../service/db';
-import { ExistError, NotFoundError } from '../declare/error';
+import { DuplicateError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
 import { DefaultType } from '../declare/type';
 
@@ -9,9 +9,19 @@ export class UserSchema {
     pwd: string;
     email: string;
     grade: number;
-    gender: number;
+    gender: number | string;
     gravatarLink: string;
     description: string;
+}
+
+export class UserUpdatedSchema {
+    username?: string;
+    pwd?: string;
+    email?: string;
+    grade?: number;
+    gender?: number | string;
+    gravatarLink?: string;
+    description?: string;
 }
 
 export class UserModel {
@@ -19,7 +29,10 @@ export class UserModel {
     async create(data: UserSchema) {
         const { username, pwd, email, grade, gender, gravatarLink, description } = data;
         if (await this.nameExist(username)) {
-            throw new ExistError();
+            throw new DuplicateError('name');
+        }
+        if (await this.emailExist(email)) {
+            throw new DuplicateError('email');
         }
         const id = await this.genId();
         await db.insert('user', {
@@ -41,7 +54,7 @@ export class UserModel {
     async updateall(data: UserSchema) {
         const { username, pwd, email, grade, gender, gravatarLink, description } = data;
         if (await this.nameExist(username)) {
-            throw new ExistError();
+            throw new DuplicateError('name');
         }
         const id = this.genId();
         await db.insert('user', {
@@ -60,11 +73,9 @@ export class UserModel {
     }
 
     @verify('id', DefaultType.Number)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async update(id: number, data: any) {
-        //TODO: 补全
+    async update(id: number, data: UserUpdatedSchema) {
         if ((await this.idExist(id)) === false) {
-            //TODO: no exist error
+            throw new NotFoundError('user', 'id');
         }
         await db.update(
             'user',
@@ -94,6 +105,15 @@ export class UserModel {
         );
     }
 
+    @verify('email', DefaultType.Email)
+    async emailExist(email: string) {
+        return !isNull(
+            await db.getone('user', {
+                email,
+            })
+        );
+    }
+
     @verify('id', DefaultType.Number)
     async idExist(id: number) {
         return !isNull(
@@ -107,9 +127,7 @@ export class UserModel {
         );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handle(data: any) {
-        //TODO: 补全
+    handle(data: UserUpdatedSchema) {
         if (typeof data.gender === 'boolean') {
             data.gender = data.gender ? 'male' : 'female';
         }
@@ -124,7 +142,7 @@ export class UserModel {
         if (isNull(idData)) {
             throw new NotFoundError('id', id);
         }
-        return this.handle(idData);
+        return this.handle(idData as UserUpdatedSchema);
     }
 
     @verify('username', DefaultType.String)
@@ -135,7 +153,7 @@ export class UserModel {
         if (isNull(nameData)) {
             throw new NotFoundError('username', username);
         }
-        return this.handle(nameData);
+        return this.handle(nameData as UserUpdatedSchema);
     }
 
     @verify('email', DefaultType.Email)
@@ -146,7 +164,7 @@ export class UserModel {
         if (isNull(emailData)) {
             throw new NotFoundError('email', email);
         }
-        return this.handle(emailData);
+        return this.handle(emailData as UserUpdatedSchema);
     }
 }
 

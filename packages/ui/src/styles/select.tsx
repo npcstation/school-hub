@@ -1,4 +1,4 @@
-import { MantineTheme } from "@mantine/core";
+import { MantineTheme } from '@mantine/core';
 
 export const standardSelect = (theme: MantineTheme) => ({
     item: {

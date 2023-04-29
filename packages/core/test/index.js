@@ -1,7 +1,7 @@
-require("../../../utils/requirets.js");
+require('../../../utils/requirets.js');
 
 async function run() {
-	await require("./tests.ts");
+	await require('./tests.ts');
 }
 
 run();

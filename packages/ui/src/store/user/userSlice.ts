@@ -5,7 +5,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  username: "GoForceX",
+  username: 'GoForceX',
 }
 
 export const userSlice = createSlice({
