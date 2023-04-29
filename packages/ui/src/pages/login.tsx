@@ -1,6 +1,6 @@
 import { useToggle, upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { handleRegister, registerError } from './loginHandler';
+import { handleLogin, handleRegister, loginError, registerError } from './loginHandler';
 import { notifications } from '@mantine/notifications';
 import {
     TextInput,
@@ -127,7 +127,8 @@ export default function LoginPage() {
                                 message:
                                     value.status === 'success'
                                         ? '🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。'
-                                        : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] || ''}。若您还需要知道更多信息请查看控制台。`,
+                                        : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] ||
+                                              ''}。若您还需要知道更多信息请查看控制台。`,
                                 color: value.status === 'error' ? 'red' : 'green',
                                 icon: value.status === 'error' ? <IconX /> : <IconCheck />,
                                 withCloseButton: false,
@@ -282,7 +283,38 @@ export default function LoginPage() {
                         </Group>
                     </form>
                 ) : (
-                    <form action='login' method='POST'>
+                    <form
+                        onSubmit={loginForm.onSubmit(async (data) => {
+                            const value = await handleLogin(data);
+                            notifications.show({
+                                title: value.status === 'error' ? '登录失败' : '登录成功',
+                                message:
+                                    value.status === 'success'
+                                        ? '🎉 All Done!  您的登录请求已经处理完成。稍后自动跳转至主页。'
+                                        : `错误！${loginError[value.type || ''] || '未知错误'}${loginError[value.param || 'default'] ||
+                                              ''}。若您还需要知道更多信息请查看控制台。`,
+                                color: value.status === 'error' ? 'red' : 'green',
+                                icon: value.status === 'error' ? <IconX /> : <IconCheck />,
+                                withCloseButton: false,
+                            });
+                            console.log('技术参数');
+                            console.log(value);
+                            if (value.status === 'success') {
+                                setTimeout(() => {
+                                    if (window.web?.disableJump !== true) {
+                                        location.href = '/';
+                                    } else {
+                                        notifications.show({
+                                            title: '通知',
+                                            message: '跳转请求已忽略。',
+                                            color: 'blue',
+                                            icon: <IconInfoSmall />,
+                                        });
+                                    }
+                                }, 2000);
+                            }
+                        })}
+                    >
                         <input name='operation' className={classes.nodisplay} value={'loginCheck'} />
                         <Stack>
                             <TextInput

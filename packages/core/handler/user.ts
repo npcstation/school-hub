@@ -1,8 +1,9 @@
 import { sha512 } from 'js-sha512';
 import { Handler, Route } from '../handle';
-import { user } from '../model/user';
+import { UserSchema, user } from '../model/user';
 import { RenderFromPage } from '../service/render';
 import { param } from '../utils/decorate';
+import { ValidationError } from '../declare/error';
 
 function randomString(length: number): string {
     const str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -156,6 +157,48 @@ class RegisterHandler extends Handler {
 }
 
 class LoginHandler extends Handler {
+    @param('email')
+    @param('password')
+    async postLoginCheck(email: string, password: string) {
+        try {
+            let data: UserSchema;
+            try {
+                data = await user.getbyEmail(email);
+            } catch (err) {
+                data = await user.getbyUsername(email);
+            }
+            const configSalt = global.Project.config.salt.salt;
+            const randomSalt = data.salt;
+            const hashedPassword = sha512(password + randomSalt + configSalt);
+
+            if (hashedPassword === data.pwd) {
+                this.ctx.body = {
+                    status: 'success',
+                    data: {
+                        username: data.username,
+                    }
+                };
+            } else {
+                throw new ValidationError('any');
+            }
+        } catch (err) {
+            // Treat exist error as validation error to prevent brute force
+            if (err?.errorType === 'exist') {
+                this.ctx.body = {
+                    status: 'error',
+                    type: 'validation',
+                    param: err?.errorParam || '',
+                };
+            } else {
+                this.ctx.body = {
+                    status: 'error',
+                    type: err?.errorType || 'unknown',
+                    param: err?.errorParam || '',
+                };
+            }
+        }
+    }
+
     async get() {
         console.log();
         this.ctx.type = 'text/html';

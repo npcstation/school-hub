@@ -10,7 +10,7 @@ export class UserSchema {
     salt: string;
     email: string;
     grade: number;
-    gender: number | string;
+    gender: Gender | string;
     gravatarLink: string;
     description: string;
 }
@@ -20,9 +20,14 @@ export class UserUpdatedSchema {
     pwd?: string;
     email?: string;
     grade?: number;
-    gender?: number | string;
+    gender?: Gender | string;
     gravatarLink?: string;
     description?: string;
+}
+
+enum Gender {
+    Female = 0,
+    Male = 1,
 }
 
 export class UserModel {
@@ -130,7 +135,7 @@ export class UserModel {
         );
     }
 
-    handle(data: UserUpdatedSchema) {
+    handle(data: UserSchema) {
         if (typeof data.gender === 'boolean') {
             data.gender = data.gender ? 'male' : 'female';
         }
@@ -145,7 +150,7 @@ export class UserModel {
         if (isNull(idData)) {
             throw new NotFoundError('id', id);
         }
-        return this.handle(idData as UserUpdatedSchema);
+        return this.handle(idData as unknown as UserSchema);
     }
 
     @verify('username', DefaultType.String)
@@ -156,7 +161,7 @@ export class UserModel {
         if (isNull(nameData)) {
             throw new NotFoundError('username', username);
         }
-        return this.handle(nameData as UserUpdatedSchema);
+        return this.handle(nameData as unknown as UserSchema);
     }
 
     @verify('email', DefaultType.Email)
@@ -167,7 +172,7 @@ export class UserModel {
         if (isNull(emailData)) {
             throw new NotFoundError('email', email);
         }
-        return this.handle(emailData as UserUpdatedSchema);
+        return this.handle(emailData as unknown as UserSchema);
     }
 }
 

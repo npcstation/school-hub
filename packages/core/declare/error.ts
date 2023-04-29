@@ -7,7 +7,7 @@ export class ValidationError extends RError {
     constructor(valuename: any) {
         super(`Validation Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
     }
-    public errorType = 'validated';
+    public errorType = 'validation';
 }
 
 export class DuplicateError extends RError {
