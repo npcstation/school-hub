@@ -1,4 +1,4 @@
-import { fetch } from "../interfaces/data";
+import { fetch } from '../interfaces/data';
 
 interface registerProp {
     email: string;
@@ -8,8 +8,16 @@ interface registerProp {
     gender: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function handleRegister(userdata: registerProp, callback: (data: any) => void) {
+interface RegisterResponse {
+    status: 'success' | 'error';
+    msg?: string;
+    type?: string;
+    data?: {
+        id: number;
+    };
+}
+
+export async function handleRegister(userdata: registerProp): Promise<RegisterResponse> {
     const data = await fetch('register', 'create', userdata);
-    callback(data);
+    return data;
 }

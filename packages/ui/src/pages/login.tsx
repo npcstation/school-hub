@@ -17,7 +17,7 @@ import {
     Progress,
     Select,
     rem,
-    createStyles
+    createStyles,
 } from '@mantine/core';
 import React, { useState } from 'react';
 import { IconCheck, IconInfoSmall, IconX } from '@tabler/icons-react';
@@ -28,8 +28,8 @@ import { standardTitleColor } from '../styles/color';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const useStyles = createStyles((theme) => ({
     nodisplay: {
-        display: 'none'
-    }
+        display: 'none',
+    },
 }));
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
@@ -111,7 +111,7 @@ export default function LoginPage() {
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
     const largestScreen = useMediaQuery('(min-width: 700px)');
-    
+
     return (
         <Container miw={rem(400)} w={!largestScreen ? '95%' : '30%'}>
             <StandardCard pt={theme.spacing.xs}>
@@ -119,17 +119,18 @@ export default function LoginPage() {
                     {type}
                 </Text>
                 {type === '注册' ? (
-                    <form onSubmit={registerForm.onSubmit((data) => {
-                        handleRegister(data, (value) => {
+                    <form
+                        onSubmit={registerForm.onSubmit(async (data) => {
+                            const value = await handleRegister(data);
                             notifications.show({
                                 title: value.status === 'error' ? '注册失败' : '注册成功',
                                 message:
                                     value.status === 'error'
-                                        ? `错误！${value.type}。相关结果已在控制台显示。`
+                                        ? `错误！${value.msg}。相关结果已在控制台显示。`
                                         : `🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。`,
                                 color: value.status === 'error' ? 'red' : 'green',
                                 icon: value.status === 'error' ? <IconX /> : <IconCheck />,
-                                withCloseButton: false
+                                withCloseButton: false,
                             });
                             console.log(`技术参数`);
                             console.log(value);
@@ -147,8 +148,8 @@ export default function LoginPage() {
                                     }
                                 }, 2000);
                             }
-                        });
-                    })}>
+                        })}
+                    >
                         <input name='operation' className={classes.nodisplay} value={'createUI'} />
                         <Stack>
                             <TextInput
@@ -284,9 +285,21 @@ export default function LoginPage() {
                     <form action='login' method='POST'>
                         <input name='operation' className={classes.nodisplay} value={'loginCheck'} />
                         <Stack>
-                            <TextInput name='email' required label='用户名 / 邮箱 / 学号' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
+                            <TextInput
+                                name='email'
+                                required
+                                label='用户名 / 邮箱 / 学号'
+                                placeholder='hello@bjbybbs.com'
+                                {...loginForm.getInputProps('email')}
+                            />
 
-                            <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
+                            <PasswordInput
+                                name='password'
+                                required
+                                label='密码'
+                                placeholder='您的密码（要保密！）'
+                                {...loginForm.getInputProps('password')}
+                            />
                         </Stack>
 
                         <Group position='apart' mt='xl'>

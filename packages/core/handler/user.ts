@@ -32,10 +32,21 @@ class RegisterHandler extends Handler {
                 data,
             };
         } catch (err) {
+            let errMessage = '未知错误';
+            switch (err.errorType) {
+                case 'exist':
+                    errMessage = '用户名已被占用';
+                    break;
+                case 'validated':
+                    errMessage = '数据验证失败';
+                    break;
+                default:
+                    break;
+            }
             this.ctx.body = {
                 status: 'error',
                 type: err?.errorType || 'unknown',
-                msg: err.toString(),
+                msg: errMessage,
             };
         }
     }
