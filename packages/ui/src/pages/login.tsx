@@ -24,6 +24,7 @@ import { IconCheck, IconInfoSmall, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
 import { standardSelect } from '../styles/select';
 import { standardTitleColor } from '../styles/color';
+import { alarm } from '../styles/alarm';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const useStyles = createStyles((theme) => ({
@@ -123,15 +124,21 @@ export default function LoginPage() {
                         onSubmit={registerForm.onSubmit(async (data) => {
                             const value = await handleRegister(data);
                             notifications.show({
-                                title: value.status === 'error' ? '注册失败' : '注册成功',
-                                message:
-                                    value.status === 'success'
-                                        ? '🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。'
-                                        : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] ||
-                                              ''}。若您还需要知道更多信息请查看控制台。`,
+                                title: value.status === 'success' ? '🎉 All Done! ' : '注册失败',
+                                message: (
+                                    <>
+                                        {value.status === 'success'
+                                            ? '您的帐号已经准备就绪。即将跳转至登录界面。'
+                                            : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] || ''}`}
+                                        {value.status === 'error' ? <br /> : <></>}
+                                        {value.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
+                                    </>
+                                ),
                                 color: value.status === 'error' ? 'red' : 'green',
                                 icon: value.status === 'error' ? <IconX /> : <IconCheck />,
                                 withCloseButton: false,
+
+                                styles: alarm(value.status),
                             });
                             console.log('技术参数');
                             console.log(value);
@@ -287,15 +294,20 @@ export default function LoginPage() {
                         onSubmit={loginForm.onSubmit(async (data) => {
                             const value = await handleLogin(data);
                             notifications.show({
-                                title: value.status === 'error' ? '登录失败' : '登录成功',
-                                message:
-                                    value.status === 'success'
-                                        ? '🎉 All Done!  您的登录请求已经处理完成。稍后自动跳转至主页。'
-                                        : `错误！${loginError[value.type || ''] || '未知错误'}${loginError[value.param || 'default'] ||
-                                              ''}。若您还需要知道更多信息请查看控制台。`,
+                                title: value.status === 'success' ? '' : '登录失败',
+                                message: (
+                                    <>
+                                        {value.status === 'success'
+                                            ? '欢迎回来！即将返回首页。'
+                                            : `错误！${loginError[value.type || ''] || '未知错误'}${loginError[value.param || 'default'] || ''}。`}
+                                        {value.status === 'error' ? <br /> : <></>}
+                                        {value.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
+                                    </>
+                                ),
                                 color: value.status === 'error' ? 'red' : 'green',
                                 icon: value.status === 'error' ? <IconX /> : <IconCheck />,
                                 withCloseButton: false,
+                                styles: alarm(value.status),
                             });
                             console.log('技术参数');
                             console.log(value);
@@ -325,13 +337,7 @@ export default function LoginPage() {
                                 {...loginForm.getInputProps('email')}
                             />
 
-                            <PasswordInput
-                                name='password'
-                                required
-                                label='密码'
-                                placeholder='您的密码（要保密！）'
-                                {...loginForm.getInputProps('password')}
-                            />
+                            <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
                         </Stack>
 
                         <Group position='apart' mt='xl'>

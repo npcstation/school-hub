@@ -20,7 +20,7 @@ export class RedisService {
 	}
 
 	async getjson(model, id) {
-		return JSON.parse(await this.redis.get(`${model}-${id}`))
+		return JSON.parse((await this.redis.get(`${model}-${id}`)) || '{}')
 	}
 
 	async set(model, id, data, expired = -1) {

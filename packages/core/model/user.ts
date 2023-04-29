@@ -5,6 +5,7 @@ import { isNull } from 'lodash';
 import { DefaultType } from '../declare/type';
 
 export class UserSchema {
+    id?: number;
     username: string;
     pwd: string;
     salt: string;

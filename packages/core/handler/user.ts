@@ -4,6 +4,7 @@ import { UserSchema, user } from '../model/user';
 import { RenderFromPage } from '../service/render';
 import { param } from '../utils/decorate';
 import { ValidationError } from '../declare/error';
+import { token } from '../model/token';
 
 function randomString(length: number): string {
     const str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -172,16 +173,19 @@ class LoginHandler extends Handler {
             const hashedPassword = sha512(password + randomSalt + configSalt);
 
             if (hashedPassword === data.pwd) {
+                const tokenid = await token.create(data.id as number, 7 * 24 * 60 * 60);
                 this.ctx.body = {
                     status: 'success',
                     data: {
                         username: data.username,
+                        token: tokenid
                     }
                 };
             } else {
                 throw new ValidationError('any');
             }
         } catch (err) {
+            console.log(err);
             // Treat exist error as validation error to prevent brute force
             if (err?.errorType === 'exist') {
                 this.ctx.body = {

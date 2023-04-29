@@ -52,7 +52,7 @@ function App() {
                     theme={{
                         colorScheme: colorScheme as ColorScheme,
                         globalStyles: (theme) => ({
-                            body: {
+                            '#root': {
                                 backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : '#f7f7f7',
                             },
                         }),
