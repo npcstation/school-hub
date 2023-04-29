@@ -59,6 +59,24 @@ class dbClass {
         client.close();
         return res;
     }
+
+    async deleteOne(model: string, where: Filter<Document>, options = {}) {
+        const client = new MongoClient(this.url);
+        const database = client.db(this.dbname);
+        const coll = database.collection(model);
+        const res = await coll.deleteOne(where, options)
+        client.close();
+        return res;
+    }
+
+    async deleteAll(model: string, where: Filter<Document>, options = {}) {
+        const client = new MongoClient(this.url);
+        const database = client.db(this.dbname);
+        const coll = database.collection(model);
+        const res = await coll.deleteMany(where, options)
+        client.close();
+        return res;
+    }
 }
 
 const url = global.Project.config.mongo;
