@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ValidationError } from "../declare/error";
-import { DefaultType, Verify } from "../declare/type";
+import { ValidationError } from '../declare/error';
+import { DefaultType, Verify } from '../declare/type';
 
 export function param(params) {
     return function (target: any, methodName: string, descriptor: any) {
@@ -22,7 +22,7 @@ export function verify(param, Type) {
 			descriptor.verify = {};
 			descriptor.originalMethod = descriptor.value;
 			const codes = descriptor.value.toString();
-			const paramList = codes.slice(codes.indexOf("(") + 1, codes.indexOf(")")).split(",");
+			const paramList = codes.slice(codes.indexOf('(') + 1, codes.indexOf(')')).split(',');
 			const paramNames = paramList.map((param) => param.trim());
 			descriptor.paramNames = paramNames;
 		}

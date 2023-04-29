@@ -7,14 +7,16 @@ export class ValidationError extends RError {
     constructor(valuename: any) {
         super(`Validation Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
     }
-    public errorType = 'validated';
+    public errorType = 'validation';
 }
 
-export class ExistError extends RError {
-    constructor() {
-        super(`Exist Error.`);
+export class DuplicateError extends RError {
+    constructor(type: string) {
+        super('Duplicate Error.');
+        this.errorParam = type;
     }
-    public errorType = 'exist';
+    public errorType = 'duplicate';
+    public errorParam = '';
 }
 
 export class NotFoundError extends RError {
@@ -23,3 +25,4 @@ export class NotFoundError extends RError {
     }
     public errorType = 'exist';
 }
+

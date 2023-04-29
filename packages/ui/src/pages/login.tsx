@@ -1,6 +1,6 @@
 import { useToggle, upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { handleRegister } from './loginHandler';
+import { handleLogin, handleRegister, loginError, registerError } from './loginHandler';
 import { notifications } from '@mantine/notifications';
 import {
     TextInput,
@@ -17,19 +17,20 @@ import {
     Progress,
     Select,
     rem,
-    createStyles
+    createStyles,
 } from '@mantine/core';
 import React, { useState } from 'react';
 import { IconCheck, IconInfoSmall, IconX } from '@tabler/icons-react';
 import { StandardCard } from '../components/card';
 import { standardSelect } from '../styles/select';
 import { standardTitleColor } from '../styles/color';
+import { alarm } from '../styles/alarm';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const useStyles = createStyles((theme) => ({
     nodisplay: {
-        display: 'none'
-    }
+        display: 'none',
+    },
 }));
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
@@ -111,7 +112,7 @@ export default function LoginPage() {
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
     const largestScreen = useMediaQuery('(min-width: 700px)');
-    
+
     return (
         <Container miw={rem(400)} w={!largestScreen ? '95%' : '30%'}>
             <StandardCard pt={theme.spacing.xs}>
@@ -119,19 +120,27 @@ export default function LoginPage() {
                     {type}
                 </Text>
                 {type === '注册' ? (
-                    <form onSubmit={registerForm.onSubmit((data) => {
-                        handleRegister(data, (value) => {
+                    <form
+                        onSubmit={registerForm.onSubmit(async (data) => {
+                            const value = await handleRegister(data);
                             notifications.show({
-                                title: value.status === 'error' ? '注册失败' : '注册成功',
-                                message:
-                                    value.status === 'error'
-                                        ? `错误！${value.type}。相关结果已在控制台显示。`
-                                        : `🎉 All Done!  您的注册请求已经处理完成。稍后自动跳转至登陆界面。`,
+                                title: value.status === 'success' ? '🎉 All Done! ' : '注册失败',
+                                message: (
+                                    <>
+                                        {value.status === 'success'
+                                            ? '您的帐号已经准备就绪。即将跳转至登录界面。'
+                                            : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] || ''}`}
+                                        {value.status === 'error' ? <br /> : <></>}
+                                        {value.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
+                                    </>
+                                ),
                                 color: value.status === 'error' ? 'red' : 'green',
                                 icon: value.status === 'error' ? <IconX /> : <IconCheck />,
-                                withCloseButton: false
+                                withCloseButton: false,
+
+                                styles: alarm(value.status),
                             });
-                            console.log(`技术参数`);
+                            console.log('技术参数');
                             console.log(value);
                             if (value.status === 'success') {
                                 setTimeout(() => {
@@ -140,15 +149,15 @@ export default function LoginPage() {
                                     } else {
                                         notifications.show({
                                             title: '通知',
-                                            message: `跳转请求已忽略。`,
+                                            message: '跳转请求已忽略。',
                                             color: 'blue',
                                             icon: <IconInfoSmall />,
                                         });
                                     }
                                 }, 2000);
                             }
-                        });
-                    })}>
+                        })}
+                    >
                         <input name='operation' className={classes.nodisplay} value={'createUI'} />
                         <Stack>
                             <TextInput
@@ -281,10 +290,52 @@ export default function LoginPage() {
                         </Group>
                     </form>
                 ) : (
-                    <form action='login' method='POST'>
+                    <form
+                        onSubmit={loginForm.onSubmit(async (data) => {
+                            const value = await handleLogin(data);
+                            notifications.show({
+                                title: value.status === 'success' ? '' : '登录失败',
+                                message: (
+                                    <>
+                                        {value.status === 'success'
+                                            ? '欢迎回来！即将返回首页。'
+                                            : `错误！${loginError[value.type || ''] || '未知错误'}${loginError[value.param || 'default'] || ''}。`}
+                                        {value.status === 'error' ? <br /> : <></>}
+                                        {value.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
+                                    </>
+                                ),
+                                color: value.status === 'error' ? 'red' : 'green',
+                                icon: value.status === 'error' ? <IconX /> : <IconCheck />,
+                                withCloseButton: false,
+                                styles: alarm(value.status),
+                            });
+                            console.log('技术参数');
+                            console.log(value);
+                            if (value.status === 'success') {
+                                setTimeout(() => {
+                                    if (window.web?.disableJump !== true) {
+                                        location.href = '/';
+                                    } else {
+                                        notifications.show({
+                                            title: '通知',
+                                            message: '跳转请求已忽略。',
+                                            color: 'blue',
+                                            icon: <IconInfoSmall />,
+                                        });
+                                    }
+                                }, 2000);
+                            }
+                        })}
+                    >
                         <input name='operation' className={classes.nodisplay} value={'loginCheck'} />
                         <Stack>
-                            <TextInput name='email' required label='用户名 / 邮箱 / 学号' placeholder='hello@bjbybbs.com' {...loginForm.getInputProps('email')} />
+                            <TextInput
+                                name='email'
+                                required
+                                label='用户名 / 邮箱 / 学号'
+                                placeholder='hello@bjbybbs.com'
+                                {...loginForm.getInputProps('email')}
+                            />
 
                             <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
                         </Stack>

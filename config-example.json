@@ -13,5 +13,9 @@
                 "pass": "xxx"
             }
         }
+    },
+    "salt": {
+        "salt": "a random sequence",
+        "strength": 8
     }
 }
