@@ -1,7 +1,7 @@
-import { db } from "../service/db";
+import { db } from '../service/db';
 import { v4 as uuidv4 } from 'uuid';
-import { rdis } from "../service/redis";
-import { isNull } from "lodash";
+import { rdis } from '../service/redis';
+import { isNull } from 'lodash';
 
 
 export class TokenModel {
