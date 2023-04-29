@@ -7,6 +7,7 @@ import { DefaultType } from '../declare/type';
 export class UserSchema {
     username: string;
     pwd: string;
+    salt: string;
     email: string;
     grade: number;
     gender: number | string;
@@ -27,7 +28,7 @@ export class UserUpdatedSchema {
 export class UserModel {
     @verify('data', DefaultType.User)
     async create(data: UserSchema) {
-        const { username, pwd, email, grade, gender, gravatarLink, description } = data;
+        const { username, pwd, salt, email, grade, gender, gravatarLink, description } = data;
         if (await this.nameExist(username)) {
             throw new DuplicateError('name');
         }
@@ -39,6 +40,7 @@ export class UserModel {
             id,
             username,
             pwd,
+            salt,
             email,
             grade,
             gender,
@@ -52,7 +54,7 @@ export class UserModel {
 
     @verify('data', DefaultType.User)
     async updateall(data: UserSchema) {
-        const { username, pwd, email, grade, gender, gravatarLink, description } = data;
+        const { username, pwd, email, salt, grade, gender, gravatarLink, description } = data;
         if (await this.nameExist(username)) {
             throw new DuplicateError('name');
         }
@@ -61,6 +63,7 @@ export class UserModel {
             id,
             username,
             pwd,
+            salt,
             email,
             grade,
             gender,

@@ -1,7 +1,17 @@
+import { sha512 } from 'js-sha512';
 import { Handler, Route } from '../handle';
 import { user } from '../model/user';
 import { RenderFromPage } from '../service/render';
 import { param } from '../utils/decorate';
+
+function randomString(length: number): string {
+    const str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = length; i > 0; --i) {
+        result += str[Math.floor(Math.random() * str.length)];
+    }
+    return result;
+}
 
 class RegisterHandler extends Handler {
     @param('username')
@@ -18,9 +28,14 @@ class RegisterHandler extends Handler {
                 parsedGender = gender;
             }
             const numGrade = parseInt(grade);
+            const randomSalt = randomString(global.Project.config.salt.strength || 8);
+            const configSalt = global.Project.config.salt.salt;
+
+            const hashedPassword = sha512(password + randomSalt + configSalt);
             const data = await user.create({
                 username,
-                pwd: password,
+                pwd: hashedPassword,
+                salt: randomSalt,
                 email,
                 grade: numGrade,
                 gender: parsedGender,
@@ -49,22 +64,22 @@ class RegisterHandler extends Handler {
     // @param('email')
     // async postCreateUI(username: string, password: string, gender: string | number, grade: string, email: string) {
     //     try {
-            // let parsedGender = 0;
-            // if (typeof gender === 'string') {
-            //     parsedGender = gender === 'female' ? 0 : 1;
-            // } else {
-            //     parsedGender = gender;
-            // }
-            // const numGrade = parseInt(grade);
-            // const data = await user.create({
-            //     username,
-            //     pwd: password,
-            //     email,
-            //     grade: numGrade,
-            //     gender: parsedGender,
-            //     gravatarLink: 'default',
-            //     description: 'default',
-            // });
+    // let parsedGender = 0;
+    // if (typeof gender === 'string') {
+    //     parsedGender = gender === 'female' ? 0 : 1;
+    // } else {
+    //     parsedGender = gender;
+    // }
+    // const numGrade = parseInt(grade);
+    // const data = await user.create({
+    //     username,
+    //     pwd: password,
+    //     email,
+    //     grade: numGrade,
+    //     gender: parsedGender,
+    //     gravatarLink: 'default',
+    //     description: 'default',
+    // });
     //         this.ctx.type = 'text/html';
     //         this.ctx.body = await RenderFromPage({
     //             type: 'back',
