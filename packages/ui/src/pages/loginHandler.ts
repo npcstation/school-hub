@@ -17,6 +17,25 @@ interface Response {
     status: 'success' | 'error';
     msg?: string;
     type?: string;
+    data?: unknown;
+    param?: string;
+}
+
+interface LoginResponse extends Response {
+    status: 'success' | 'error';
+    msg?: string;
+    type?: string;
+    data?: {
+        username: string;
+        token: string;
+    };
+    param?: string;
+}
+
+interface RegisterResponse extends Response {
+    status: 'success' | 'error';
+    msg?: string;
+    type?: string;
     data?: {
         id: number;
     };
@@ -42,12 +61,12 @@ export const loginError: {
     default: '',
 };
 
-export async function handleRegister(userdata: RegisterProp): Promise<Response> {
+export async function handleRegister(userdata: RegisterProp): Promise<RegisterResponse> {
     const data = await fetch('register', 'create', userdata);
     return data;
 }
 
-export async function handleLogin(userdata: LoginProp): Promise<Response> {
+export async function handleLogin(userdata: LoginProp): Promise<LoginResponse> {
     const data = await fetch('login', 'loginCheck', userdata);
     return data;
 }
