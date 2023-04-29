@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, AppShell } from '@mantine/core';
+import { createStyles, AppShell, rem } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { Navbar } from '../components/navbar';
@@ -27,8 +27,8 @@ export function Root({ onThemeChange, type, children }: RootProps) {
         <AppShell
             styles={{
                 main: {
-                    minHeight: 'calc(100vh - 135px)',
-                    paddingTop: '25px',
+                    minHeight: 'calc(100vh - 10.5rem)',
+                    paddingTop: rem('25px'),
                     paddingBottom: 'calc(var(--mantine-header-height, 0px) + 0.05rem)',
                 },
             }}

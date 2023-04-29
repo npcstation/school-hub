@@ -1,4 +1,4 @@
-import { Button, Container, Flex, Footer, Group, Text, useMantineTheme } from '@mantine/core';
+import { Button, Container, Flex, Footer, Group, Text, rem, useMantineTheme } from '@mantine/core';
 import { IconBrandGithub, IconSun, IconMoon } from '@tabler/icons-react';
 import React from 'react';
 
@@ -23,7 +23,7 @@ export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
                     <div>
                         <Text size={21.5}>在线校园系统</Text>
                         <Text>北京市八一学校 - NPC Station</Text>
-                        <Group spacing='xs' mt='4px' ml='-2px'>
+                        <Group spacing='xs' mt={rem('4px')} ml={rem('-2px')}>
                             <Button
                                 onClick={() => {
                                     location.href = 'https://github.com/npcstation/school-hub';
