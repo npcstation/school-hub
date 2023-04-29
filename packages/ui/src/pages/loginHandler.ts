@@ -30,6 +30,6 @@ export const registerError: {
 };
 
 export async function handleRegister(userdata: registerProp): Promise<RegisterResponse> {
-    const data = await fetch('register', 'create', userdata);
+    const data = await fetch('register/create', userdata);
     return data;
 }

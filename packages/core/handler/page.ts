@@ -1,16 +1,16 @@
-import { Handler, Route } from '../handle';
-// import * as fs from 'fs';
-// import * as path from 'path';
+import { Route } from '../handle';
 import { RenderFromPage } from '../service/render';
+import { Context } from 'koa';
 
-class MainPageHandler extends Handler {
-    async get() {
-        this.ctx.type = 'text/html';
-        this.ctx.body = await RenderFromPage();
+class MainPageHandler {
+    async get(ctx: Context) {
+        ctx.type = 'text/html';
+        ctx.body = await RenderFromPage();
         return;
     }
 }
 
 export function apply() {
-    Route('HomePage', '/', MainPageHandler);
+    Route('React', '/', 'get', new MainPageHandler().get);
+    Route('React', '/login', 'get', new MainPageHandler().get);
 }

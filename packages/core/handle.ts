@@ -19,50 +19,24 @@ app.use(KoaBody());
 app.use(bodyParser());
 app.use(router.routes());
 
-type KoaContext = Context;
-
-function transWord(word: string) {
-    const firstLetter = word.charAt(0);
-    const firstLetterCap = firstLetter.toUpperCase();
-    const remainingLetters = word.slice(1);
-    return firstLetterCap + remainingLetters;
-}
-
-export class Handler {
-    ctx: KoaContext;
-    async get() {
-        this.ctx.type = 'text/html';
-        this.ctx.body = await RenderFromPage();
+async function handle(ctx: Context, method: 'get' | 'post', handler) {
+    if (method !== ctx.method.toLowerCase()) {
+        ctx.body = '404 Not Found';
+        ctx.response.status = 404;
         return;
     }
-}
-
-async function handle(ctx: KoaContext, Handler) {
     const body = ctx.request.body;
-    const method = ctx.method.toLowerCase();
-    let operation = '';
-    if (method === 'post' && body?.operation !== '') {
-        operation = transWord(body.operation);
-    }
-    const h = new Handler();
     const args = {};
-    h.ctx = ctx;
     Object.assign(args, body);
     Object.assign(args, ctx.params);
     Object.assign(args, ctx.request.query);
     try {
-        const steps = [method, ...(operation ? [`post${operation}`] : []), 'after'];
-        let cur = 0;
-        const length = steps.length;
-        h.ctx.body = '';
-        while (cur < length) {
-            const step = steps[cur];
-            cur++;
-            if (typeof h[step] === 'function') {
-                await h[step](args);
-            }
+        // Check if args is empty
+        if (Object.keys(args).length === 0) {
+            await handler(ctx);
+        } else {
+            await handler(ctx, args);
         }
-        ctx = h.ctx;
     } catch (err) {
         ctx.body = JSON.stringify({
             error: err,
@@ -71,9 +45,9 @@ async function handle(ctx: KoaContext, Handler) {
     }
 }
 
-export function Route(name: string, link: string, Handler) {
+export function Route(name: string, link: string, method: 'get' | 'post', handler) {
     router.all(link, async (ctx, next) => {
-        await handle(ctx, Handler);
+        await handle(ctx, method, handler);
         next();
     });
 }
