@@ -34,9 +34,9 @@ export class RedisService {
         return await this.redis.get(`${model}-${id}`);
     }
 
-	async delete(model, id) {
-		return await this.redis.del(`${model}-${id}`);
-	}
+    async delete(model, id) {
+        return await this.redis.del(`${model}-${id}`);
+    }
 }
 
 const url = global.Project.redis.url || 'redis://127.0.0.1:6379/';

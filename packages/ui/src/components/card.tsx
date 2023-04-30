@@ -21,7 +21,7 @@ export function StandardCard({
 }: {
     title?: string | React.ReactNode;
     content?: React.ReactNode;
-	subtitle?: React.ReactNode;
+    subtitle?: React.ReactNode;
     pt?: string | number;
     children?: JSX.Element[] | JSX.Element | string;
         w?: string;

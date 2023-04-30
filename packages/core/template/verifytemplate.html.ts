@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 const content = `<body>
 	<div style='
 		width: 100%;padding: 20px;background-color: rgb(247, 247, 247);'>
