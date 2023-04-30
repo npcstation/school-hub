@@ -14,7 +14,8 @@
     "plugins": ["react", "@typescript-eslint"],
     "rules": {
         "quotes": [1, "single"],
-        "no-tabs": 1
+        "no-tabs": 1,
+        "@typescript-eslint/type-annotation-spacing": "error"
     },
     "settings": {
         "react": {
