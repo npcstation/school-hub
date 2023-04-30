@@ -1,11 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// import { MantineTheme } from '@mantine/core';
+import { MantineTheme } from '@mantine/core';
+
+function getAlarmBackgroundColor(theme: MantineTheme, status: 'error' | 'success') {
+    const fade = theme.colorScheme === 'dark' ? 8 : 6;
+    if (status === 'error') {
+        return theme.colors.red[fade];
+    } else {
+        return theme.colors.green[fade];
+    }
+}
 
 export function alarm(status: 'error' | 'success') {
-    return (theme: any) => ({
+    return (theme: MantineTheme) => ({
         root: {
-            backgroundColor: status === 'error' ? theme.colors.red[6] : theme.colors.green[6],
-            borderColor: status === 'error' ? theme.colors.red[6] : theme.colors.green[6],
+            backgroundColor: getAlarmBackgroundColor(theme, status),
+            borderColor: getAlarmBackgroundColor(theme, status),
             '&::before': { backgroundColor: theme.white },
         },
         title: { color: theme.white },
