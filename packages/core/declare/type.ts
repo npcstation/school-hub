@@ -48,6 +48,20 @@ export class UserType extends BasicType {
     }
 }
 
+export class DiscussType extends BasicType {
+    verify(data: any): boolean {
+        console.log(data);
+        return (
+            typeof data.author === 'string' &&
+            typeof data.topic === 'string' &&
+            typeof data.title === 'string' &&
+            typeof data.content === 'string' &&
+            typeof data.createdTime === 'number' &&
+            typeof data.lastModified === 'number'
+        );
+    }
+}
+
 export function Verify(Types, data) {
     return Types.verify(data);
 }
@@ -69,4 +83,5 @@ export const DefaultType = {
     String: new StringType(),
     Boolean: new BooleanType(),
     User: new UserType(),
+    Discuss: new DiscussType(),
 };
