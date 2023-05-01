@@ -23,22 +23,31 @@ export function StandardCard({
     content?: React.ReactNode;
     subtitle?: React.ReactNode;
     pt?: string | number;
-    children?: JSX.Element[] | JSX.Element | string;
-        w?: string;
+    children?: React.ReactNode;
+    w?: string;
 }) {
     const { classes, cx, theme } = useStyles();
-    
+
     return (
-        <Card shadow="xs" p="md" radius="sm" {...props}>
+        <Card shadow='xs' p='md' radius='sm' {...props}>
             <Card.Section inheritPadding>
-                <Group position="apart" mt="md" mb="xs">
-                    <Text className={classes.standardCard}>
-                        {title}
-                    </Text>
+                <Group position='apart' mt='md' mb='xs'>
+                    <Text className={classes.standardCard}>{title}</Text>
                     {subtitle}
                 </Group>
             </Card.Section>
             {content || children}
+        </Card>
+    );
+}
+
+
+export function NoStyleCard({ content, children, ...props }: { content?: React.ReactNode; pt?: string | number; children?: React.ReactNode; w?: string }) {
+    const { classes, cx, theme } = useStyles();
+
+    return (
+        <Card shadow='xs' p='md' radius='sm' {...props}>
+            {children || content}
         </Card>
     );
 }

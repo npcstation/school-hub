@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MantineTheme } from '@mantine/core';
 
 function getAlarmBackgroundColor(theme: MantineTheme, status: 'error' | 'success') {

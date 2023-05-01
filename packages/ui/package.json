@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.1.2",
     "@emotion/react": "^11.10.6",
     "@mantine/carousel": "^6.0.4",
-    "@mantine/core": "^6.0.4",
+    "@mantine/core": "6.0.9",
     "@mantine/dates": "^6.0.4",
     "@mantine/dropzone": "^6.0.4",
     "@mantine/form": "^6.0.4",
@@ -32,6 +33,7 @@
     "axios": "1.0.0",
     "dayjs": "^1.11.7",
     "embla-carousel-react": "^7.1.0",
+    "emoji-mart": "^5.5.2",
     "localforage": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

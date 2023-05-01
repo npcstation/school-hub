@@ -8,6 +8,8 @@ import store from './store/store';
 import { Provider } from 'react-redux';
 import { Notifications } from '@mantine/notifications';
 import * as Direct from './interfaces/interface';
+import DiscussPage from './pages/discuss';
+import './app.css';
 
 declare global {
     interface Window {
@@ -76,6 +78,7 @@ function App() {
                                     <Route path='' element={<Root type='route' onThemeChange={onThemeChange} />}>
                                         <Route path='' element={<HomePage></HomePage>} />
                                         <Route path='login' element={<LoginPage></LoginPage>} />
+                                        <Route path='discuss/:id' element={<DiscussPage></DiscussPage>} />
                                     </Route>
                                 </Routes>
                             </BrowserRouter>
