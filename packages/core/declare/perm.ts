@@ -8,13 +8,11 @@ export class BasicPermModel {
     }
 
     generate(list: Array<string>, mode: 'except' | 'require' = 'require') {
-        // console.log(this.permlist);
         let res = 0;
         const len = this.permlist.length;
         for (let i = 0; i < len; i++) {
             const v = this.permlist[i];
             const status = +!(+list.includes(v) - +(mode === 'require'));
-            // console.log(v, status);
             res = res | (status << i);
         }
         return res;
@@ -40,12 +38,36 @@ export class BasicPermModel {
     }
 }
 
+export class PermClass {
+    handler: BasicPermModel;
+
+    constructor(handler: BasicPermModel) {
+        this.handler = handler;
+    }
+
+    getPerm(value: number) {
+        return this.handler.getPerm(value);
+    }
+
+    addPerm(value: number, list: Array<string>, mode: 'except' | 'require' = 'require') {
+        return this.handler.generate(list, mode) | value;
+    }
+
+    delPerm(value: number, list: Array<string>, mode: 'except' | 'require' = 'require') {
+        return (this.handler.generate(list, mode) & value) ^ value;
+    }
+
+    checkPerm(value: number, perm: string) {
+        return ((value >> this.handler.permlist.indexOf(perm)) & 1) === 1;
+    }
+}
+
 export class Perm {
     value: number;
     handler: BasicPermModel;
 
-    constructor(permlist: Array<string> = [], value = 0) {
-        this.handler = new BasicPermModel(permlist);
+    constructor(handler: BasicPermModel, value = 0) {
+        this.handler = handler;
         this.value = value;
     }
 
@@ -66,94 +88,29 @@ export class Perm {
     }
 }
 
+/*
+export const userPermList = ['view', 'modifyOwn', 'modifyAll', 'delete', 'action'];
+export const userPermExplain = ['查看帖子', '修改个人发布', '修改全部发布', '删除帖子', '帖子交互'];
+export const userPermHandler = new BasicPermModel(userPermList);
+export const userPerm = new PermClass(userPermHandler);
+export const userPermDefault =  3;
+export const userPerm = 
 
-export const permNameList = ['view', 'manage', 'action', 'other'];
+*/
 
+const permColl = {};
 
-export class ViewPerm extends Perm {
-    constructor(value = 0) {
-        super(viewPermList, value);
-    }
+export function registerPerm(name: string, list: Array<string>, explain: Array<string>, defaultvalue: number) {
+    const engine = new BasicPermModel(list);
+    return (permColl[name] = {
+        list,
+        explain,
+        default: defaultvalue,
+        engine,
+        handler: new PermClass(engine)
+    });
 }
 
-export class ActionPerm extends Perm {
-    constructor(value = 0) {
-        super(managePermList, value);
-    }
+export function checkPerm(model: string, value: number, perm: string) {
+    return permColl[model].handler.checkPerm(value, perm);
 }
-
-export class ManagePerm extends Perm {
-    constructor(value = 0) {
-        super(managePermList, value);
-    }
-}
-
-export class OtherPerm extends Perm {
-    constructor(value = 0) {
-        super(otherPermList, value);
-    }
-}
-
-export type PermType = 'view' | 'manage' | 'other' | 'action';
-
-const viewPermC = new ViewPerm();
-const managePermC = new ManagePerm();
-const actionPermC = new ActionPerm();
-const otherPermC = new OtherPerm();
-
-export function checkPermFromValue(value: number, type: PermType, permName: string) {
-    switch (type) {
-        case 'view':
-            viewPermC.value = value;
-            return viewPermC.checkPerm(permName);
-        case 'manage':
-            managePermC.value = value;
-            return managePermC.checkPerm(permName);
-        case 'other':
-            otherPermC.value = value;
-            return otherPermC.checkPerm(permName);
-        case 'action':
-            actionPermC.value = value;
-            return actionPermC.checkPerm(permName);
-    }
-}
-
-export function checkPerm(
-    value: {
-        view: number;
-        manage: number;
-        other: number;
-    },
-    type: PermType,
-    permName: string
-) {
-    switch (type) {
-        case 'view':
-            viewPermC.value = value.view;
-            return viewPermC.checkPerm(permName);
-        case 'manage':
-            managePermC.value = value.manage;
-            return managePermC.checkPerm(permName);
-        case 'other':
-            otherPermC.value = value.other;
-            return otherPermC.checkPerm(permName);
-        case 'action':
-            actionPermC.value = value.other;
-            return actionPermC.checkPerm(permName);
-    }
-}
-
-//NOTE: 请注意 对于任意新的权限请在权限后面添加参数。
-//NOTE: Notice that add new perm after exists.
-export const viewExplain = '查看权限';
-export const viewPermList = ['main', 'discuss', 'admin', 'chat'];
-export const viewPermExplain = ['主站', '讨论', '后台', '私信'];
-export const manageExplain = '管理权限';
-export const managePermList = ['main', 'discuss', 'admin', 'chat'];
-export const managePermExplain = ['主站', '讨论', '后台', '私信'];
-export const actionExplain = '交互权限';
-export const actionPermList = ['discuss', 'chat'];
-export const actionPermExplain = ['讨论', '私信'];
-export const otherExplan = '';
-export const otherPermList = ['adminBadge', 'superadminBadge', 'permChange'];
-export const otherPermExplain = ['显示管理徽章', '显示高级徽章', '权限管理'];

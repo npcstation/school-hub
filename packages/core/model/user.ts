@@ -3,6 +3,7 @@ import { db } from '../service/db';
 import { DuplicateError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
 import { DefaultType } from '../declare/type';
+import { BasicPermModel, PermClass, registerPerm } from '../declare/perm';
 
 export class UserSchema {
     id?: number;
@@ -178,3 +179,9 @@ export class UserModel {
 }
 
 export const user = new UserModel();
+
+export const userPerm = registerPerm('user',
+    ['view', 'modifyOwn', 'modifyAll', 'delete', 'action'],
+    ['查看帖子', '修改个人发布', '修改全部发布', '删除帖子', '帖子交互'],
+    3
+)
