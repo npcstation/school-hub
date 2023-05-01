@@ -3,7 +3,7 @@ import { db } from '../service/db';
 import { DuplicateError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
 import { DefaultType } from '../declare/type';
-import { BasicPermModel, PermClass, registerPerm } from '../declare/perm';
+import { registerPerm } from '../declare/perm';
 
 export class UserSchema {
     id?: number;
