@@ -64,10 +64,20 @@ async function handle(ctx: KoaContext, Handler) {
         }
         ctx = h.ctx;
     } catch (err) {
-        ctx.body = JSON.stringify({
-            error: err,
-        });
-        ctx.response.status = 500;
+        console.log(err);
+        if (err?.errorType === 'perm') {
+            ctx.body = JSON.stringify({
+                msg: 'PERM ERROR',
+                type: 'perm',
+                param: err?.errorParam
+            });
+            ctx.response.status = 200;
+        } else {
+            ctx.body = JSON.stringify({
+                error: err,
+            });
+            ctx.response.status = 500;
+        }
     }
 }
 

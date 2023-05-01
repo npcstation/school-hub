@@ -1,5 +1,9 @@
 // import _ from 'lodash';
 
+import { token } from '../model/token';
+import { db } from '../service/db';
+import { PermError } from './error';
+
 export class BasicPermModel {
     permlist: Array<string> = [];
 
@@ -100,17 +104,47 @@ export const userPerm =
 
 const permColl = {};
 
-export function registerPerm(name: string, list: Array<string>, explain: Array<string>, defaultvalue: number) {
+export function registerPerm(name: string, list: Array<string>, explain: Array<string>, defaultvalue: number, guestvalue: number) {
     const engine = new BasicPermModel(list);
     return (permColl[name] = {
         list,
         explain,
         default: defaultvalue,
+        guest: guestvalue,
         engine,
-        handler: new PermClass(engine)
+        handler: new PermClass(engine),
     });
 }
 
-export function checkPerm(model: string, value: number, perm: string) {
+export function checkPerm(value: number, model: string, perm: string) {
     return permColl[model].handler.checkPerm(value, perm);
+}
+
+export function perm(model: string, name: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return function (target: any, methodName: string, descriptor: any) {
+        descriptor.originalMethod = descriptor.value;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        descriptor.value = async function run(args: any) {
+            let id = args?.id || 0;
+            if (id !== 0) {
+                if ((await token.check(id, args?.token)) !== true) {
+                    id = 0;
+                }
+            }
+            const defaultValue = permColl[model].default,
+                guestValue = permColl[model].guest;
+            let value = 0;
+            if (id !== 0) {
+                const dbData = await db.getone('perm', { id });
+                value = (dbData || {})[model] || defaultValue;
+            } else {
+                value = guestValue;
+            }
+            if (checkPerm(value, model, name) === false) {
+                throw new PermError(id, name);
+            }
+            return await descriptor.originalMethod.apply(this, args);
+        };
+    };
 }

@@ -26,3 +26,11 @@ export class NotFoundError extends RError {
     public errorType = 'exist';
 }
 
+export class PermError extends RError {
+    constructor(id: string, value: string | number) {
+        super(`Not Found Error. id:${id} do not have perm ${value}.`);
+        this.errorParam.push(id, value);
+    }
+    public errorType = 'perm';
+    public errorParam = [];
+}
