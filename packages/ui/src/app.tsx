@@ -11,6 +11,7 @@ import * as Direct from './interfaces/interface';
 import DiscussPage from './pages/discuss';
 import './app.css';
 
+
 declare global {
     interface Window {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,17 +1,38 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Table, Grid, Text, Card, Group, rem, Tooltip } from '@mantine/core';
+import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Table, Grid, Text, Card, Group, rem, Tooltip, Anchor } from '@mantine/core';
 import React, { useState } from 'react';
 import { NoStyleCard, StandardCard } from '../components/card';
 import { IconAd, IconDiscountCheck, IconExclamationMark } from '@tabler/icons-react';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
+import { init } from 'emoji-mart'
 
 const useStyles = createStyles((theme) => ({}));
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'em-emoji': { set: string, id: string, size: string };
+        }
+    }
+}
+
+
+function BadgeShow({id}: {id: string }) {
+    return (
+        <em-emoji set='twitter' id={id} size='10px'></em-emoji>
+    );
+}
+
+const righticon = <Avatar size={24} color='indigo' >12</Avatar>;
 
 export default function DiscussPage() {
     const { classes, cx, theme } = useStyles();
     const [opened, setOpened] = useState(false);
+
+    init({ data });
     return (
         <>
             <Container>
@@ -64,6 +85,11 @@ export default function DiscussPage() {
                                             </div>
                                         </Popover.Dropdown>
                                     </Popover>
+                                    &nbsp;·&nbsp;
+                                    <Badge color='indigo' variant='outline' radius='xl' pr={0} rightSection={righticon}>
+                                        <BadgeShow id='-1' />
+                                        &nbsp;
+                                    </Badge>
                                 </Text>
                             </Card.Section>
                         </NoStyleCard>
