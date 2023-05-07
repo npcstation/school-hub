@@ -282,7 +282,7 @@ export default function LoginPage() {
 
                         <Group position='apart' mt='xl'>
                             <Anchor component='button' type='button' color='dimmed' onClick={() => toggle()} size='xs'>
-                                {type === '注册' ? '已经有账号了? 点这里登录' : '还没有账号吗? 点这里注册'}
+                                已经有账号了? 点这里登录
                             </Anchor>
                             <Button type='submit' radius='xl'>
                                 {upperFirst(type)}

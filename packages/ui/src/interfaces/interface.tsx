@@ -35,11 +35,9 @@ export function Feedback({ status, title, msg, links }: any) {
             style: string;
         }[]
     ).map((item) => (
-        <>
-            <a href={item.link}>
-                <Button mr={4} color={item.color || 'indigo'} variant={item.style || 'filled'}>{item.title}</Button>
-            </a>
-        </>
+        <a key={item.title} href={item.link}>
+            <Button mr={4} color={item.color || 'indigo'} variant={item.style || 'filled'}>{item.title}</Button>
+        </a>
     ));
     return (
         <Container>
