@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MantineProvider, ColorScheme } from '@mantine/core';
+import { MantineProvider, ColorScheme, createEmotionCache } from '@mantine/core';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Root } from './structure/root';
 import HomePage from './pages/home';
@@ -11,6 +11,7 @@ import * as Direct from './interfaces/interface';
 import DiscussPage from './pages/discuss';
 import './app.css';
 
+const myCache = createEmotionCache({ key: 'school-hub' });
 
 declare global {
     interface Window {
@@ -51,6 +52,7 @@ function App() {
         <>
             <Provider store={store}>
                 <MantineProvider
+                    emotionCache={myCache}
                     withGlobalStyles
                     withNormalizeCSS
                     theme={{
