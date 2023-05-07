@@ -28,7 +28,7 @@ export function verify(param, Type) {
             const paramNames = paramList.map((param) => param.trim());
             descriptor.paramNames = paramNames;
         }
-        descriptor.verify[descriptor.paramNames.indexOf(param)] = Type || DefaultType[Type.toString()];
+        descriptor.verify[descriptor.paramNames.indexOf(param)] = Type || DefaultType[Type?.toString()];
         descriptor.value = async function run(...args) {
             for (const i in descriptor.verify) {
                 if (!Verify(descriptor.verify[i], args[i])) {
