@@ -23,6 +23,7 @@ function App() {
     const [colorScheme, setColorScheme] = useState('light');
     const beforeColorScheme = localStorage.getItem('colorScheme');
 
+
     if (beforeColorScheme === null) {
         localStorage.setItem('colorScheme', 'light');
         setColorScheme('light');
