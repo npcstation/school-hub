@@ -62,7 +62,6 @@ async function handle(ctx: KoaContext, Handler) {
                 await h[step](args);
             }
         }
-        ctx = h.ctx; // deepscan-disable-line UNUSED_VAR_ASSIGN
     } catch (err) {
         console.log(err);
         if (err?.errorType === 'perm') {
