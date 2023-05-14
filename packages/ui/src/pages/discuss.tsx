@@ -100,7 +100,7 @@ export default function DiscussPage() {
                                         </Popover.Target>
                                         <Popover.Dropdown p={0}>
                                             <div>
-                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={console.log} />
+                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={alert} />
                                             </div>
                                         </Popover.Dropdown>
                                     </Popover>
@@ -149,7 +149,7 @@ export default function DiscussPage() {
                                         </Popover.Target>
                                         <Popover.Dropdown p={0}>
                                             <div>
-                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={console.log} />
+                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={alert} />
                                             </div>
                                         </Popover.Dropdown>
                                     </Popover>

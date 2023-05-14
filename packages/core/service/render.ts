@@ -36,6 +36,6 @@ export async function apply() {
     templateHTML['RenderHTML'] = (await fs.readFileSync(path.join(__dirname, '..', '..', 'ui', 'index.html'))).toString();
     if (global.Project.env === 'prod') {
         manifest = JSON.parse(await fs.readFileSync(path.join(__dirname, '..', '..', 'ui', 'dist', 'manifest.json')).toString());
-        console.log(manifest);
+        // console.log(manifest);
     }
 }

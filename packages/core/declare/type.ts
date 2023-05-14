@@ -35,7 +35,6 @@ export class BooleanType extends BasicType {
 
 export class UserType extends BasicType {
     verify(data: any): boolean {
-        console.log(data);
         return (
             typeof data.username === 'string' &&
             typeof data.pwd === 'string' &&
@@ -50,7 +49,6 @@ export class UserType extends BasicType {
 
 export class DiscussType extends BasicType {
     verify(data: any): boolean {
-        console.log(data);
         return (
             typeof data.author === 'string' &&
             typeof data.topic === 'string' &&

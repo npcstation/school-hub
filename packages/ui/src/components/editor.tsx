@@ -46,14 +46,11 @@ export function VditorThemeChangeProvider({vditor}: VditorThemeChangeProviderPro
     
     useEffect(() => {
         function handleThemeChange() {
-            console.log('ee');
             const nowTheme = localStorage.getItem('colorScheme') as string;
             vditor.setTheme(nowTheme === 'dark' ? 'dark' : 'classic', nowTheme);
         }
-        console.log('Register');
         window.addEventListener('changeTheme', handleThemeChange);
         return () => {
-            console.log('delete ');
             window.removeEventListener('changeTheme', handleThemeChange);
         }
     }, [vditor]);
@@ -62,9 +59,7 @@ export function VditorThemeChangeProvider({vditor}: VditorThemeChangeProviderPro
 
 export function VditorProvider({ id, minHeight, content, setVd }: VditorRegisterProp) {
     const { theme } = useStyles();
-
     const [infoModalStatus, { open, close }] = useDisclosure(false);
-
     useEffect(() => {
         const vditor = new Vditor(id, {
             theme: theme.colorScheme === 'dark' ? 'dark' : 'classic',
