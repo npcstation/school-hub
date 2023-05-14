@@ -46,6 +46,9 @@ function App() {
                 localStorage.setItem('colorScheme', 'light');
             }
         }
+        const setItemEvent = new Event('changeTheme');
+        window.dispatchEvent(setItemEvent);
+        console.log('2333');
     }
 
     return (

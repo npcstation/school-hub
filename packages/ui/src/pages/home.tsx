@@ -2,6 +2,8 @@
 import { createStyles, Badge, Container, Space, Table, Grid } from '@mantine/core';
 import React from 'react';
 import { StandardCard } from '../components/card';
+// import { BlockSuitEditor } from '../components/editor';
+import {IconArrowLeft} from '@tabler/icons-react'
 
 const useStyles = createStyles((theme) => ({
     
@@ -9,12 +11,14 @@ const useStyles = createStyles((theme) => ({
 
 export default function HomePage() {
     const { classes, cx, theme } = useStyles();
-    const rows = (<>
-        <tr>
-            <td>测试公告</td>
-            <td>2023.12.31</td>
-        </tr>
-    </>)
+    const rows = (
+        <>
+            <tr>
+                <td>测试公告</td>
+                <td>2023.12.31</td>
+            </tr>
+        </>
+    );
     return (
         <>
             <Container>

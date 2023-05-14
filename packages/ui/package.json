@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocksuite/blocks": "^0.0.0-20230508161503-04475f67-nightly",
+    "@blocksuite/editor": "^0.0.0-20230508161503-04475f67-nightly",
+    "@blocksuite/store": "^0.0.0-20230508161503-04475f67-nightly",
     "@emoji-mart/data": "^1.1.2",
     "@emotion/react": "^11.10.6",
     "@mantine/carousel": "^6.0.4",
@@ -38,7 +41,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.9.0"
+    "react-router-dom": "^6.9.0",
+    "vditor": "^3.9.2",
+    "yjs": "^13.6.1"
   },
   "devDependencies": {
     "@eslint/create-config": "^0.4.2",

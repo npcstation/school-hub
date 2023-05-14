@@ -8,6 +8,11 @@ import { IconAd, IconDiscountCheck, IconExclamationMark } from '@tabler/icons-re
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
 import { init } from 'emoji-mart'
+import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
+import Vditor from 'vditor';
+// import { BlockSuitEditor } from '../components/editor';
+
+import { IconHeading } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -46,10 +51,8 @@ const righticon = <Avatar size={24} color='indigo' >18</Avatar>;
 export default function DiscussPage() {
     const { classes, cx, theme } = useStyles();
     const [opened, setOpened] = useState(false);
-    init({ data });
-    // console.log('qwq');
-    // console.log(init({ data }));
-    
+    // init({ data });
+    const [replyVditor, setReplyVditor] = useState({});
     return (
         <>
             <Container>
@@ -73,6 +76,7 @@ export default function DiscussPage() {
                                     display: 'flex',
                                 }}
                             >
+                                <IconHeading width={3} height={3} />
                                 <div style={{ marginRight: 15, paddingTop: 7.435 }}>
                                     <Avatar color='pink' src='https://blog.smallfang.fun/image/tx.png' radius='xl'></Avatar>
                                 </div>
@@ -177,6 +181,12 @@ export default function DiscussPage() {
                                 })}
                             />
                         </NoStyleCard>
+                        <StandardCard title='回复讨论' mt={15}>
+                            <VditorProvider minHeight={300} id='reply-vditor' setVd={setReplyVditor} />
+                            <VditorThemeChangeProvider vditor={replyVditor as Vditor} />
+                            <Space pt={10} />
+                            <Button>回复</Button>
+                        </StandardCard>
                     </Grid.Col>
                     <Grid.Col sm={12} xs={12} lg={4}>
                         <StandardCard title='讨论详情'>
