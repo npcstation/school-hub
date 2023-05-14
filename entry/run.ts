@@ -90,7 +90,7 @@ async function run() {
             await require(path.join(process.cwd(), global.Project.core, 'test', 'index.js')); 
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 

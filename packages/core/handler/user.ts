@@ -185,8 +185,7 @@ class LoginHandler extends Handler {
                 throw new ValidationError('any');
             }
         } catch (err) {
-            // eslint-disable-next-line no-console
-            console.log(err);
+            console.error(err);
             // Treat exist error as validation error to prevent brute force
             if (err?.errorType === 'exist') {
                 this.ctx.body = {
