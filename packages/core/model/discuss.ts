@@ -17,7 +17,7 @@ export class DiscussSchema {
     responds: Record<string, Array<number>>;
 }
 
-type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'id'>
+type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'id'>;
 
 export class DiscussModel {
     async genId() {
@@ -76,10 +76,28 @@ export class DiscussModel {
         );
         return;
     }
+
+    @verify('id', DefaultType.Number)
+    @verify('emoji', DefaultType.String)
+    async respondWith(id: number, emoji: string) {
+        if ((await this.idExist(id)) === false) {
+            throw new NotFoundError('discuss', 'id');
+        }
+        const data = await db.getone('discuss', { id });
+        const newCount = data.responds[emoji] + 1 || 1;
+        data.responds[emoji] = newCount;
+        await db.update(
+            'discuss',
+            {
+                id,
+            },
+            data
+        );
+        return;
+    }
 }
 
 export const discuss = new DiscussModel();
-
 
 export const discussPerm = registerPerm(
     'user',
