@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import React from 'react';
 import Vditor from 'vditor';
 import 'vditor/dist/index.css';
-import { Badge, Center, createStyles } from '@mantine/core';
+import { createStyles } from '@mantine/core';
 import { IconArrowsMaximize, IconBold, IconBoxModel, IconHeading, IconInfoCircle, IconItalic, IconMoodHappy } from '@tabler/icons-react';
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 import '../assets/vditor.css'
-import { Modal, Text, TypographyStylesProvider, Avatar } from '@mantine/core';
+import { Modal, Text, TypographyStylesProvider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
