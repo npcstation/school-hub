@@ -63,8 +63,7 @@ async function handle(ctx: KoaContext, Handler) {
             }
         }
     } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
         if (err?.errorType === 'perm') {
             ctx.body = JSON.stringify({
                 msg: 'PERM ERROR',

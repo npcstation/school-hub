@@ -140,10 +140,8 @@ export default function LoginPage() {
 
                                 styles: alarm(value.status),
                             });
-                            // eslint-disable-next-line no-console
-                            console.log('技术参数');
-                            // eslint-disable-next-line no-console
-                            console.log(value);
+                            console.info('技术参数');
+                            console.info(value);
                             if (value.status === 'success') {
                                 setTimeout(() => {
                                     if (window.web?.disableJump !== true) {
@@ -311,10 +309,8 @@ export default function LoginPage() {
                                 withCloseButton: false,
                                 styles: alarm(value.status),
                             });
-                            // eslint-disable-next-line no-console
-                            console.log('技术参数');
-                            // eslint-disable-next-line no-console
-                            console.log(value);
+                            console.info('技术参数');
+                            console.info(value);
                             if (value.status === 'success') {
                                 setTimeout(() => {
                                     if (window.web?.disableJump !== true) {
