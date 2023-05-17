@@ -84,16 +84,14 @@ export function ContentCard({Header, Content}: HeaderProps) {
                 </div>
                 <div>
                     <Text size={12.5} color='dimmed'>
-                        {Content.user.name} · {Content.sendTime/* render */}
+                        {Content.user.name} · {Content.sendTime /* render */}
                     </Text>
-                    <Text size={20}>
-                        {Content.content /* markdownRender */}
-                    </Text>
+                    <Text size={20}>{Content.title}</Text>
                 </div>
             </Card.Section>
 
             <Card.Section p={15} pl={10}>
-                <Text size={14.5}>qwq</Text>
+                <Text size={14.5}>{Content.content /* markdownRender */}</Text>
             </Card.Section>
             <Card.Section withBorder p={6} pl={15}>
                 <Text color='dimmed' fw={700} size={12.5}>
