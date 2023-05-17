@@ -63,7 +63,6 @@ async function handle(ctx: KoaContext, Handler) {
             }
         }
     } catch (err) {
-        console.error(err);
         if (err?.errorType === 'perm') {
             ctx.body = JSON.stringify({
                 msg: 'PERM ERROR',
@@ -72,6 +71,7 @@ async function handle(ctx: KoaContext, Handler) {
             });
             ctx.response.status = 200;
         } else {
+            console.error(err);
             ctx.body = JSON.stringify({
                 error: err,
             });

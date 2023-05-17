@@ -25,12 +25,6 @@ declare global {
 }
 
 
-function BadgeShow({ id }: { id: string }) {
-    init({ data });
-    return (
-        <em-emoji set='twitter' id={id} size='10px'></em-emoji>
-    );
-}
 
 // class BadgeShow extends React.Component {
 //     componentDidMount() {
@@ -58,6 +52,10 @@ export default function DiscussPage() {
             <Container>
                 <Grid>
                     <Grid.Col sm={12} xs={12} lg={8}>
+                        <div style={{ display: 'none' }}>
+                            {/*预加载*/}
+                            <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
+                        </div>
                         <NoStyleCard>
                             <Card.Section>
                                 <Alert icon={<IconDiscountCheck stroke={1.5} />} radius={0} title='已验证的官方讨论' color='green'>
@@ -105,10 +103,6 @@ export default function DiscussPage() {
                                         </Popover.Dropdown>
                                     </Popover>
                                     &nbsp;·&nbsp;
-                                    <Badge color='indigo' variant='outline' radius='xl' pr={0} rightSection={righticon}>
-                                        <BadgeShow id='-1' />
-                                        &nbsp;
-                                    </Badge>
                                 </Text>
                             </Card.Section>
                         </NoStyleCard>
@@ -155,8 +149,7 @@ export default function DiscussPage() {
                                     </Popover>
                                     &nbsp;·&nbsp;
                                     <Badge color='indigo' variant='outline' radius='xl' pr={0} rightSection={righticon}>
-                                        <BadgeShow id='+1' />
-                                        &nbsp;
+                                        
                                     </Badge>
                                 </Text>
                             </Card.Section>

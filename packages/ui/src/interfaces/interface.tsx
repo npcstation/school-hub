@@ -64,3 +64,19 @@ export function Feedback({ status, title, msg, links }: any) {
         </Container>
     );
 }
+
+
+export function ErrorShow({ errmsg, from }: any) {
+    const { classes, cx, theme } = useStyles();
+    return (
+        <Container>
+            <StandardCard title='Error'>
+                { errmsg }
+                发生意料之外的错误。<br />
+                错误处理来自{from === 'ui' ? '前端' : '后端'}。<br />
+                本页面请截图发给以下邮箱<br />
+                smallfang@rotriw.tech
+            </StandardCard>
+        </Container>
+    );
+}
