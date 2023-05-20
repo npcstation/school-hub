@@ -6,7 +6,7 @@ import { verify } from '../utils/decorate';
 import { NotFoundError } from '../declare/error';
 
 export class DiscussSchema {
-    id?: number;
+    did?: number;
     author: string;
     topic: string;
     tags: Array<string>;
@@ -14,13 +14,14 @@ export class DiscussSchema {
     content: string;
     createdTime: number;
     lastModified: number;
+    commentsNumber: number;
     responds: Record<string, Array<number>>;
 }
 
-type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'id'>;
+type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
 
 export class DiscussModel {
-    async genId() {
+    async genDId() {
         const newID = (await db.getone('count', { type: 'discussId' }))?.count + 1 || 1;
         if (newID === 1) {
             await db.insert('count', { type: 'discussId', count: newID });
@@ -32,9 +33,9 @@ export class DiscussModel {
     @verify('data', DefaultType.Discuss)
     async create(data: DiscussSchema) {
         const { author, topic, tags, title, content, createdTime, lastModified, responds } = data;
-        const id = await this.genId();
+        const did = await this.genDId();
         await db.insert('discuss', {
-            id,
+            did,
             author,
             topic,
             tags,
@@ -42,58 +43,78 @@ export class DiscussModel {
             content,
             createdTime,
             lastModified,
+            commentsNumber: 0,
             responds,
         });
         return {
-            id,
+            did,
         };
     }
 
-    @verify('id', DefaultType.Number)
-    async idExist(id: number) {
+    @verify('did', DefaultType.Number)
+    async idExist(did: number) {
         return !isNull(
             await db.getall(
                 'discuss',
                 {
-                    id,
+                    did,
                 },
                 {}
             )
         );
     }
 
-    @verify('id', DefaultType.Number)
-    async update(id: number, data: DiscussUpdatedSchema) {
-        if ((await this.idExist(id)) === false) {
-            throw new NotFoundError('discuss', 'id');
+    @verify('idd', DefaultType.Number)
+    async update(did: number, data: DiscussUpdatedSchema) {
+        if ((await this.idExist(did)) === false) {
+            throw new NotFoundError('discuss', 'did');
         }
         await db.update(
             'discuss',
             {
-                id,
+                did,
             },
             data
         );
         return;
     }
 
-    @verify('id', DefaultType.Number)
+    @verify('did', DefaultType.Number)
     @verify('emoji', DefaultType.String)
-    async respondWith(id: number, emoji: string) {
-        if ((await this.idExist(id)) === false) {
-            throw new NotFoundError('discuss', 'id');
+    async respondWithDiscussId(did: number, emoji: string) {
+        if ((await this.idExist(did)) === false) {
+            throw new NotFoundError('discuss', 'did');
         }
-        const data = await db.getone('discuss', { id });
+        const data = await db.getone('discuss', { did });
         const newCount = data.responds[emoji] + 1 || 1;
         data.responds[emoji] = newCount;
         await db.update(
             'discuss',
             {
-                id,
+                did,
             },
             data
         );
         return;
+    }
+
+    @verify('did', DefaultType.Number)
+    async info(did: number) {
+        if ((await this.idExist(did)) === false) {
+            throw new NotFoundError('discuss', 'did');
+        }
+        const data = await db.getone('discuss', { did }) as DiscussSchema;
+        return {
+            author: data.author,
+            commentsNumber: data.commentsNumber,
+            time: data.createdTime,
+        }
+    }
+
+    // TODO: sendcomment
+    async sendComment(did: number, commentContent: any) {
+        // TODO:
+        
     }
 }
 

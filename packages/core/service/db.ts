@@ -30,7 +30,7 @@ class dbClass {
         const coll = database.collection(model);
         const res = await coll.findOne(query, options);
         client.close();
-        return res;
+        return res as any;
     }
 
     async getall(model: string, query: Filter<Document>, options = {}) {
