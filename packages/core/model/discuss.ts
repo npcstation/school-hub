@@ -111,6 +111,15 @@ export class DiscussModel {
         }
     }
 
+    @verify('did', DefaultType.Number)
+    async find(did: number) {
+        if ((await this.idExist(did)) === false) {
+            throw new NotFoundError('discuss', 'did');
+        }
+        const data = await db.getone('discuss', { did }) as DiscussSchema;
+        return data;
+    }
+
     // TODO: sendcomment
     async sendComment(did: number, commentContent: any) {
         // TODO:
@@ -121,7 +130,7 @@ export class DiscussModel {
 export const discuss = new DiscussModel();
 
 export const discussPerm = registerPerm(
-    'user',
+    'discuss',
     ['view', 'modifyOwn', 'modifyAll', 'delete', 'action'],
     ['查看帖子', '修改个人发布', '修改全部发布', '删除帖子', '帖子交互'],
     3,
