@@ -123,7 +123,7 @@ export function checkPerm(value: number, model: string, perm: string) {
 export function perm(model: string, name: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (target: any, methodName: string, descriptor: any) {
-        descriptor.originalMethod = descriptor.value;
+        descriptor.originalMethodPerm = descriptor.value;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         descriptor.value = async function run(args: any) {
             let id = args?.id || 0;
@@ -144,7 +144,7 @@ export function perm(model: string, name: string) {
             if (checkPerm(value, model, name) === false) {
                 throw new PermError(id, name);
             }
-            return await descriptor.originalMethod.apply(this, args);
+            return await descriptor.originalMethodPerm.apply(this, [args]);
         };
     };
 }

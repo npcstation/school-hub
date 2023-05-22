@@ -6,11 +6,11 @@ export function param(params) {
     return function(target: any, methodName: string, descriptor: any) {
         if (descriptor.__param === undefined) {
             descriptor.__param = [];
-            descriptor.originalMethod = descriptor.value;
+            descriptor.originalMethodParam = descriptor.value;
         }
         descriptor.__param.unshift(params);
         descriptor.value = async function run(args: any) {
-            return await descriptor.originalMethod.apply(
+            return await descriptor.originalMethodParam.apply(
                 this,
                 descriptor.__param.map((key) => args[key])
             );
@@ -22,7 +22,7 @@ export function verify(param, Type) {
     return function(target: any, methodName: string, descriptor: any) {
         if (descriptor.verify === undefined) {
             descriptor.verify = {};
-            descriptor.originalMethod = descriptor.value;
+            descriptor.originalMethodVerify = descriptor.value;
             const codes = descriptor.value.toString();
             const paramList = codes.slice(codes.indexOf('(') + 1, codes.indexOf(')')).split(',');
             const paramNames = paramList.map((param) => param.trim());
@@ -35,7 +35,7 @@ export function verify(param, Type) {
                     throw new ValidationError(descriptor.verify[i]);
                 }
             }
-            return await descriptor.originalMethod.apply(this, args);
+            return await descriptor.originalMethodVerify.apply(this, args);
         };
     };
 }
