@@ -64,7 +64,7 @@ export class DiscussModel {
         );
     }
 
-    @verify('idd', DefaultType.Number)
+    @verify('did', DefaultType.Number)
     async update(did: number, data: DiscussUpdatedSchema) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
