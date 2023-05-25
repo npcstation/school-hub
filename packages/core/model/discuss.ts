@@ -103,12 +103,12 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = await db.getone('discuss', { did }) as DiscussSchema;
+        const data = (await db.getone('discuss', { did })) as DiscussSchema;
         return {
             author: data.author,
             commentsNumber: data.commentsNumber,
             time: data.createdTime,
-        }
+        };
     }
 
     @verify('did', DefaultType.Number)
@@ -116,14 +116,18 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = await db.getone('discuss', { did }) as DiscussSchema;
+        const data = (await db.getone('discuss', { did })) as DiscussSchema;
         return data;
+    }
+
+    async getResponds(did: number) {
+        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        return data.responds;
     }
 
     // TODO: sendcomment
     async sendComment(did: number, commentContent: any) {
         // TODO:
-        
     }
 }
 
