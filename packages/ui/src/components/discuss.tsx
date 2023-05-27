@@ -1,11 +1,10 @@
 import { UserSchema } from '../interfaces/user';
 import { NoStyleCard } from './card';
 import React from 'react';
-import { Alert, Avatar, Badge, Card, Pagination, Popover, Text, createStyles } from '@mantine/core';
+import { Alert, Avatar, Card, Pagination, Popover, Text, createStyles } from '@mantine/core';
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
-import { IconHeading } from '@tabler/icons-react';
 
 export interface CommentProps {
     content: string;

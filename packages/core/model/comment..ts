@@ -1,8 +1,6 @@
 import { NotFoundError } from '../declare/error';
 import { registerPerm } from '../declare/perm';
-import { DefaultType } from '../declare/type';
 import { db } from '../service/db';
-import { verify } from '../utils/decorate';
 
 interface CommentSchema {
     cid: number;
@@ -30,13 +28,11 @@ class CommentModel {
         return data !== null;
     }
 
-    @verify('did', DefaultType.Number)
     async list(did: number) {
         const data = await db.getall('comment', { did });
         return data;
     }
 
-    @verify('cid', DefaultType.Number)
     async info(cid: number) {
         if ((await this.idExist(cid)) === false) {
             throw new NotFoundError('comment', 'cid');
@@ -49,7 +45,6 @@ class CommentModel {
         };
     }
 
-    @verify('cid', DefaultType.Number)
     async find(cid: number) {
         if ((await this.idExist(cid)) === false) {
             throw new NotFoundError('comment', 'cid');
@@ -72,7 +67,6 @@ class CommentModel {
         return { cid };
     }
 
-    @verify('cid', DefaultType.Number)
     async update(cid: number, data: CommentUpdatedSchema) {
         if ((await this.idExist(cid)) === false) {
             throw new NotFoundError('comment', 'cid');

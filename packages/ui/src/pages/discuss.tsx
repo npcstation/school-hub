@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Table, Grid, Text, Card, Group, rem, Tooltip, Anchor, Pagination } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
+import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination } from '@mantine/core';
+import React, { useState } from 'react';
 import { NoStyleCard, StandardCard } from '../components/card';
-import { IconAd, IconDiscountCheck, IconExclamationMark } from '@tabler/icons-react';
+import { IconDiscountCheck } from '@tabler/icons-react';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
-import { init } from 'emoji-mart'
+import { init } from 'emoji-mart';
 import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
 import Vditor from 'vditor';
 // import { BlockSuitEditor } from '../components/editor';
@@ -19,12 +19,10 @@ const useStyles = createStyles((theme) => ({}));
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'em-emoji': { set: string, id: string, size: string };
+            'em-emoji': { set: string; id: string; size: string };
         }
     }
 }
-
-
 
 // class BadgeShow extends React.Component {
 //     componentDidMount() {
@@ -40,7 +38,11 @@ declare global {
 //     }
 // }
 
-const righticon = <Avatar size={24} color='indigo' >18</Avatar>;
+const righticon = (
+    <Avatar size={24} color='indigo'>
+        18
+    </Avatar>
+);
 
 export default function DiscussPage() {
     const { classes, cx, theme } = useStyles();
@@ -148,9 +150,7 @@ export default function DiscussPage() {
                                         </Popover.Dropdown>
                                     </Popover>
                                     &nbsp;·&nbsp;
-                                    <Badge color='indigo' variant='outline' radius='xl' pr={0} rightSection={righticon}>
-                                        
-                                    </Badge>
+                                    <Badge color='indigo' variant='outline' radius='xl' pr={0} rightSection={righticon}></Badge>
                                 </Text>
                             </Card.Section>
                         </NoStyleCard>
@@ -167,7 +167,9 @@ export default function DiscussPage() {
                                         '&[data-active]': {
                                             border: 'none',
                                             background:
-                                                theme.colorScheme === 'dark' ? theme.colors.gray[7] : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
+                                                theme.colorScheme === 'dark'
+                                                    ? theme.colors.gray[7]
+                                                    : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
                                             color: theme.colorScheme === 'dark' ? 'white' : 'black',
                                         },
                                     },

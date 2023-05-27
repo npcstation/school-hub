@@ -1,8 +1,6 @@
 import { isNull } from 'lodash';
 import { registerPerm } from '../declare/perm';
-import { DefaultType } from '../declare/type';
 import { db } from '../service/db';
-import { verify } from '../utils/decorate';
 import { NotFoundError } from '../declare/error';
 
 export class DiscussSchema {
