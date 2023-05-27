@@ -2,14 +2,21 @@
 import { ValidationError } from '../declare/error';
 import { DefaultType, Verify } from '../declare/type';
 
-export function param(params) {
+export function param(params, Type: any = DefaultType.Any) {
     return function(target: any, methodName: string, descriptor: any) {
         if (descriptor.__param === undefined) {
             descriptor.__param = [];
+            descriptor.verify = {};
             descriptor.originalMethodParam = descriptor.value;
         }
+        descriptor.verify[params] = Type;
         descriptor.__param.unshift(params);
         descriptor.value = async function run(args: any) {
+            for (const i of descriptor.__param) {
+                if (!Verify(descriptor.verify[i], args[i])) {
+                    throw new ValidationError(descriptor.verify[i], i);
+                }
+            }
             return await descriptor.originalMethodParam.apply(
                 this,
                 descriptor.__param.map((key) => args[key])
@@ -18,6 +25,10 @@ export function param(params) {
     };
 }
 
+
+/**
+ * @deprecated
+ */
 export function verify(param, Type) {
     return function(target: any, methodName: string, descriptor: any) {
         if (descriptor.verify === undefined) {

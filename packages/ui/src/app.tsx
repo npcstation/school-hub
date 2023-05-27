@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MantineProvider, ColorScheme, createEmotionCache } from '@mantine/core';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { Root } from './structure/root';
 import HomePage from './pages/home';
 import LoginPage from './pages/login';
@@ -17,6 +17,7 @@ declare global {
     interface Window {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         web?: any;
+        nowPage: string;
     }
 }
 
@@ -48,6 +49,8 @@ function App() {
         const setItemEvent = new Event('changeTheme');
         window.dispatchEvent(setItemEvent);
     }
+
+    
 
     return (
         <>

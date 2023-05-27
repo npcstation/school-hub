@@ -1,11 +1,12 @@
 import { perm } from '../declare/perm';
+import { DefaultType } from '../declare/type';
 import { Handler, Route } from '../handle';
 import { discuss } from '../model/discuss';
 import { param } from '../utils/decorate';
 
 class DiscussHandler extends Handler {
     @perm('discuss', 'view')
-    @param('did')
+    @param('did', DefaultType.String)
     async postInfo(did: string) {
         try {
             const data = await discuss.find(parseInt(did));

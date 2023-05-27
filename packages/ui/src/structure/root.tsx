@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createStyles, AppShell, rem } from '@mantine/core';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { Navbar } from '../components/navbar';
 import React from 'react';
 import { AppFooter } from '../structure/footer';
+import { updateNewPageBackEndData } from '../interfaces/data';
 
 const useStyles = createStyles((theme) => ({
     
@@ -23,6 +24,14 @@ export function Root({ onThemeChange, type, children }: RootProps) {
         { link: '/', label: '主页' },
         { link: '/login', label: '登录' },
     ];
+    const location = useLocation();
+    React.useEffect(() => {
+        if (window.nowPage === undefined) {
+            window.nowPage = location.pathname;
+        } else if (window.nowPage !== location.pathname) {
+            updateNewPageBackEndData(location.pathname);
+        }
+    }, [location]);
     return (
         <AppShell
             styles={{

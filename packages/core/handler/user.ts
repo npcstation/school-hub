@@ -5,6 +5,7 @@ import { RenderFromPage } from '../service/render';
 import { param } from '../utils/decorate';
 import { ValidationError } from '../declare/error';
 import { token } from '../model/token';
+import { DefaultType, StringType } from '../declare/type';
 
 function randomString(length: number): string {
     const str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -16,11 +17,11 @@ function randomString(length: number): string {
 }
 
 class RegisterHandler extends Handler {
-    @param('username')
-    @param('password')
-    @param('gender')
-    @param('grade')
-    @param('email')
+    @param('username', new StringType([4, 20]))
+    @param('password', DefaultType.String)
+    @param('gender', DefaultType.String)
+    @param('grade', DefaultType.Number)
+    @param('email', DefaultType.Email)
     async postCreate(username: string, password: string, gender: string | number, grade: string, email: string) {
         try {
             let parsedGender = 0;
@@ -158,8 +159,9 @@ class RegisterHandler extends Handler {
 }
 
 class LoginHandler extends Handler {
-    @param('email')
-    @param('password')
+
+    @param('email', DefaultType.String)
+    @param('password', DefaultType.String)
     async postLoginCheck(email: string, password: string) {
         try {
             let data: UserSchema;

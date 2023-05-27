@@ -7,3 +7,9 @@ export async function fetch(handler: string, operation: string, data: any) {
     //TODO: Throw ERROR or handle error status.
     return datas.data;
 }
+
+export async function updateNewPageBackEndData(path: string) {
+    const datas = await axios.get(`${window.web?.link || ''}${path}?onlyJSON`);
+    window.web = datas;
+    return ;
+}
