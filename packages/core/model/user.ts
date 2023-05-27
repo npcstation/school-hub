@@ -1,8 +1,6 @@
-import { verify } from '../utils/decorate';
 import { db } from '../service/db';
 import { DuplicateError, NotFoundError } from '../declare/error';
 import { isNull } from 'lodash';
-import { DefaultType } from '../declare/type';
 import { registerPerm } from '../declare/perm';
 
 export class UserSchema {
