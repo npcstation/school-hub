@@ -128,6 +128,7 @@ export class DiscussModel {
             responds: {},
         };
         await comment.create(commentData);
+        return;
     }
 }
 
