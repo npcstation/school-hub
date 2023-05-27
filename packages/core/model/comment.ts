@@ -5,7 +5,7 @@ import { db } from '../service/db';
 interface CommentSchema {
     cid: number;
     did: number;
-    author: string;
+    authorId: number;
     content: string;
     createdTime: number;
     lastModified: number;
@@ -40,7 +40,7 @@ class CommentModel {
         }
         const data = (await db.getone('comment', { cid })) as CommentSchema;
         return {
-            author: data.author,
+            author: data.authorId,
             content: data.content,
             time: data.createdTime,
         };
@@ -54,13 +54,13 @@ class CommentModel {
         return data;
     }
 
-    async create(data: CommentSchema) {
-        const { did, author, content, createdTime, lastModified, responds } = data;
+    async create(data: Omit<CommentSchema, 'cid'>) {
+        const { did, authorId, content, createdTime, lastModified, responds } = data;
         const cid = await this.genCommentId();
         await db.insert('comment', {
             cid,
             did,
-            author,
+            authorId,
             content,
             createdTime,
             lastModified,

@@ -2,6 +2,7 @@ import { isNull } from 'lodash';
 import { registerPerm } from '../declare/perm';
 import { db } from '../service/db';
 import { NotFoundError } from '../declare/error';
+import { comment } from './comment';
 
 export class DiscussSchema {
     did?: number;
@@ -117,8 +118,16 @@ export class DiscussModel {
     }
 
     // TODO: sendcomment
-    async sendComment(did: number, commentContent: any) {
-        // TODO:
+    async sendComment(did: number, authorId: number, commentContent: string) {
+        const commentData = {
+            did,
+            authorId,
+            content: commentContent,
+            createdTime: Date.now(),
+            lastModified: Date.now(),
+            responds: {},
+        };
+        await comment.create(commentData);
     }
 }
 
