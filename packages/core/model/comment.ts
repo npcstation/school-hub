@@ -9,6 +9,7 @@ interface CommentSchema {
     content: string;
     createdTime: number;
     lastModified: number;
+    responds: Record<string, Array<number>>;
 }
 
 type CommentUpdatedSchema = Omit<Partial<CommentSchema>, 'cid' | 'did'>;
@@ -54,7 +55,7 @@ class CommentModel {
     }
 
     async create(data: CommentSchema) {
-        const { did, author, content, createdTime, lastModified } = data;
+        const { did, author, content, createdTime, lastModified, responds } = data;
         const cid = await this.genCommentId();
         await db.insert('comment', {
             cid,
@@ -63,6 +64,7 @@ class CommentModel {
             content,
             createdTime,
             lastModified,
+            responds
         });
         return { cid };
     }
@@ -79,6 +81,28 @@ class CommentModel {
             data
         );
         return;
+    }
+
+    async respondWithCommentId(cid: number, emoji: string) {
+        if ((await this.idExist(cid)) === false) {
+            throw new NotFoundError('comment', 'cid');
+        }
+        const data = await db.getone('comment', { cid });
+        const newCount = data.responds[emoji] + 1 || 1;
+        data.responds[emoji] = newCount;
+        await db.update(
+            'comment',
+            {
+                cid,
+            },
+            data
+        );
+        return;
+    }
+
+    async getResponds(cid: number) {
+        const data = (await db.getone('comment', { cid })) as CommentSchema;
+        return data.responds;
     }
 }
 
