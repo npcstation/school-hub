@@ -10,6 +10,7 @@ interface CommentSchema {
     createdTime: number;
     lastModified: number;
     responds: Record<string, Array<number>>;
+    deleted: boolean;
 }
 
 type CommentUpdatedSchema = Omit<Partial<CommentSchema>, 'cid' | 'did'>;
@@ -39,6 +40,9 @@ class CommentModel {
             throw new NotFoundError('comment', 'cid');
         }
         const data = (await db.getone('comment', { cid })) as CommentSchema;
+        if (data.deleted) {
+            throw new NotFoundError('comment', 'cid');
+        }
         return {
             author: data.authorId,
             content: data.content,
@@ -51,10 +55,13 @@ class CommentModel {
             throw new NotFoundError('comment', 'cid');
         }
         const data = (await db.getone('comment', { cid })) as CommentSchema;
+        if (data.deleted) {
+            throw new NotFoundError('comment', 'cid');
+        }
         return data;
     }
 
-    async create(data: Omit<CommentSchema, 'cid'>) {
+    async create(data: Omit<CommentSchema, 'cid' | 'deleted'>) {
         const { did, authorId, content, createdTime, lastModified, responds } = data;
         const cid = await this.genCommentId();
         await db.insert('comment', {
@@ -64,7 +71,8 @@ class CommentModel {
             content,
             createdTime,
             lastModified,
-            responds
+            responds,
+            deleted: false,
         });
         return { cid };
     }
@@ -88,6 +96,9 @@ class CommentModel {
             throw new NotFoundError('comment', 'cid');
         }
         const data = await db.getone('comment', { cid });
+        if (data.deleted) {
+            throw new NotFoundError('comment', 'cid');
+        }
         const newCount = data.responds[emoji] + 1 || 1;
         data.responds[emoji] = newCount;
         await db.update(
@@ -102,6 +113,9 @@ class CommentModel {
 
     async getResponds(cid: number) {
         const data = (await db.getone('comment', { cid })) as CommentSchema;
+        if (data.deleted) {
+            throw new NotFoundError('comment', 'cid');
+        }
         return data.responds;
     }
 }

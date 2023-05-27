@@ -15,6 +15,7 @@ export class DiscussSchema {
     lastModified: number;
     commentsNumber: number;
     responds: Record<string, Array<number>>;
+    deleted: boolean;
 }
 
 type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
@@ -29,7 +30,7 @@ export class DiscussModel {
         return newID;
     }
 
-    async create(data: DiscussSchema) {
+    async create(data: Omit<DiscussSchema, 'did' | 'deleted'>) {
         const { author, topic, tags, title, content, createdTime, lastModified, responds } = data;
         const did = await this.genDId();
         await db.insert('discuss', {
@@ -43,6 +44,7 @@ export class DiscussModel {
             lastModified,
             commentsNumber: 0,
             responds,
+            deleted: false,
         });
         return {
             did,
@@ -80,6 +82,9 @@ export class DiscussModel {
             throw new NotFoundError('discuss', 'did');
         }
         const data = await db.getone('discuss', { did });
+        if (data.deleted) {
+            throw new NotFoundError('discuss', 'did');
+        }
         const newCount = data.responds[emoji] + 1 || 1;
         data.responds[emoji] = newCount;
         await db.update(
@@ -97,6 +102,9 @@ export class DiscussModel {
             throw new NotFoundError('discuss', 'did');
         }
         const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        if (data.deleted) {
+            throw new NotFoundError('discuss', 'did');
+        }
         return {
             author: data.author,
             commentsNumber: data.commentsNumber,
@@ -109,16 +117,29 @@ export class DiscussModel {
             throw new NotFoundError('discuss', 'did');
         }
         const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        if (data.deleted) {
+            throw new NotFoundError('discuss', 'did');
+        }
         return data;
     }
 
     async getResponds(did: number) {
         const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        if (data.deleted) {
+            throw new NotFoundError('discuss', 'did');
+        }
         return data.responds;
     }
 
     // TODO: sendcomment
     async sendComment(did: number, authorId: number, commentContent: string) {
+        if ((await this.idExist(did)) === false) {
+            throw new NotFoundError('discuss', 'did');
+        }
+        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        if (data.deleted) {
+            throw new NotFoundError('discuss', 'did');
+        }
         const commentData = {
             did,
             authorId,
