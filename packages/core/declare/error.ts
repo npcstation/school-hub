@@ -4,9 +4,13 @@ export class RError extends Error {
 
 export class ValidationError extends RError {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    constructor(valuename: any) {
+    constructor(valuename: any, ...args) {
         super(`Validation Error. ${valuename.name || valuename.constructor.name} have not correct validated.`);
+
+        Object.assign(this.errorParam, args);
+        this.errorParam.push(valuename.name || valuename.constructor.name);
     }
+    public errorParam = [];
     public errorType = 'validation';
 }
 

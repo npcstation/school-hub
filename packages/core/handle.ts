@@ -63,10 +63,9 @@ async function handle(ctx: KoaContext, Handler) {
             }
         }
     } catch (err) {
-        if (err?.errorType === 'perm') {
+        if (['perm', 'validation'].includes(err?.errorType)) {
             ctx.body = JSON.stringify({
-                msg: 'PERM ERROR',
-                type: 'perm',
+                type: err?.errorType,
                 param: err?.errorParam
             });
             ctx.response.status = 200;

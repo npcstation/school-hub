@@ -30,7 +30,6 @@ export class DiscussModel {
         return newID;
     }
 
-    @verify('data', DefaultType.Discuss)
     async create(data: DiscussSchema) {
         const { author, topic, tags, title, content, createdTime, lastModified, responds } = data;
         const did = await this.genDId();
@@ -51,7 +50,6 @@ export class DiscussModel {
         };
     }
 
-    @verify('did', DefaultType.Number)
     async idExist(did: number) {
         return !isNull(
             await db.getall(
@@ -64,7 +62,6 @@ export class DiscussModel {
         );
     }
 
-    @verify('did', DefaultType.Number)
     async update(did: number, data: DiscussUpdatedSchema) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
@@ -79,8 +76,6 @@ export class DiscussModel {
         return;
     }
 
-    @verify('did', DefaultType.Number)
-    @verify('emoji', DefaultType.String)
     async respondWithDiscussId(did: number, emoji: string) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
@@ -98,7 +93,6 @@ export class DiscussModel {
         return;
     }
 
-    @verify('did', DefaultType.Number)
     async info(did: number) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
@@ -111,7 +105,6 @@ export class DiscussModel {
         };
     }
 
-    @verify('did', DefaultType.Number)
     async find(did: number) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
