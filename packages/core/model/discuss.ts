@@ -159,6 +159,7 @@ export class DiscussModel {
             createdTime: Date.now(),
             lastModified: Date.now(),
             responds: {},
+            deleted: false,
         };
         await comment.create(commentData);
         return;
