@@ -1,8 +1,8 @@
-import { NotFoundError } from '../declare/error';
+import { DuplicateError, NotFoundError, ValidationError } from '../declare/error';
 import { registerPerm } from '../declare/perm';
 import { db } from '../service/db';
 
-interface CommentSchema {
+export interface CommentSchema {
     cid: number;
     did: number;
     authorId: number;
@@ -31,7 +31,10 @@ class CommentModel {
     }
 
     async list(did: number) {
-        const data = await db.getall('comment', { did });
+        const data = (await db.getall('comment', { did })).map((item) => {
+            delete item._id;
+            return (item as unknown) as CommentSchema;
+        });
         return data;
     }
 
@@ -50,19 +53,20 @@ class CommentModel {
         };
     }
 
-    async find(cid: number) {
+    async find(cid: number): Promise<CommentSchema> {
         if ((await this.idExist(cid)) === false) {
             throw new NotFoundError('comment', 'cid');
         }
-        const data = (await db.getone('comment', { cid })) as CommentSchema;
+        const data = (await db.getone('comment', { cid }));
+        delete data._id
         if (data.deleted) {
             throw new NotFoundError('comment', 'cid');
         }
         return data;
     }
 
-    async create(data: Omit<CommentSchema, 'cid' | 'deleted'>) {
-        const { did, authorId, content, createdTime, lastModified, responds } = data;
+    async create(data: Omit<CommentSchema, 'cid'>) {
+        const { did, authorId, content, createdTime, lastModified, responds, deleted } = data;
         const cid = await this.genCommentId();
         await db.insert('comment', {
             cid,
@@ -72,7 +76,7 @@ class CommentModel {
             createdTime,
             lastModified,
             responds,
-            deleted: false,
+            deleted,
         });
         return { cid };
     }
@@ -91,16 +95,28 @@ class CommentModel {
         return;
     }
 
-    async respondWithCommentId(cid: number, emoji: string) {
+    emojiCheck(emoji: string): boolean {
+        const regex = /^\p{Extended_Pictographic}$/u;
+        return regex.test(emoji);
+    }
+
+    async respondWithCommentId(uid: number, cid: number, emoji: string) {
+        if (!this.emojiCheck(emoji)) {
+            throw new ValidationError('emoji');
+        }
         if ((await this.idExist(cid)) === false) {
             throw new NotFoundError('comment', 'cid');
         }
-        const data = await db.getone('comment', { cid });
+        const data = (await db.getone('comment', { cid })) as CommentSchema;
         if (data.deleted) {
             throw new NotFoundError('comment', 'cid');
         }
-        const newCount = data.responds[emoji] + 1 || 1;
-        data.responds[emoji] = newCount;
+        const users = data.responds[emoji] || [];
+        if (users.includes(uid)) {
+            throw new DuplicateError('emoji')
+        }
+        users.push(uid);
+        data.responds[emoji] = users;
         await db.update(
             'comment',
             {

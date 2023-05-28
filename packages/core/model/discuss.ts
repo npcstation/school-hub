@@ -1,19 +1,19 @@
 import { isNull } from 'lodash';
 import { registerPerm } from '../declare/perm';
 import { db } from '../service/db';
-import { NotFoundError } from '../declare/error';
+import { DuplicateError, NotFoundError, ValidationError } from '../declare/error';
 import { comment } from './comment';
 
 export class DiscussSchema {
     did?: number;
-    author: string;
+    author: number;
     topic: string;
     tags: Array<string>;
     title: string;
     content: string;
     createdTime: number;
     lastModified: number;
-    commentsNumber: number;
+    // It is like {'😅': [1, 2, 3]}
     responds: Record<string, Array<number>>;
     deleted: boolean;
 }
@@ -30,8 +30,8 @@ export class DiscussModel {
         return newID;
     }
 
-    async create(data: Omit<DiscussSchema, 'did' | 'deleted'>) {
-        const { author, topic, tags, title, content, createdTime, lastModified, responds } = data;
+    async create(data: Omit<DiscussSchema, 'did'>) {
+        const { author, topic, tags, title, content, createdTime, lastModified, responds, deleted } = data;
         const did = await this.genDId();
         await db.insert('discuss', {
             did,
@@ -44,7 +44,7 @@ export class DiscussModel {
             lastModified,
             commentsNumber: 0,
             responds,
-            deleted: false,
+            deleted,
         });
         return {
             did,
@@ -77,16 +77,28 @@ export class DiscussModel {
         return;
     }
 
-    async respondWithDiscussId(did: number, emoji: string) {
+    emojiCheck(emoji: string): boolean {
+        const regex = /^\p{Extended_Pictographic}$/u;
+        return regex.test(emoji);
+    }
+
+    async respondWithDiscussId(uid: number, did: number, emoji: string) {
+        if (!this.emojiCheck(emoji)) {
+            throw new ValidationError('emoji');
+        }
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = await db.getone('discuss', { did });
+        const data = (await db.getone('discuss', { did })) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
-        const newCount = data.responds[emoji] + 1 || 1;
-        data.responds[emoji] = newCount;
+        const users = data.responds[emoji] || [];
+        if (users.includes(uid)) {
+            throw new DuplicateError('emoji')
+        }
+        users.push(uid);
+        data.responds[emoji] = users;
         await db.update(
             'discuss',
             {
@@ -107,19 +119,20 @@ export class DiscussModel {
         }
         return {
             author: data.author,
-            commentsNumber: data.commentsNumber,
             time: data.createdTime,
         };
     }
 
-    async find(did: number) {
+    async find(did: number): Promise<DiscussSchema> {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        const data = await db.getone('discuss', { did });
+        delete data._id;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
+
         return data;
     }
 
@@ -131,7 +144,6 @@ export class DiscussModel {
         return data.responds;
     }
 
-    // TODO: sendcomment
     async sendComment(did: number, authorId: number, commentContent: string) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
