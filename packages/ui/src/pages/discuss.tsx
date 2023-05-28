@@ -11,7 +11,6 @@ import { init } from 'emoji-mart';
 import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
 import Vditor from 'vditor';
 // import { BlockSuitEditor } from '../components/editor';
-
 import { IconHeading } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({}));
@@ -44,7 +43,23 @@ const righticon = (
     </Avatar>
 );
 
+interface EmojiData {
+    id: string
+    name: string
+    native: string
+    unified: string
+    keywords: string[]
+    shortcodes: string
+    aliases: string[]
+    skin: number
+  }
+
 export default function DiscussPage() {
+    function onEmojiSelected(emoji: EmojiData) {
+        // TODO: Emoji Selection
+        alert(emoji.native);
+    }
+
     const { classes, cx, theme } = useStyles();
     const [opened, setOpened] = useState(false);
     // init({ data });
@@ -100,7 +115,13 @@ export default function DiscussPage() {
                                         </Popover.Target>
                                         <Popover.Dropdown p={0}>
                                             <div>
-                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={alert} />
+                                                <Picker
+                                                    theme={theme.colorScheme}
+                                                    set={'twitter'}
+                                                    locale='zh'
+                                                    data={data}
+                                                    onEmojiSelect={onEmojiSelected}
+                                                />
                                             </div>
                                         </Popover.Dropdown>
                                     </Popover>
@@ -145,7 +166,7 @@ export default function DiscussPage() {
                                         </Popover.Target>
                                         <Popover.Dropdown p={0}>
                                             <div>
-                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={alert} />
+                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={onEmojiSelected} />
                                             </div>
                                         </Popover.Dropdown>
                                     </Popover>
