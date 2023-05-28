@@ -10,6 +10,7 @@ import { Notifications } from '@mantine/notifications';
 import * as Direct from './interfaces/interface';
 import DiscussPage from './pages/discuss';
 import './app.css';
+import { DiscussCreatePage } from './pages/discusscreate';
 
 const myCache = createEmotionCache({ key: 'school-hub' });
 
@@ -87,6 +88,7 @@ function App() {
                                         <Route path='' element={<HomePage></HomePage>} />
                                         <Route path='login' element={<LoginPage></LoginPage>} />
                                         <Route path='discuss/:id' element={<DiscussPage></DiscussPage>} />
+                                        <Route path='discuss/create' element={<DiscussCreatePage></DiscussCreatePage>} />
                                     </Route>
                                 </Routes>
                             </BrowserRouter>

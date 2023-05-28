@@ -35,6 +35,7 @@ interface VditorRegisterProp {
     minHeight?: number,
     content?: string,
     id: string,
+    fontLimit?: number,
     setVd: (vditor: Vditor) => void
 }
 
@@ -57,7 +58,7 @@ export function VditorThemeChangeProvider({vditor}: VditorThemeChangeProviderPro
     return <></>;
 }
 
-export function VditorProvider({ id, minHeight, content, setVd }: VditorRegisterProp) {
+export function VditorProvider({ id, minHeight, content, setVd, fontLimit }: VditorRegisterProp) {
     const { theme } = useStyles();
     const [infoModalStatus, { open, close }] = useDisclosure(false);
     useEffect(() => {
@@ -65,7 +66,7 @@ export function VditorProvider({ id, minHeight, content, setVd }: VditorRegister
             theme: theme.colorScheme === 'dark' ? 'dark' : 'classic',
             counter: {
                 enable: true,
-                max: 500,
+                max: fontLimit || 500,
                 type: 'text'
             },
             toolbar: [
