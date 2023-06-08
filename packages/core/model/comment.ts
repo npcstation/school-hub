@@ -30,12 +30,20 @@ class CommentModel {
         return data !== null;
     }
 
-    async list(did: number) {
-        const data = (await db.getall('comment', { did })).map((item) => {
+    async listComments(did: number, limit?: number, skip?: number) {
+        const data = (await db.getall('comment', { did }, { limit, skip })).map((item) => {
             delete item._id;
             return (item as unknown) as CommentSchema;
         });
         return data;
+    }
+
+    /**
+     * @deprecated This method is deprecated and will be removed in future versions.
+     * Use `listComments` instead.
+     */
+    async list(did: number) {
+        return this.listComments(did);
     }
 
     async info(cid: number) {
@@ -57,8 +65,8 @@ class CommentModel {
         if ((await this.idExist(cid)) === false) {
             throw new NotFoundError('comment', 'cid');
         }
-        const data = (await db.getone('comment', { cid }));
-        delete data._id
+        const data = await db.getone('comment', { cid });
+        delete data._id;
         if (data.deleted) {
             throw new NotFoundError('comment', 'cid');
         }
@@ -113,7 +121,7 @@ class CommentModel {
         }
         const users = data.responds[emoji] || [];
         if (users.includes(uid)) {
-            throw new DuplicateError('emoji')
+            throw new DuplicateError('emoji');
         }
         users.push(uid);
         data.responds[emoji] = users;

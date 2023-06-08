@@ -62,9 +62,15 @@ class DiscussHandler extends Handler {
 
     @perm('comment', 'view')
     @param('did', DefaultType.String)
-    async postFetchComments(did: string) {
+    @param('limit', DefaultType.Number)
+    @param('page', DefaultType.Number)
+    // Page starts at 0
+    async postFetchComments(did: string, limit: number, page: number) {
         try {
-            const data = await comment.list(parseInt(did));
+            if (limit > 50 || limit < 10) {
+                limit = 20
+            }
+            const data = await comment.listComments(parseInt(did), limit, page * limit);
             this.ctx.body = {
                 status: 'success',
                 responds: data,
