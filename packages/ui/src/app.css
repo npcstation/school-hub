@@ -2,3 +2,17 @@ em-emoji-picker {
     width: 100%;
     
 }
+
+
+.shadowButton:hover {
+    box-shadow: rgba(51, 154, 240, 10) 0px 0px 20px;
+}
+
+.shadowButton:active {
+    box-shadow: rgba(51, 154, 240, 10) 0px 0px 20px;
+}
+
+.shadowButton {
+    transition: all 0.1s ease-in-out;
+    
+}

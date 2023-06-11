@@ -1,11 +1,12 @@
 import { UserSchema } from '../interfaces/user';
 import { NoStyleCard } from './card';
 import React from 'react';
-import { Alert, Avatar, Card, Pagination, Popover, Text, createStyles } from '@mantine/core';
+import { Alert, Avatar, Card, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import moment from 'moment';
+import { MarkdownRender } from './markdown';
 
 export interface CommentProps {
     content: string;
@@ -108,7 +109,10 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
             </Card.Section>
 
             <Card.Section p={15} pl={10}>
-                <Text size={14.5}>{Content.content /* markdownRender */}</Text>
+                <Text size={14.5}>
+                    {' '}
+                    <MarkdownRender md={Content.content} vid={(++contentID).toString()} />
+                </Text>
             </Card.Section>
             <Card.Section withBorder p={6} pl={15}>
                 <Text color='dimmed' fw={700} size={12.5}>
@@ -129,6 +133,8 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
         </NoStyleCard>
     );
 }
+
+let contentID = 0;
 
 export function Comment({ content, user, sendTime, reaction }: CommentProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -153,7 +159,7 @@ export function Comment({ content, user, sendTime, reaction }: CommentProps) {
                         {user.name} · {sendTime /* 需要转化 */}
                     </Text>
                     <Text size={14.5} pt={5} pb={5}>
-                        {content /*需要markdown 来渲染。 */}
+                        <MarkdownRender md={content} vid={(++ contentID).toString()} />
                     </Text>
                 </div>
             </Card.Section>
@@ -187,6 +193,7 @@ export function Discuss({ Header, Comments, pageNumber, nowPage, Content }: Disc
         <>
             <DiscussContentCard Header={Header} Content={Content} />
             {comments}
+            <Space h={4}></Space>
             <NoStyleCard>
                 <Pagination
                     position='center'
