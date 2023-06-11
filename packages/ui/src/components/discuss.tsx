@@ -50,10 +50,21 @@ export interface DiscussProp {
     Comments: CommentProps[];
 }
 
+interface EmojiData {
+    id: string
+    name: string
+    native: string
+    unified: string
+    keywords: string[]
+    shortcodes: string
+    aliases: string[]
+    skin: number
+  }
+
 export function DiscussContentCard({ Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
-    const alert = Header.enable ? (
+    const headerAlert = Header.enable ? (
         <>
             <Card.Section>
                 <Alert icon={Header.icon} radius={0} title={Header.title} color={Header.color}>
@@ -66,9 +77,15 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
     ) : (
         <></>
     );
+
+    function onEmojiSelected(emoji: EmojiData) {
+        // TODO: Emoji Selection
+        alert(emoji.native);
+    }
+
     return (
         <NoStyleCard pt={0}>
-            {alert}
+            {headerAlert}
             <Card.Section
                 withBorder
                 p={6}
@@ -102,7 +119,7 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
                         </Popover.Target>
                         <Popover.Dropdown p={0}>
                             <div>
-                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={alert} />
+                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={onEmojiSelected} />
                             </div>
                         </Popover.Dropdown>
                     </Popover>
