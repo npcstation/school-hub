@@ -119,7 +119,7 @@ export class UserModel {
 
     async idExist(id: number) {
         return !isNull(
-            await db.getall(
+            await db.getone(
                 'user',
                 {
                     id,

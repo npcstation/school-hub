@@ -57,7 +57,7 @@ export class DiscussModel {
 
     async idExist(did: number) {
         return !isNull(
-            await db.getall(
+            await db.getone(
                 'discuss',
                 {
                     did,
