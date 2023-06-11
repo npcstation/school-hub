@@ -38,6 +38,14 @@ class CommentModel {
         return data;
     }
 
+    async commentCount(did: number) {
+        const data = (await db.getall('comment', { did })).map((item) => {
+            delete item._id;
+            return (item as unknown) as CommentSchema;
+        });
+        return data.length;
+    }
+
     /**
      * @deprecated This method is deprecated and will be removed in future versions.
      * Use `listComments` instead.

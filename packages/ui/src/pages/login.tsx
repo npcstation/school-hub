@@ -1,6 +1,6 @@
 import { useToggle, upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { handleLogin, handleRegister, loginError, registerError } from './loginHandler';
+import { handleLogin, handleRegister, loginError, registerError } from '../handlers/loginHandler';
 import { notifications } from '@mantine/notifications';
 import {
     TextInput,

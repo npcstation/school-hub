@@ -21,12 +21,13 @@ class DiscussHandler extends Handler {
         try {
             const discussData = await discuss.find(parseInt(did));
             const author = await user.getbyId(discussData.author);
-            const comments = await comment.list(parseInt(did));
+            const comments = await comment.listComments(parseInt(did));
+            const commentCount = await comment.commentCount(parseInt(did));
             const data: DiscussSchema & DiscussSchemaExtra = {
                 ...discussData,
                 authorName: author.username,
                 authorAvatar: author.gravatarLink,
-                commentCount: comments.length,
+                commentCount,
                 comments,
             };
             this.ctx.body = {
@@ -68,7 +69,7 @@ class DiscussHandler extends Handler {
     async postFetchComments(did: string, limit: number, page: number) {
         try {
             if (limit > 50 || limit < 10) {
-                limit = 20
+                limit = 20;
             }
             const data = await comment.listComments(parseInt(did), limit, page * limit);
             this.ctx.body = {
@@ -145,6 +146,8 @@ class DiscussHandler extends Handler {
                 lastModified: Date.now() / 1000,
                 responds: {},
                 deleted: false,
+                official: false,
+                officialNotice: '',
             });
             this.ctx.body = {
                 status: 'success',

@@ -16,6 +16,8 @@ export class DiscussSchema {
     // It is like {'😅': [1, 2, 3]}
     responds: Record<string, Array<number>>;
     deleted: boolean;
+    official: boolean;
+    officialNotice: string;
 }
 
 type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
@@ -31,7 +33,7 @@ export class DiscussModel {
     }
 
     async create(data: Omit<DiscussSchema, 'did'>) {
-        const { author, topic, tags, title, content, createdTime, lastModified, responds, deleted } = data;
+        const { author, topic, tags, title, content, createdTime, lastModified, responds, deleted, official, officialNotice } = data;
         const did = await this.genDId();
         await db.insert('discuss', {
             did,
@@ -45,6 +47,8 @@ export class DiscussModel {
             commentsNumber: 0,
             responds,
             deleted,
+            official,
+            officialNotice,
         });
         return {
             did,
@@ -95,7 +99,7 @@ export class DiscussModel {
         }
         const users = data.responds[emoji] || [];
         if (users.includes(uid)) {
-            throw new DuplicateError('emoji')
+            throw new DuplicateError('emoji');
         }
         users.push(uid);
         data.responds[emoji] = users;
