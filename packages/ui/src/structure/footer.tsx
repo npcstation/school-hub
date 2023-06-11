@@ -1,9 +1,23 @@
 import { Button, Container, Flex, Footer, Group, Text, rem, useMantineTheme } from '@mantine/core';
+import { useToggle } from '@mantine/hooks';
 import { IconBrandGithub, IconSun, IconMoon } from '@tabler/icons-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
     const theme = useMantineTheme();
+
+    const [displaysStyles, cgDisplaysStyles] = useToggle(['', 'none']);
+
+    useEffect(() => {
+        function changeFooter() {
+            cgDisplaysStyles();
+        }
+        window.addEventListener('changeFooter', changeFooter);
+
+        return () => {
+            window.removeEventListener('changeFooter', changeFooter);
+        };
+    }, []);
 
     return (
         <Footer
@@ -17,6 +31,9 @@ export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
             fixed={false}
             height='auto'
             p='md'
+            style={{
+                display: displaysStyles,
+            }}
         >
             <Container>
                 <Flex justify='space-between' align='center' direction='row'>

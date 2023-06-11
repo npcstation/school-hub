@@ -6,14 +6,12 @@ import { createStyles } from '@mantine/core';
 import { IconArrowsMaximize, IconBold, IconBoxModel, IconHeading, IconInfoCircle, IconItalic, IconMoodHappy } from '@tabler/icons-react';
 // import { render } from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
-import '../assets/vditor.css'
+import '../assets/vditor.css';
 import { Modal, Text, TypographyStylesProvider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const useStyles = createStyles((theme) => ({
-    
-}));
+const useStyles = createStyles((theme) => ({}));
 
 // interface BlockSuitEditorProps {
 //     title?: string;
@@ -30,21 +28,19 @@ const useStyles = createStyles((theme) => ({
 //     }
 // }
 
-
 interface VditorRegisterProp {
-    minHeight?: number,
-    content?: string,
-    id: string,
-    fontLimit?: number,
-    setVd: (vditor: Vditor) => void
+    minHeight?: number;
+    content?: string;
+    id: string;
+    fontLimit?: number;
+    setVd: (vditor: Vditor) => void;
 }
 
 interface VditorThemeChangeProviderProp {
-    vditor: Vditor
+    vditor: Vditor;
 }
 
-export function VditorThemeChangeProvider({vditor}: VditorThemeChangeProviderProp) {
-    
+export function VditorThemeChangeProvider({ vditor }: VditorThemeChangeProviderProp) {
     useEffect(() => {
         function handleThemeChange() {
             const nowTheme = localStorage.getItem('colorScheme') as string;
@@ -53,7 +49,7 @@ export function VditorThemeChangeProvider({vditor}: VditorThemeChangeProviderPro
         window.addEventListener('changeTheme', handleThemeChange);
         return () => {
             window.removeEventListener('changeTheme', handleThemeChange);
-        }
+        };
     }, [vditor]);
     return <></>;
 }
@@ -67,7 +63,7 @@ export function VditorProvider({ id, minHeight, content, setVd, fontLimit }: Vdi
             counter: {
                 enable: true,
                 max: fontLimit || 500,
-                type: 'text'
+                type: 'text',
             },
             toolbar: [
                 {
@@ -89,6 +85,10 @@ export function VditorProvider({ id, minHeight, content, setVd, fontLimit }: Vdi
                 {
                     name: 'fullscreen',
                     icon: ReactDOMServer.renderToString(<IconArrowsMaximize />),
+                    click() {
+                        const setItemEvent = new Event('changeFooter');
+                        window.dispatchEvent(setItemEvent);
+                    },
                 },
                 {
                     name: 'edit-mode',
@@ -129,7 +129,7 @@ export function VditorProvider({ id, minHeight, content, setVd, fontLimit }: Vdi
                 vditor.setValue(content || '');
             },
         });
-    }, [])
+    }, []);
     return (
         <>
             <Modal

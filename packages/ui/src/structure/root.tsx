@@ -7,9 +7,7 @@ import React from 'react';
 import { AppFooter } from '../structure/footer';
 import { updateNewPageBackEndData } from '../interfaces/data';
 
-const useStyles = createStyles((theme) => ({
-    
-}));
+const useStyles = createStyles((theme) => ({}));
 
 interface RootProps {
     onThemeChange: () => void;
@@ -43,13 +41,7 @@ export function Root({ onThemeChange, type, children }: RootProps) {
             }}
             padding='md'
             footer={<AppFooter onThemeChange={onThemeChange}></AppFooter>}
-            header={
-                <Navbar
-                    title='在线校园'
-                    links={mainLinks}
-                    type={type}
-                ></Navbar>
-            }
+            header={<Navbar title='在线校园' links={mainLinks} type={type}></Navbar>}
         >
             {type === 'route' ? <Outlet /> : children}
         </AppShell>
