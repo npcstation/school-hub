@@ -5,16 +5,17 @@ import { Alert, Avatar, Card, Pagination, Popover, Text, createStyles } from '@m
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
+import moment from 'moment';
 
 export interface CommentProps {
     content: string;
-    user: UserSchema;
+    user: Omit<UserSchema, 'gender'>;
     sendTime: number;
-    id: string;
+    id: number;
     reaction: {
         code: string;
         count: number;
-    };
+    }[];
 }
 
 export interface HeaderAlert {
@@ -28,7 +29,7 @@ export interface HeaderAlert {
 export interface ContentType {
     title: string;
     content: string;
-    user: UserSchema;
+    user: Omit<UserSchema, 'gender'>;
     sendTime: number;
     reaction: {
         code: string;
@@ -37,7 +38,7 @@ export interface ContentType {
 }
 
 export interface HeaderProps {
-    Header: HeaderAlert,
+    Header: HeaderAlert;
     Content: ContentType;
 }
 
@@ -49,7 +50,7 @@ export interface DiscussProp {
     Comments: CommentProps[];
 }
 
-export function ContentCard({Header, Content}: HeaderProps) {
+export function DiscussContentCard({ Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
     const alert = Header.enable ? (
@@ -66,7 +67,7 @@ export function ContentCard({Header, Content}: HeaderProps) {
         <></>
     );
     return (
-        <NoStyleCard>
+        <NoStyleCard pt={0}>
             {alert}
             <Card.Section
                 withBorder
@@ -83,7 +84,7 @@ export function ContentCard({Header, Content}: HeaderProps) {
                 </div>
                 <div>
                     <Text size={12.5} color='dimmed'>
-                        {Content.user.name} · {Content.sendTime /* render */}
+                        {Content.user.name} · {moment(Content.sendTime * 1000).format('YYYY-MM-DD HH:mm:ss') /* render */}
                     </Text>
                     <Text size={20}>{Content.title}</Text>
                 </div>
@@ -167,7 +168,7 @@ export function Discuss({ Header, Comments, pageNumber, nowPage, Content }: Disc
     ));
     return (
         <>
-            <ContentCard Header={Header} Content={Content} />
+            <DiscussContentCard Header={Header} Content={Content} />
             {comments}
             <NoStyleCard>
                 <Pagination
@@ -180,7 +181,8 @@ export function Discuss({ Header, Comments, pageNumber, nowPage, Content }: Disc
                         control: {
                             '&[data-active]': {
                                 border: 'none',
-                                background: theme.colorScheme === 'dark' ? theme.colors.gray[7] : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
+                                background:
+                                    theme.colorScheme === 'dark' ? theme.colors.gray[7] : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
                                 color: theme.colorScheme === 'dark' ? 'white' : 'black',
                             },
                         },

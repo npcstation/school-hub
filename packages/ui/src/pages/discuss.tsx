@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination } from '@mantine/core';
-import React, { useState } from 'react';
+import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
 import { NoStyleCard, StandardCard } from '../components/card';
-import { IconDiscountCheck } from '@tabler/icons-react';
+import { IconDiscountCheck, IconX } from '@tabler/icons-react';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
@@ -12,6 +12,12 @@ import { VditorProvider, VditorThemeChangeProvider } from '../components/editor'
 import Vditor from 'vditor';
 // import { BlockSuitEditor } from '../components/editor';
 import { IconHeading } from '@tabler/icons-react';
+import { DiscussSchema, handleInfo } from '../handlers/discussHandler';
+import { useParams } from 'react-router-dom';
+import { notifications } from '@mantine/notifications';
+import { alarm } from '../styles/alarm';
+import moment from 'moment';
+import { Discuss } from '../components/discuss';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -44,15 +50,15 @@ const righticon = (
 );
 
 interface EmojiData {
-    id: string
-    name: string
-    native: string
-    unified: string
-    keywords: string[]
-    shortcodes: string
-    aliases: string[]
-    skin: number
-  }
+    id: string;
+    name: string;
+    native: string;
+    unified: string;
+    keywords: string[];
+    shortcodes: string;
+    aliases: string[];
+    skin: number;
+}
 
 export default function DiscussPage() {
     function onEmojiSelected(emoji: EmojiData) {
@@ -64,6 +70,67 @@ export default function DiscussPage() {
     const [opened, setOpened] = useState(false);
     // init({ data });
     const [replyVditor, setReplyVditor] = useState({});
+
+    const [discuss, setDiscuss] = useState<DiscussSchema>({
+        did: -1,
+        author: 0,
+        topic: '',
+        tags: [],
+        title: '',
+        content: '',
+        createdTime: 0,
+        lastModified: 0,
+        responds: {},
+        deleted: false,
+        official: false,
+        officialNotice: '',
+        authorName: '',
+        authorAvatar: '',
+        commentCount: 0,
+        comments: [],
+    });
+
+    const param = useParams();
+    const did = parseInt(param.id || '-1', 10);
+
+    useEffect(() => {
+        if (did === -1) {
+            notifications.show({
+                title: '加载失败',
+                message: (
+                    <>
+                        <Text size='sm'>加载讨论失败，错误信息：Discuss id illegal.</Text>
+                    </>
+                ),
+                color: 'red',
+                icon: <IconX />,
+                withCloseButton: false,
+                styles: alarm('error'),
+            });
+            return;
+        }
+        handleInfo({ did }).then((response) => {
+            if (response.status === 'success') {
+                if (response.data) {
+                    setDiscuss(response.data);
+                }
+            } else {
+                notifications.show({
+                    title: '加载失败',
+                    message: (
+                        <>
+                            <Text size='sm'>加载讨论失败，错误信息：{response.type}</Text>
+                        </>
+                    ),
+                    color: 'red',
+                    icon: <IconX />,
+                    withCloseButton: false,
+                    styles: alarm(response.status),
+                });
+            }
+        });
+    }, [did]);
+
     return (
         <>
             <Container>
@@ -73,185 +140,47 @@ export default function DiscussPage() {
                             {/*预加载*/}
                             <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
                         </div>
-                        <NoStyleCard>
-                            <Card.Section>
-                                <Alert icon={<IconDiscountCheck stroke={1.5} />} radius={0} title='已验证的官方讨论' color='green'>
-                                    <Text size={12.5} color={theme.colors.green[8]}>
-                                        公告类帖子
-                                    </Text>
-                                </Alert>
-                            </Card.Section>
-                            <Card.Section
-                                withBorder
-                                p={6}
-                                pt={10}
-                                pl={10}
-                                ta={'left'}
-                                style={{
-                                    display: 'flex',
-                                }}
-                            >
-                                <IconHeading width={3} height={3} />
-                                <div style={{ marginRight: 15, paddingTop: 7.435 }}>
-                                    <Avatar color='pink' src='https://blog.smallfang.fun/image/tx.png' radius='xl'></Avatar>
-                                </div>
-                                <div>
-                                    <Text size={12.5} color='dimmed'>
-                                        smallfang · 2022.12.32
-                                    </Text>
-                                    <Text size={20}>第一条帖子 qwq</Text>
-                                </div>
-                            </Card.Section>
-
-                            <Card.Section p={15} pl={10}>
-                                <Text size={14.5}>qwq</Text>
-                            </Card.Section>
-                            <Card.Section withBorder p={6} pl={15}>
-                                <Text color='dimmed' fw={700} size={12.5}>
-                                    举报 · &nbsp;
-                                    <Popover radius='md' withinPortal width={350} withArrow shadow='md'>
-                                        <Popover.Target>
-                                            <span>Emoji</span>
-                                        </Popover.Target>
-                                        <Popover.Dropdown p={0}>
-                                            <div>
-                                                <Picker
-                                                    theme={theme.colorScheme}
-                                                    set={'twitter'}
-                                                    locale='zh'
-                                                    data={data}
-                                                    onEmojiSelect={onEmojiSelected}
-                                                />
-                                            </div>
-                                        </Popover.Dropdown>
-                                    </Popover>
-                                    &nbsp;·&nbsp;
-                                </Text>
-                            </Card.Section>
-                        </NoStyleCard>
-
-                        <NoStyleCard mt={10}>
-                            <Card.Section
-                                withBorder
-                                p={6}
-                                pt={10}
-                                pl={10}
-                                ta={'left'}
-                                style={{
-                                    display: 'flex',
-                                }}
-                            >
-                                <div style={{ marginRight: 15, paddingTop: 4.435 }}>
-                                    <Avatar color='pink' src='' radius='xl'></Avatar>
-                                </div>
-                                <div>
-                                    <Text size={12.5} color='dimmed'>
-                                        ww · 2022.12.32
-                                    </Text>
-                                    <Text size={14.5} pt={5} pb={5}>
-                                        如果说我换一行呢？
-                                        <br />
-                                        看起来也还好。
-                                    </Text>
-
-                                    {/*  */}
-                                </div>
-                            </Card.Section>
-                            <Card.Section p={6} pl={15}>
-                                <Text color='dimmed' fw={700} size={12.5}>
-                                    举报 · &nbsp;
-                                    <Popover radius='md' withinPortal width={350} withArrow shadow='md'>
-                                        <Popover.Target>
-                                            <span>Emoji</span>
-                                        </Popover.Target>
-                                        <Popover.Dropdown p={0}>
-                                            <div>
-                                                <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={onEmojiSelected} />
-                                            </div>
-                                        </Popover.Dropdown>
-                                    </Popover>
-                                    &nbsp;·&nbsp;
-                                    <Badge color='indigo' variant='outline' radius='xl' pr={0} rightSection={righticon}></Badge>
-                                </Text>
-                            </Card.Section>
-                        </NoStyleCard>
-
-                        <Space h='md' />
-                        <NoStyleCard>
-                            <Pagination
-                                position='center'
-                                total={10}
-                                size={'sm'}
-                                color='indigo'
-                                styles={(theme) => ({
-                                    control: {
-                                        '&[data-active]': {
-                                            border: 'none',
-                                            background:
-                                                theme.colorScheme === 'dark'
-                                                    ? theme.colors.gray[7]
-                                                    : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
-                                            color: theme.colorScheme === 'dark' ? 'white' : 'black',
-                                        },
+                        <Discuss
+                            Header={{
+                                enable: discuss.official,
+                                title: '已认证的官方消息',
+                                description: discuss.officialNotice,
+                                icon: <IconDiscountCheck />,
+                                color: theme.colors.green[8],
+                            }}
+                            Comments={discuss.comments.map((comment) => {
+                                return {
+                                    content: comment.content,
+                                    user: {
+                                        uid: comment.authorId,
+                                        name: comment.authorName,
+                                        gravatar: comment.authorAvatar,
                                     },
-                                })}
-                            />
-                        </NoStyleCard>
-                        <StandardCard title='回复讨论' mt={15}>
-                            <VditorProvider minHeight={300} id='reply-vditor' setVd={setReplyVditor} />
-                            <VditorThemeChangeProvider vditor={replyVditor as Vditor} />
-                            <Space pt={10} />
-                            <Button>回复</Button>
-                        </StandardCard>
-                    </Grid.Col>
-                    <Grid.Col sm={12} xs={12} lg={4}>
-                        <StandardCard title='讨论详情'>
-                            <Card.Section p={5.5} pb={1.5} pl={15.5} pr={15.5}>
-                                <Group position='apart'>
-                                    <Text size={13} fw={800}>
-                                        创建时间
-                                    </Text>
-                                    <div></div>
-                                    <Text size={13} fw={400}>
-                                        2022.12.32
-                                    </Text>
-                                </Group>
-                            </Card.Section>
-                            <Card.Section p={5.5} pb={1.5} pl={15.5} pr={15.5}>
-                                <Group position='apart'>
-                                    <Text size={13} fw={800}>
-                                        创建用户
-                                    </Text>
-                                    <div></div>
-                                    <Text size={13} fw={400}>
-                                        smallfang
-                                    </Text>
-                                </Group>
-                            </Card.Section>
-
-                            <Card.Section p={5.5} pb={1.5} pl={15.5} pr={15.5}>
-                                <Group position='apart'>
-                                    <Text size={13} fw={800}>
-                                        回复数
-                                    </Text>
-                                    <div></div>
-                                    <Text size={13} fw={400}>
-                                        150
-                                    </Text>
-                                </Group>
-                            </Card.Section>
-                            <Card.Section p={5.5} pb={15.5} pl={15.5} pr={15.5}>
-                                <Group position='apart'>
-                                    <Text size={13} fw={800}>
-                                        ID
-                                    </Text>
-                                    <div></div>
-                                    <Text size={13} fw={400}>
-                                        123
-                                    </Text>
-                                </Group>
-                            </Card.Section>
-                        </StandardCard>
+                                    sendTime: comment.createdTime,
+                                    id: comment.cid,
+                                    reaction: Object.entries(comment.responds).map(([k, v]) => ({
+                                        code: k,
+                                        count: v.length,
+                                    })),
+                                };
+                            })}
+                            pageNumber={discuss.commentCount / 10 + 1}
+                            nowPage={1}
+                            Content={{
+                                title: discuss.title,
+                                content: discuss.content,
+                                user: {
+                                    uid: discuss.author,
+                                    name: discuss.authorName,
+                                    gravatar: discuss.authorAvatar,
+                                },
+                                sendTime: discuss.createdTime,
+                                reaction: Object.entries(discuss.responds).map(([k, v]) => ({
+                                    code: k,
+                                    count: v.length,
+                                })),
+                            }}
+                        ></Discuss>
                     </Grid.Col>
                 </Grid>
             </Container>

@@ -227,6 +227,9 @@ importers:
       localforage:
         specifier: ^1.10.0
         version: registry.npmmirror.com/localforage@1.10.0
+      moment:
+        specifier: ^2.29.4
+        version: registry.npmmirror.com/moment@2.29.4
       react:
         specifier: ^18.2.0
         version: registry.npmmirror.com/react@18.2.0
@@ -6489,7 +6492,6 @@ packages:
     version: 2.29.4
     requiresBuild: true
     dev: false
-    optional: true
 
   registry.npmmirror.com/mongodb-connection-string-url@2.6.0:
     resolution: {integrity: sha512-WvTZlI9ab0QYtTYnuMLgobULWhokRjtC7db9LtcVfJ+Hsnyr5eo6ZtNAt3Ly24XZScGMelOcGtm7lSn0332tPQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mongodb-connection-string-url/-/mongodb-connection-string-url-2.6.0.tgz}

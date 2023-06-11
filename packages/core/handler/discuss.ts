@@ -7,28 +7,44 @@ import { token as tokenModel } from '../model/token';
 import { CommentSchema, comment } from '../model/comment';
 import { user } from '../model/user';
 
+interface CommentSchemaExtra {
+    authorName: string;
+    authorAvatar: string;
+}
+
 interface DiscussSchemaExtra {
     authorName: string;
     authorAvatar: string;
     commentCount: number;
-    comments: CommentSchema[];
+    comments: (CommentSchema & CommentSchemaExtra)[];
 }
 
 class DiscussHandler extends Handler {
     @perm('discuss', 'view')
-    @param('did', DefaultType.String)
+    @param('did', DefaultType.Number)
     async postInfo(did: string) {
         try {
             const discussData = await discuss.find(parseInt(did));
             const author = await user.getbyId(discussData.author);
             const comments = await comment.listComments(parseInt(did));
+            const commentsWithName = await Promise.all(
+                comments.map(async (comment) => {
+                    const author = await user.getbyId(comment.authorId);
+                    const data: CommentSchema & CommentSchemaExtra = {
+                        ...comment,
+                        authorName: author.username,
+                        authorAvatar: author.gravatarLink,
+                    };
+                    return data;
+                })
+            );
             const commentCount = await comment.commentCount(parseInt(did));
             const data: DiscussSchema & DiscussSchemaExtra = {
                 ...discussData,
                 authorName: author.username,
                 authorAvatar: author.gravatarLink,
                 commentCount,
-                comments,
+                comments: commentsWithName,
             };
             this.ctx.body = {
                 status: 'success',
@@ -72,9 +88,20 @@ class DiscussHandler extends Handler {
                 limit = 20;
             }
             const data = await comment.listComments(parseInt(did), limit, page * limit);
+            const dataWithName = await Promise.all(
+                data.map(async (comment) => {
+                    const author = await user.getbyId(comment.authorId);
+                    const commentData: CommentSchema & CommentSchemaExtra = {
+                        ...comment,
+                        authorName: author.username,
+                        authorAvatar: author.gravatarLink,
+                    };
+                    return commentData;
+                })
+            );
             this.ctx.body = {
                 status: 'success',
-                responds: data,
+                comments: dataWithName,
             };
         } catch (err) {
             this.ctx.body = {
@@ -193,5 +220,6 @@ class DiscussHandler extends Handler {
 }
 
 export function apply() {
+    Route('Discuss', '/discuss', DiscussHandler);
     Route('Discuss', '/discuss/:did', DiscussHandler);
 }

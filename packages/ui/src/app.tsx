@@ -10,7 +10,7 @@ import { Notifications } from '@mantine/notifications';
 import * as Direct from './interfaces/interface';
 import DiscussPage from './pages/discuss';
 import './app.css';
-import { DiscussCreatePage } from './pages/discusscreate';
+import { DiscussCreatePage } from './pages/discussCreate';
 
 const myCache = createEmotionCache({ key: 'school-hub' });
 
@@ -51,8 +51,6 @@ function App() {
         window.dispatchEvent(setItemEvent);
     }
 
-    
-
     return (
         <>
             <Provider store={store}>
@@ -74,10 +72,8 @@ function App() {
                 >
                     {window?.web?.type === 'back' ? (
                         <Root onThemeChange={onThemeChange} type='direct'>
-                            {
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                (Direct as any)[window?.web?.template](window?.web?.data)
-                            }
+                            {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            (Direct as any)[window?.web?.template](window?.web?.data)}
                         </Root>
                     ) : (
                         <>

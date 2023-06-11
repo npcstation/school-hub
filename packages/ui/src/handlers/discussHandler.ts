@@ -30,7 +30,7 @@ interface CreateResponse extends Response {
     param?: string;
 }
 
-interface CommentSchema {
+export interface CommentSchema {
     cid: number;
     did: number;
     authorId: number;
@@ -39,30 +39,34 @@ interface CommentSchema {
     lastModified: number;
     responds: Record<string, Array<number>>;
     deleted: boolean;
+    authorName: string;
+    authorAvatar: string;
+}
+
+export interface DiscussSchema {
+    did?: number;
+    author: number;
+    topic: string;
+    tags: Array<string>;
+    title: string;
+    content: string;
+    createdTime: number;
+    lastModified: number;
+    responds: Record<string, Array<number>>;
+    deleted: boolean;
+    official: boolean;
+    officialNotice: string;
+    authorName: string;
+    authorAvatar: string;
+    commentCount: number;
+    comments: CommentSchema[];
 }
 
 interface InfoResponse extends Response {
     status: 'success' | 'error';
     msg?: string;
     type?: string;
-    data?: {
-        did?: number;
-        author: number;
-        topic: string;
-        tags: Array<string>;
-        title: string;
-        content: string;
-        createdTime: number;
-        lastModified: number;
-        responds: Record<string, Array<number>>;
-        deleted: boolean;
-        official: boolean;
-        officialNotice: string;
-        authorName: string;
-        authorAvatar: string;
-        commentCount: number;
-        comments: CommentSchema[];
-    };
+    data?: DiscussSchema;
     param?: string;
 }
 
