@@ -52,15 +52,15 @@ export interface DiscussProp {
 }
 
 interface EmojiData {
-    id: string
-    name: string
-    native: string
-    unified: string
-    keywords: string[]
-    shortcodes: string
-    aliases: string[]
-    skin: number
-  }
+    id: string;
+    name: string;
+    native: string;
+    unified: string;
+    keywords: string[];
+    shortcodes: string;
+    aliases: string[];
+    skin: number;
+}
 
 export function DiscussContentCard({ Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -109,10 +109,7 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
             </Card.Section>
 
             <Card.Section p={15} pl={10}>
-                <Text size={14.5}>
-                    {' '}
-                    <MarkdownRender md={Content.content} vid={(++contentID).toString()} />
-                </Text>
+                <Text size={14.5}>{Content.content.length === 0 ? ' ' : <MarkdownRender md={Content.content} vid={(++contentID).toString()} />}</Text>
             </Card.Section>
             <Card.Section withBorder p={6} pl={15}>
                 <Text color='dimmed' fw={700} size={12.5}>
@@ -159,7 +156,7 @@ export function Comment({ content, user, sendTime, reaction }: CommentProps) {
                         {user.name} · {sendTime /* 需要转化 */}
                     </Text>
                     <Text size={14.5} pt={5} pb={5}>
-                        <MarkdownRender md={content} vid={(++ contentID).toString()} />
+                        <MarkdownRender md={content} vid={(++contentID).toString()} />
                     </Text>
                 </div>
             </Card.Section>
