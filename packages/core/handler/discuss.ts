@@ -155,15 +155,14 @@ class DiscussHandler extends Handler {
     }
 
     @perm('discuss', 'modifyOwn')
-    @param('id', DefaultType.Number)
     @param('token', DefaultType.String)
     @param('topic', DefaultType.String)
     @param('tags', DefaultType.Any)
     @param('title', DefaultType.String)
     @param('content', DefaultType.String)
-    async postCreate(id: number, token: string, topic: string, tags: string[], title: string, content: string) {
+    async postCreate(token: string, topic: string, tags: string[], title: string, content: string) {
         try {
-            const author = id;
+            const author = await tokenModel.stripId(token);
             const data = await discuss.create({
                 author,
                 topic,

@@ -122,12 +122,14 @@ export function checkPerm(value: number, model: string, perm: string) {
 
 export function perm(model: string, name: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return function (target: any, methodName: string, descriptor: any) {
+    return function(target: any, methodName: string, descriptor: any) {
         descriptor.originalMethodPerm = descriptor.value;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         descriptor.value = async function run(args: any) {
             let id = args?.id || 0;
-            if (id !== 0) {
+            if (id === 0) {
+                id = await token.stripId(args.token);
+            } else {
                 if ((await token.check(id, args?.token)) !== true) {
                     id = 0;
                 }

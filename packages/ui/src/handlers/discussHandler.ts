@@ -70,21 +70,10 @@ interface InfoResponse extends Response {
     param?: string;
 }
 
-export const registerError: {
+export const createError: {
     [key: string]: string | undefined;
 } = {
-    duplicate: '已存在的 ',
-    validation: '未通过验证的注册信息',
-    unknown: '后端未知错误',
-    default: '',
-    name: '用户名',
-    email: '邮箱',
-};
-
-export const loginError: {
-    [key: string]: string | undefined;
-} = {
-    validation: '用户名或密码错误',
+    validation: '内容验证失败',
     unknown: '后端未知错误',
     default: '',
 };

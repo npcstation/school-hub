@@ -1,8 +1,6 @@
 em-emoji-picker {
     width: 100%;
-    
 }
-
 
 .shadowButton:hover {
     box-shadow: rgba(51, 154, 240, 10) 0px 0px 20px;
@@ -14,5 +12,13 @@ em-emoji-picker {
 
 .shadowButton {
     transition: all 0.1s ease-in-out;
-    
+}
+
+.vditor-reset > h1,
+.vditor-reset > h2,
+.vditor-reset > h3,
+.vditor-reset > h4,
+.vditor-reset > h5,
+.vditor-reset > h6 {
+    margin-top: 0 !important;
 }
