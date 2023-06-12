@@ -14,11 +14,18 @@ em-emoji-picker {
     transition: all 0.1s ease-in-out;
 }
 
-.vditor-reset > h1,
-.vditor-reset > h2,
-.vditor-reset > h3,
-.vditor-reset > h4,
-.vditor-reset > h5,
-.vditor-reset > h6 {
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview h5,
+.preview h6 {
     margin-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: 0 !important;
+    text-decoration: underline;
+    text-decoration-line: underline;
+    text-decoration-color: #66ccff30;
+    text-decoration-thickness: 0.75rem;
+    text-underline-offset: -0.3rem;
 }

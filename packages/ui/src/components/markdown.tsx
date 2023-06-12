@@ -3,8 +3,8 @@ import Vditor from 'vditor';
 import { TypographyStylesProvider, useMantineTheme } from '@mantine/core';
 
 interface MarkdownRenderProp {
-    md: string,
-    vid: string
+    md: string;
+    vid: string;
 }
 
 export function MarkdownRender({ md, vid }: MarkdownRenderProp) {
@@ -18,7 +18,7 @@ export function MarkdownRender({ md, vid }: MarkdownRenderProp) {
                 current: theme.colorScheme === 'dark' ? 'dark' : 'light',
             },
             after() {
-                window.addEventListener('changetheme', function () {
+                window.addEventListener('changetheme', function() {
                     const nowtheme = localStorage.getItem('bgColor');
                     Vditor.setContentTheme(nowtheme === 'dark' ? 'dark' : 'light', 'https://unpkg.com/vditor@3.9.0/dist/css/content-theme/');
                 });
