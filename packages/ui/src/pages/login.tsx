@@ -129,7 +129,8 @@ export default function LoginPage() {
                                     <>
                                         {value.status === 'success'
                                             ? '您的帐号已经准备就绪。即将跳转至登录界面。'
-                                            : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] || ''}`}
+                                            : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] ||
+                                                  ''}`}
                                         {value.status === 'error' ? <br /> : <></>}
                                         {value.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
                                     </>
@@ -293,6 +294,9 @@ export default function LoginPage() {
                     <form
                         onSubmit={loginForm.onSubmit(async (data) => {
                             const value = await handleLogin(data);
+                            if (!value.data || value.data?.token) {
+                                value.status === 'error';
+                            }
                             notifications.show({
                                 title: value.status === 'success' ? '' : '登录失败',
                                 message: (
@@ -324,6 +328,8 @@ export default function LoginPage() {
                                         });
                                     }
                                 }, 2000);
+
+                                localStorage.setItem('token', value.data?.token || '');
                             }
                         })}
                     >
@@ -337,7 +343,13 @@ export default function LoginPage() {
                                 {...loginForm.getInputProps('email')}
                             />
 
-                            <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
+                            <PasswordInput
+                                name='password'
+                                required
+                                label='密码'
+                                placeholder='您的密码（要保密！）'
+                                {...loginForm.getInputProps('password')}
+                            />
                         </Stack>
 
                         <Group position='apart' mt='xl'>
