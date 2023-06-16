@@ -174,6 +174,6 @@ export const userPerm = registerPerm(
     'user',
     ['view'],
     ['进入主站'],
-    0,
+    1,
     1
 );
