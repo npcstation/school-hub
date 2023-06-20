@@ -110,7 +110,9 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                 pt={10}
                 pl={10}
                 ta={'left'}
+                
                 style={{
+                    borderTop: 'none',
                     display: 'flex',
                 }}
             >
