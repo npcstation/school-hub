@@ -80,7 +80,7 @@ export default function DiscussPage() {
         content: '',
         createdTime: 0,
         lastModified: 0,
-        responds: {},
+        parsedResponds: [],
         deleted: false,
         official: false,
         officialNotice: '',
@@ -141,6 +141,7 @@ export default function DiscussPage() {
                             <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
                         </div>
                         <Discuss
+                            DiscussId={did}
                             Header={{
                                 enable: discuss.official,
                                 title: '已认证的官方消息',
@@ -175,10 +176,12 @@ export default function DiscussPage() {
                                     gravatar: discuss.authorAvatar,
                                 },
                                 sendTime: discuss.createdTime,
-                                reaction: Object.entries(discuss.responds).map(([k, v]) => ({
-                                    code: k,
-                                    count: v.length,
-                                })),
+                                reaction: discuss.parsedResponds.map((v) => {
+                                    return {
+                                        code: v.emoji,
+                                        count: v.count,
+                                    };
+                                }),
                             }}
                         ></Discuss>
                     </Grid.Col>

@@ -1,12 +1,13 @@
 import { UserSchema } from '../interfaces/user';
 import { NoStyleCard } from './card';
 import React from 'react';
-import { Alert, Avatar, Card, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
+import { Alert, Avatar, Badge, Card, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import moment from 'moment';
 import { MarkdownRender } from './markdown';
+import { handleRespond } from '../handlers/discussHandler';
 
 export interface CommentProps {
     content: string;
@@ -39,11 +40,13 @@ export interface ContentType {
 }
 
 export interface HeaderProps {
+    DiscussId: number;
     Header: HeaderAlert;
     Content: ContentType;
 }
 
 export interface DiscussProp {
+    DiscussId: number;
     Header: HeaderAlert;
     Content: ContentType;
     pageNumber: number;
@@ -62,7 +65,11 @@ interface EmojiData {
     skin: number;
 }
 
-export function DiscussContentCard({ Header, Content }: HeaderProps) {
+function BadgeShow({ id }: { id: string }) {
+    return <em-emoji set='twitter' id={id} size='10px'></em-emoji>;
+}
+
+export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
     const headerAlert = Header.enable ? (
@@ -80,8 +87,18 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
     );
 
     function onEmojiSelected(emoji: EmojiData) {
-        // TODO: Emoji Selection
-        alert(emoji.native);
+        const token: string = localStorage.getItem('token') || '';
+        // eslint-disable-next-line no-console
+        console.log(emoji);
+        if (token === '') {
+            // TODO: Respond on logout state
+            return;
+        }
+        handleRespond({
+            token,
+            did: DiscussId,
+            emoji: emoji.native,
+        });
     }
 
     return (
@@ -125,6 +142,20 @@ export function DiscussContentCard({ Header, Content }: HeaderProps) {
                         </Popover.Dropdown>
                     </Popover>
                     &nbsp;·&nbsp;
+                    <Badge
+                        color='indigo'
+                        variant='outline'
+                        radius='xl'
+                        pr={0}
+                        rightSection={
+                            <Avatar size={24} color='indigo'>
+                                18
+                            </Avatar>
+                        }
+                    >
+                        <BadgeShow id='+1' />
+                        &nbsp;
+                    </Badge>
                 </Text>
             </Card.Section>
         </NoStyleCard>
@@ -180,7 +211,7 @@ export function Comment({ content, user, sendTime, reaction }: CommentProps) {
     );
 }
 
-export function Discuss({ Header, Comments, pageNumber, nowPage, Content }: DiscussProp) {
+export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Content }: DiscussProp) {
     const comments = Comments.map((item) => (
         <div key={item.id}>
             <Comment id={item.id} content={item.content} reaction={item.reaction} user={item.user} sendTime={item.sendTime} />
@@ -188,7 +219,7 @@ export function Discuss({ Header, Comments, pageNumber, nowPage, Content }: Disc
     ));
     return (
         <>
-            <DiscussContentCard Header={Header} Content={Content} />
+            <DiscussContentCard DiscussId={DiscussId} Header={Header} Content={Content} />
             {comments}
             <Space h={4}></Space>
             <NoStyleCard>

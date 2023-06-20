@@ -20,6 +20,11 @@ export class DiscussSchema {
     officialNotice: string;
 }
 
+export class RespondProps {
+    emoji: string;
+    count: number;
+}
+
 type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
 
 export class DiscussModel {
@@ -145,7 +150,8 @@ export class DiscussModel {
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
-        return data.responds;
+        const responds: RespondProps[] = Object.entries(data.responds).map(([emoji, users]) => ({ emoji, count: users.length }));
+        return responds;
     }
 
     async sendComment(did: number, authorId: number, commentContent: string) {

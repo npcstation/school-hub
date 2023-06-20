@@ -1,7 +1,7 @@
 import { perm } from '../declare/perm';
 import { DefaultType } from '../declare/type';
 import { Handler, Route } from '../handle';
-import { DiscussSchema, discuss } from '../model/discuss';
+import { DiscussSchema, RespondProps, discuss } from '../model/discuss';
 import { param } from '../utils/decorate';
 import { token as tokenModel } from '../model/token';
 import { CommentSchema, comment } from '../model/comment';
@@ -17,6 +17,7 @@ interface DiscussSchemaExtra {
     authorAvatar: string;
     commentCount: number;
     comments: (CommentSchema & CommentSchemaExtra)[];
+    parsedResponds: RespondProps[];
 }
 
 class DiscussHandler extends Handler {
@@ -39,12 +40,15 @@ class DiscussHandler extends Handler {
                 })
             );
             const commentCount = await comment.commentCount(parseInt(did));
-            const data: DiscussSchema & DiscussSchemaExtra = {
+            const respondData = await discuss.getResponds(parseInt(did));
+            // remove omit => will show respond user in ui
+            const data: Omit<DiscussSchema, 'responds'> & DiscussSchemaExtra = {
                 ...discussData,
                 authorName: author.username,
                 authorAvatar: author.gravatarLink,
                 commentCount,
                 comments: commentsWithName,
+                parsedResponds: respondData,
             };
             this.ctx.body = {
                 status: 'success',
@@ -119,10 +123,9 @@ class DiscussHandler extends Handler {
     async postRespond(token: string, did: number, emoji: string) {
         try {
             const author = await tokenModel.stripId(token);
-            const data = await discuss.respondWithDiscussId(author, did, emoji);
+            await discuss.respondWithDiscussId(author, did, emoji);
             this.ctx.body = {
                 status: 'success',
-                responds: data,
             };
         } catch (err) {
             this.ctx.body = {

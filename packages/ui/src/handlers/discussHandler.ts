@@ -12,6 +12,16 @@ interface InfoProp {
     did: number;
 }
 
+interface RespondProp {
+    token: string;
+    did: number;
+    emoji: string;
+}
+
+interface FetchRespondProp {
+    did: number;
+}
+
 interface Response {
     status: 'success' | 'error';
     msg?: string;
@@ -30,6 +40,24 @@ interface CreateResponse extends Response {
     param?: string;
 }
 
+interface RespondResponse extends Response {
+    status: 'success' | 'error';
+    msg?: string;
+    type?: string;
+    param?: string;
+}
+
+interface FetchRespondResponse extends Response {
+    status: 'success' | 'error';
+    msg?: string;
+    responds?: {
+        emoji: string;
+        count: number;
+    }
+    type?: string;
+    param?: string;
+}
+
 export interface CommentSchema {
     cid: number;
     did: number;
@@ -43,6 +71,11 @@ export interface CommentSchema {
     authorAvatar: string;
 }
 
+interface RespondProps {
+    emoji: string;
+    count: number;
+}
+
 export interface DiscussSchema {
     did?: number;
     author: number;
@@ -52,7 +85,7 @@ export interface DiscussSchema {
     content: string;
     createdTime: number;
     lastModified: number;
-    responds: Record<string, Array<number>>;
+    // responds: Record<string, Array<number>>;
     deleted: boolean;
     official: boolean;
     officialNotice: string;
@@ -60,6 +93,7 @@ export interface DiscussSchema {
     authorAvatar: string;
     commentCount: number;
     comments: CommentSchema[];
+    parsedResponds: RespondProps[];
 }
 
 interface InfoResponse extends Response {
@@ -85,5 +119,15 @@ export async function handleCreate(discussData: CreateProp): Promise<CreateRespo
 
 export async function handleInfo(infoData: InfoProp): Promise<InfoResponse> {
     const data = await fetch('discuss', 'info', infoData);
+    return data;
+}
+
+export async function handleRespond(respondData: RespondProp): Promise<RespondResponse> {
+    const data = await fetch('discuss', 'respond', respondData);
+    return data;
+}
+
+export async function handleFetchResponds(fetchRespondData: FetchRespondProp): Promise<FetchRespondResponse> {
+    const data = await fetch('discuss', 'fetchResponds', fetchRespondData);
     return data;
 }
