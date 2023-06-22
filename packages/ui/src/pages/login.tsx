@@ -112,10 +112,10 @@ export default function LoginPage() {
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
     const largestScreen = useMediaQuery('(min-width: 700px)');
-
+    
     return (
-        <Container miw={rem(400)} w={!largestScreen ? '95%' : '30%'}>
-            <StandardCard pt={theme.spacing.xs}>
+        <Container miw={rem(400)} className='loginCard' >
+            <StandardCard pt={theme.spacing.xs} >
                 <Text size='lg' weight={700} c={standardTitleColor(theme)} mb='sm'>
                     {type}
                 </Text>
