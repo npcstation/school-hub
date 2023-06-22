@@ -166,6 +166,8 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
 
 let contentID = 0;
 
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Comment({ content, user, sendTime, reaction }: CommentProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
