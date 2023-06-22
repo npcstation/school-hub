@@ -18,6 +18,7 @@ import { notifications } from '@mantine/notifications';
 import { alarm } from '../styles/alarm';
 import moment from 'moment';
 import { Discuss } from '../components/discuss';
+import { InfoLoad } from '../components/load';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -99,18 +100,6 @@ export default function DiscussPage() {
 
     useEffect(() => {
         if (did === -1) {
-            // notifications.show({
-            //     title: '加载失败',
-            //     message: (
-            //         <>
-            //             <Text size='sm'>加载讨论失败，错误信息：帖子不存在</Text>
-            //         </>
-            //     ),
-            //     color: 'red',
-            //     icon: <IconX />,
-            //     withCloseButton: false,
-            //     styles: alarm('error'),
-            // });
             setLoaded(true);
             setStatus(false);
             setErrorMsg('帖子不存在');
@@ -124,18 +113,6 @@ export default function DiscussPage() {
                     setStatus(true);
                 }
             } else {
-                // notifications.show({
-                //     title: '加载失败',
-                //     message: (
-                //         <>
-                //             <Text size='sm'>加载讨论失败，错误信息：{response.type ? fetchDiscussError[response.type] : '后端未知错误'}</Text>
-                //         </>
-                //     ),
-                //     color: 'red',
-                //     icon: <IconX />,
-                //     withCloseButton: false,
-                //     styles: alarm(response.status),
-                // });
                 setLoaded(true);
                 setStatus(false);
                 setErrorMsg(response.type ? fetchDiscussError[response.type] || '后端未知错误' : '后端未知错误');
@@ -204,7 +181,11 @@ export default function DiscussPage() {
                         <StandardCard title='帖子详情'>加载讨论失败，错误信息：{errorMsg}</StandardCard>
                     )
                 ) : (
-                    <StandardCard title='帖子详情'>帖子正在加载中……</StandardCard>
+                    <Grid>
+                        <Grid.Col sm={12} xs={12} lg={8}>
+                            <InfoLoad waitingfor='Discuss Data' />
+                        </Grid.Col>
+                    </Grid>
                 )}
             </Container>
         </>

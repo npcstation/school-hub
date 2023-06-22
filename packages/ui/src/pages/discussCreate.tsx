@@ -46,9 +46,6 @@ export function DiscussCreatePage() {
                 </NoStyleCard>
                 <Space h={10}></Space>
                 <NoStyleCard>
-                    {/* <Text size='md' weight={700} c={standardTitleColor(theme)}>
-                        创建讨论
-                    </Text> */}
                     <form
                         onSubmit={createForm.onSubmit(async (data) => {
                             const response = await handleCreate({
@@ -56,9 +53,9 @@ export function DiscussCreatePage() {
                                 content: (contentVditor as Vditor).getValue(),
                                 token: localStorage.getItem('token') || '',
                             });
-                            if (!response.data || response.data?.did) {
-                                response.status === 'error';
-                            }
+                            // if (!response.data || response.data?.did) {
+                                // response.status === 'error';
+                            // }
                             notifications.show({
                                 title: response.status === 'success' ? '' : '发布失败',
                                 message: (

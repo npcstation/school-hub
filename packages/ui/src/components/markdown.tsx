@@ -14,10 +14,15 @@ export function MarkdownRender({ md, vid }: MarkdownRenderProp) {
         Vditor.preview(previewElement as HTMLDivElement, md, {
             // cdn: "",
             mode: 'light',
+            renderers: {
+
+            },
             theme: {
                 current: theme.colorScheme === 'dark' ? 'dark' : 'light',
             },
             after() {
+                const setItemEvent = new Event(`${vid}-render-done`);
+                window.dispatchEvent(setItemEvent);
                 window.addEventListener('changetheme', function() {
                     const nowtheme = localStorage.getItem('bgColor');
                     Vditor.setContentTheme(nowtheme === 'dark' ? 'dark' : 'light', 'https://unpkg.com/vditor@3.9.0/dist/css/content-theme/');
