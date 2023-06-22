@@ -294,9 +294,9 @@ export default function LoginPage() {
                     <form
                         onSubmit={loginForm.onSubmit(async (data) => {
                             const value = await handleLogin(data);
-                            if (!value.data || value.data?.token) {
-                                value.status === 'error';
-                            }
+                            // if (!value.data || value.data?.token) {
+                            //     value.status === 'error';
+                            // }
                             notifications.show({
                                 title: value.status === 'success' ? '' : '登录失败',
                                 message: (

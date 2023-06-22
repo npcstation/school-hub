@@ -17,6 +17,19 @@ em-emoji-picker {
     transition: all 0.1s ease-in-out;
 }
 
+.heimu:active, .heimu:hover {
+    color: #fff
+}
+
+.heimu {
+    padding-left: 1px;
+    padding-right: 1px;
+    background-color: #949191;
+    color: #949191;
+    text-shadow: none;
+    transition: color 0.4s;
+}
+
 .preview h1,
 .preview h2,
 .preview h3,
@@ -33,7 +46,7 @@ em-emoji-picker {
     text-underline-offset: -0.3rem;
     text-decoration-skip-ink: none; */
     background: linear-gradient(to bottom,transparent 60%,#66ccff30 0) no-repeat;
-    display: table;
+    display: inline-block;
 }
 
 @keyframes dynamics {

@@ -7,15 +7,26 @@ interface MarkdownRenderProp {
     vid: string;
 }
 
+export function MarkdownFirstChange(md: string) {
+    console.log(md.replaceAll(`\[heimu\](.*?)\[\/heimu\]`, `<div class='heimu'>$1</div>`));
+    return md.replaceAll(/\[heimu\](.*?)\[\/heimu\]/g, `<span class='heimu'>$1</span>`);
+}
+
 export function MarkdownRender({ md, vid }: MarkdownRenderProp) {
     const theme = useMantineTheme();
     React.useEffect(() => {
         const previewElement = document.getElementById(vid);
-        Vditor.preview(previewElement as HTMLDivElement, md, {
+        Vditor.preview(previewElement as HTMLDivElement, MarkdownFirstChange(md), {
             // cdn: "",
             mode: 'light',
             renderers: {
-
+                renderHeading: (node, entering) => {
+                    if (entering) {
+                    return [`<h${node.__internal_object__.HeadingLevel}><span>`, Lute.WalkContinue];
+                    } else {
+                    return [`</span></h${node.__internal_object__.HeadingLevel}><div class='endheading'></div>`, Lute.WalkContinue];
+                    }
+                }
             },
             theme: {
                 current: theme.colorScheme === 'dark' ? 'dark' : 'light',
