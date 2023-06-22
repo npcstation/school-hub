@@ -126,7 +126,7 @@ export function perm(model: string, name: string) {
         descriptor.originalMethodPerm = descriptor.value;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         descriptor.value = async function run(args: any) {
-            let id = args?.id || 0;
+            let id = args?.id;
             if (id === 0) {
                 id = await token.stripId(args.token);
             } else {

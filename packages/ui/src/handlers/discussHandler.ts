@@ -108,6 +108,17 @@ export const createError: {
     [key: string]: string | undefined;
 } = {
     validation: '内容验证失败',
+    perm: '无操作权限',
+    unknown: '后端未知错误',
+    default: '',
+};
+
+export const fetchDiscussError: {
+    [key: string]: string | undefined;
+} = {
+    validation: '数据验证失败',
+    perm: '无浏览权限',
+    exist: '帖子不存在',
     unknown: '后端未知错误',
     default: '',
 };

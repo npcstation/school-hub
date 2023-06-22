@@ -12,7 +12,7 @@ import { VditorProvider, VditorThemeChangeProvider } from '../components/editor'
 import Vditor from 'vditor';
 // import { BlockSuitEditor } from '../components/editor';
 import { IconHeading } from '@tabler/icons-react';
-import { DiscussSchema, handleInfo } from '../handlers/discussHandler';
+import { DiscussSchema, fetchDiscussError, handleInfo } from '../handlers/discussHandler';
 import { useParams } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 import { alarm } from '../styles/alarm';
@@ -90,43 +90,55 @@ export default function DiscussPage() {
         comments: [],
     });
 
+    const [loaded, setLoaded] = useState(false);
+    const [status, setStatus] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+
     const param = useParams();
     const did = parseInt(param.id || '-1', 10);
 
     useEffect(() => {
         if (did === -1) {
-            notifications.show({
-                title: '加载失败',
-                message: (
-                    <>
-                        <Text size='sm'>加载讨论失败，错误信息：Discuss id illegal.</Text>
-                    </>
-                ),
-                color: 'red',
-                icon: <IconX />,
-                withCloseButton: false,
-                styles: alarm('error'),
-            });
+            // notifications.show({
+            //     title: '加载失败',
+            //     message: (
+            //         <>
+            //             <Text size='sm'>加载讨论失败，错误信息：帖子不存在</Text>
+            //         </>
+            //     ),
+            //     color: 'red',
+            //     icon: <IconX />,
+            //     withCloseButton: false,
+            //     styles: alarm('error'),
+            // });
+            setLoaded(true);
+            setStatus(false);
+            setErrorMsg('帖子不存在');
             return;
         }
         handleInfo({ did }).then((response) => {
             if (response.status === 'success') {
                 if (response.data) {
                     setDiscuss(response.data);
+                    setLoaded(true);
+                    setStatus(true);
                 }
             } else {
-                notifications.show({
-                    title: '加载失败',
-                    message: (
-                        <>
-                            <Text size='sm'>加载讨论失败，错误信息：{response.type}</Text>
-                        </>
-                    ),
-                    color: 'red',
-                    icon: <IconX />,
-                    withCloseButton: false,
-                    styles: alarm(response.status),
-                });
+                // notifications.show({
+                //     title: '加载失败',
+                //     message: (
+                //         <>
+                //             <Text size='sm'>加载讨论失败，错误信息：{response.type ? fetchDiscussError[response.type] : '后端未知错误'}</Text>
+                //         </>
+                //     ),
+                //     color: 'red',
+                //     icon: <IconX />,
+                //     withCloseButton: false,
+                //     styles: alarm(response.status),
+                // });
+                setLoaded(true);
+                setStatus(false);
+                setErrorMsg(response.type ? fetchDiscussError[response.type] || '后端未知错误' : '后端未知错误');
             }
         });
     }, [did]);
@@ -134,58 +146,66 @@ export default function DiscussPage() {
     return (
         <>
             <Container>
-                <Grid>
-                    <Grid.Col sm={12} xs={12} lg={8}>
-                        <div style={{ display: 'none' }}>
-                            {/*预加载*/}
-                            <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
-                        </div>
-                        <Discuss
-                            DiscussId={did}
-                            Header={{
-                                enable: discuss.official,
-                                title: '已认证的官方消息',
-                                description: discuss.officialNotice,
-                                icon: <IconDiscountCheck />,
-                                color: theme.colors.green[8],
-                            }}
-                            Comments={discuss.comments.map((comment) => {
-                                return {
-                                    content: comment.content,
-                                    user: {
-                                        uid: comment.authorId,
-                                        name: comment.authorName,
-                                        gravatar: comment.authorAvatar,
-                                    },
-                                    sendTime: comment.createdTime,
-                                    id: comment.cid,
-                                    reaction: Object.entries(comment.responds).map(([k, v]) => ({
-                                        code: k,
-                                        count: v.length,
-                                    })),
-                                };
-                            })}
-                            pageNumber={discuss.commentCount / 10 + 1}
-                            nowPage={1}
-                            Content={{
-                                title: discuss.title,
-                                content: discuss.content,
-                                user: {
-                                    uid: discuss.author,
-                                    name: discuss.authorName,
-                                    gravatar: discuss.authorAvatar,
-                                },
-                                sendTime: discuss.createdTime,
-                                reaction: discuss.parsedResponds.map((v) => {
-                                    return {
-                                        code: v.emoji,
-                                        count: v.count,
-                                    };
-                                }),
-                            }}
-                        ></Discuss>
-                    </Grid.Col>
-                </Grid>
+                {loaded ? (
+                    status ? (
+                        <Grid>
+                            <Grid.Col sm={12} xs={12} lg={8}>
+                                <div style={{ display: 'none' }}>
+                                    {/*预加载*/}
+                                    <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
+                                </div>
+                                <Discuss
+                                    DiscussId={did}
+                                    Header={{
+                                        enable: discuss.official,
+                                        title: '已认证的官方消息',
+                                        description: discuss.officialNotice,
+                                        icon: <IconDiscountCheck />,
+                                        color: theme.colors.green[8],
+                                    }}
+                                    Comments={discuss.comments.map((comment) => {
+                                        return {
+                                            content: comment.content,
+                                            user: {
+                                                uid: comment.authorId,
+                                                name: comment.authorName,
+                                                gravatar: comment.authorAvatar,
+                                            },
+                                            sendTime: comment.createdTime,
+                                            id: comment.cid,
+                                            reaction: Object.entries(comment.responds).map(([k, v]) => ({
+                                                code: k,
+                                                count: v.length,
+                                            })),
+                                        };
+                                    })}
+                                    pageNumber={discuss.commentCount / 10 + 1}
+                                    nowPage={1}
+                                    Content={{
+                                        title: discuss.title,
+                                        content: discuss.content,
+                                        user: {
+                                            uid: discuss.author,
+                                            name: discuss.authorName,
+                                            gravatar: discuss.authorAvatar,
+                                        },
+                                        sendTime: discuss.createdTime,
+                                        reaction: discuss.parsedResponds.map((v) => {
+                                            return {
+                                                code: v.emoji,
+                                                count: v.count,
+                                            };
+                                        }),
+                                    }}
+                                ></Discuss>
+                            </Grid.Col>
+                        </Grid>
+                    ) : (
+                        <StandardCard title='帖子详情'>加载讨论失败，错误信息：{errorMsg}</StandardCard>
+                    )
+                ) : (
+                    <StandardCard title='帖子详情'>帖子正在加载中……</StandardCard>
+                )}
             </Container>
         </>
     );
