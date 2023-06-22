@@ -73,7 +73,7 @@ function BadgeShow({ id }: { id: string }) {
 export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
-    let tid = (++contentID).toString();
+    const tid = (++contentID).toString();
     const [markdownLoaded, setMarkdownLoaded] = useState(false);
     useEffect(() => {
         function handleDone() {

@@ -8,8 +8,8 @@ interface MarkdownRenderProp {
 }
 
 export function MarkdownFirstChange(md: string) {
-    console.log(md.replaceAll(`\[heimu\](.*?)\[\/heimu\]`, `<div class='heimu'>$1</div>`));
-    return md.replaceAll(/\[heimu\](.*?)\[\/heimu\]/g, `<span class='heimu'>$1</span>`);
+    // eslint-disable-next-line
+    return md.replaceAll(/\[heimu\](.*?)\[\/heimu\]/g, "<span class='heimu'>$1</span>");
 }
 
 export function MarkdownRender({ md, vid }: MarkdownRenderProp) {

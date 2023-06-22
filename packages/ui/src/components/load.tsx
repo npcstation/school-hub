@@ -1,6 +1,6 @@
-import { Center, Text } from "@mantine/core";
-import { NoStyleCard } from "./card";
-
+import { Center, Text } from '@mantine/core';
+import { NoStyleCard } from './card';
+import React from 'react';
 
 interface InfoLoadProp {
     waitingfor: string;
