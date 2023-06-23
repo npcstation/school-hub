@@ -73,10 +73,12 @@ function BadgeShow({ id }: { id: string }) {
 export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
-    const tid = (++contentID).toString();
+    const [tid, setTid] = useState((++contentID).toString());
     const [markdownLoaded, setMarkdownLoaded] = useState(false);
     useEffect(() => {
         function handleDone() {
+            setTid(tid);
+            document.getElementById(tid)?.classList.remove('vditor-reset');
             setMarkdownLoaded(true);
         }
         window.addEventListener(`${tid}-render-done`, handleDone);
@@ -165,7 +167,7 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                                 radius='xl'
                                 leftSection={
                                     <div style={{position: 'relative', marginLeft: '-10px'}}>
-                                        <BadgeShow id='white_check_mark' />
+                                        <BadgeShow id='grinning' />
                                     </div>
                                 }
                             >

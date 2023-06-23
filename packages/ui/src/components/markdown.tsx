@@ -38,7 +38,7 @@ export function MarkdownRender({ md, vid }: MarkdownRenderProp) {
                     const nowtheme = localStorage.getItem('bgColor');
                     Vditor.setContentTheme(nowtheme === 'dark' ? 'dark' : 'light', 'https://unpkg.com/vditor@3.9.0/dist/css/content-theme/');
                 });
-            },
+            }
         });
     }, [md]);
     return (
