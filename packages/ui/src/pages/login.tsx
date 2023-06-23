@@ -111,7 +111,7 @@ export default function LoginPage() {
     const minBirthYear = currDate.getFullYear() - (currDate.getMonth() + 1 < 9 ? 18 : 17);
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
-    const largestScreen = useMediaQuery('(min-width: 700px)');
+    // const largestScreen = useMediaQuery('(min-width: 700px)');
     
     return (
         <Container miw={rem(400)} className='loginCard' >

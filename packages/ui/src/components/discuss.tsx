@@ -1,7 +1,7 @@
 import { UserSchema } from '../interfaces/user';
 import { NoStyleCard } from './card';
 import React, { useEffect, useState } from 'react';
-import { Alert, Avatar, Badge, Card, Center, Group, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
+import { Alert, Avatar, Badge, Card, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
