@@ -9,7 +9,7 @@ interface MarkdownRenderProp {
 
 export function MarkdownFirstChange(md: string) {
     // eslint-disable-next-line
-    return md.replaceAll(/\[heimu\](.*?)\[\/heimu\]/g, "<span class='heimu'>$1</span>");
+    return md.replaceAll(/\[heimu\](.*?)\[\/heimu\]/g, '<span class="heimu">$1</span>').replaceAll(/::(.*?)::/g, '<em-emoji set="twitter" class="iconInContent" id="$1"></em-emoji>');
 }
 
 export function MarkdownRender({ md, vid }: MarkdownRenderProp) {

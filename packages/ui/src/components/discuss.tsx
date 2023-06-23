@@ -1,7 +1,7 @@
 import { UserSchema } from '../interfaces/user';
 import { NoStyleCard } from './card';
 import React, { useEffect, useState } from 'react';
-import { Alert, Avatar, Badge, Card, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
+import { Alert, Avatar, Badge, Card, Center, Group, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
@@ -67,7 +67,7 @@ interface EmojiData {
 }
 
 function BadgeShow({ id }: { id: string }) {
-    return <em-emoji set='twitter' id={id} size='10px'></em-emoji>;
+    return <em-emoji set='twitter' class={'icons'} id={id} size='13px'></em-emoji>;
 }
 
 export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) {
@@ -144,34 +144,35 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                     <Text size={14.5}>{Content.content.length === 0 ? ' ' : <MarkdownRender md={Content.content} vid={tid} />}</Text>
                 </Card.Section>
                 <Card.Section withBorder p={6} pl={15}>
-                    <Text color='dimmed' fw={700} size={12.5}>
-                        举报 · &nbsp;
-                        <Popover radius='md' withinPortal width={350} withArrow shadow='md'>
-                            <Popover.Target>
-                                <span>Emoji</span>
-                            </Popover.Target>
-                            <Popover.Dropdown p={0}>
-                                <div>
-                                    <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={onEmojiSelected} />
-                                </div>
-                            </Popover.Dropdown>
-                        </Popover>
-                        &nbsp;·&nbsp;
-                        <Badge
-                            color='indigo'
-                            variant='outline'
-                            radius='xl'
-                            pr={0}
-                            rightSection={
-                                <Avatar size={24} color='indigo'>
-                                    18
-                                </Avatar>
-                            }
-                        >
-                            <BadgeShow id='+1' />
-                            &nbsp;
-                        </Badge>
-                    </Text>
+                    <div className='bottomBar'>
+                        <Text color='dimmed' fw={700} size={13}>
+                            举报 · &nbsp;
+                            <Popover radius='md' withinPortal width={350} withArrow shadow='md'>
+                                <Popover.Target>
+                                    <span>Emoji</span>
+                                </Popover.Target>
+                                <Popover.Dropdown p={0}>
+                                    <div>
+                                        <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} onEmojiSelect={onEmojiSelected} />
+                                    </div>
+                                </Popover.Dropdown>
+                            </Popover>
+                            &nbsp;·&nbsp;
+                            <Badge
+                                color='indigo'
+                                h={18}
+                                variant='light'
+                                radius='xl'
+                                leftSection={
+                                    <div style={{position: 'relative', marginLeft: '-10px'}}>
+                                        <BadgeShow id='white_check_mark' />
+                                    </div>
+                                }
+                            >
+                                233
+                            </Badge>
+                        </Text>
+                    </div>
                 </Card.Section>
             </NoStyleCard>
         </>
@@ -245,7 +246,7 @@ export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Cont
                     total={pageNumber}
                     defaultValue={nowPage}
                     size={'sm'}
-                    color='indigo'
+                    color='gray'
                     styles={(theme) => ({
                         control: {
                             '&[data-active]': {

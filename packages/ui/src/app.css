@@ -84,3 +84,18 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
         width: 70%;
     }
 }
+
+.icons {
+    display: block;
+    margin-top: -2.35px;
+    margin-left: 2px;
+}
+
+.bottomBar {
+    /* transform: translate(-50%,50%); */
+    justify-content: center;
+}
+
+.iconInContent {
+    margin-right: 1px;
+}

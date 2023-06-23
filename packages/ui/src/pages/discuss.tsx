@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({}));
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'em-emoji': { set: string; id: string; size: string };
+            'em-emoji': { set: string; id: string; size: string, class: string };
         }
     }
 }
