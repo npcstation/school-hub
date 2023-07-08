@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { UserSchema } from '../interfaces/user';
 import { NoStyleCard } from './card';
 import React, { useEffect, useState } from 'react';
-import { Alert, Avatar, Badge, Card, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
+import { Alert, Avatar, Card, Badge, Pagination, Popover, Space, Text, createStyles } from '@mantine/core';
 // import { BadgeShow } from './exbadge';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
@@ -9,6 +10,19 @@ import moment from 'moment';
 import { MarkdownRender } from './markdown';
 import { handleRespond } from '../handlers/discussHandler';
 import { InfoLoad } from './load';
+import { EmojiBadge } from './emojibadge';
+import { notifications } from '@mantine/notifications';
+import { IconX } from '@tabler/icons-react';
+import { alarm } from '../styles/alarm';
+import { useAsync } from 'react-use';
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'em-emoji': { set: string; native: string; size: string; class: string };
+        }
+    }
+}
 
 export interface CommentProps {
     content: string;
@@ -66,15 +80,16 @@ interface EmojiData {
     skin: number;
 }
 
-function BadgeShow({ id }: { id: string }) {
-    return <em-emoji set='twitter' class={'icons'} id={id} size='10px'></em-emoji>;
-}
+// function BadgeShow({ native }: { native: string }) {
+//     return <em-emoji set='twitter' class={'icons'} native={native} size='13px'></em-emoji>;
+// }
 
 export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { theme } = createStyles((theme) => ({}))();
     const [tid, setTid] = useState((++contentID).toString());
     const [markdownLoaded, setMarkdownLoaded] = useState(false);
+    const [responds, setResponds] = useState(Content.reaction);
     useEffect(() => {
         function handleDone() {
             setTid(tid);
@@ -100,19 +115,57 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
         <></>
     );
 
-    function onEmojiSelected(emoji: EmojiData) {
+    async function onEmojiSelected(emoji: EmojiData) {
         const token: string = localStorage.getItem('token') || '';
         // eslint-disable-next-line no-console
         console.log(emoji);
         if (token === '') {
             // TODO: Respond on logout state
+            notifications.show({
+                title: '未登录',
+                message: '请先登录再进行操作！',
+                color: 'red',
+                icon: <IconX />,
+                styles: alarm('error'),
+            });
             return;
         }
-        handleRespond({
+        const resp = await handleRespond({
             token,
             did: DiscussId,
             emoji: emoji.native,
         });
+        if (resp.status === 'success') {
+            setResponds([...responds, { code: emoji.native, count: 1 }]);
+        }
+    }
+
+    async function onExistingEmojiClicked(emoji: string) {
+        const token: string = localStorage.getItem('token') || '';
+        // eslint-disable-next-line no-console
+        console.log(emoji);
+        if (token === '') {
+            // TODO: Respond on logout state
+            notifications.show({
+                title: '未登录',
+                message: '请先登录再进行操作！',
+                color: 'red',
+                icon: <IconX />,
+                styles: alarm('error'),
+            });
+            return;
+        }
+        const resp = await handleRespond({
+            token,
+            did: DiscussId,
+            emoji: emoji,
+        });
+        if (resp.status === 'success') {
+            const incEmoji = responds.find((e) => e.code === emoji);
+            if (incEmoji) {
+                incEmoji.count++;
+            }
+        }
     }
 
     return (
@@ -168,10 +221,18 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                                     </div>
                                 </Popover.Dropdown>
                             </Popover>
-                            &nbsp;
-                            <Badge size='sm' color='indigo' variant='light' pr={5} pl={6} leftSection={<BadgeShow id='grinning' />}>
-                                12
-                            </Badge>
+                            &nbsp;·&nbsp;
+                            {responds.map((item) => {
+                                return (
+                                    <div key={item.code} style={{ marginLeft: '0.125rem', marginRight: '0.125rem', display: 'inline-flex' }}>
+                                        <EmojiBadge
+                                            native={item.code}
+                                            count={item.count}
+                                            onClick={() => onExistingEmojiClicked(item.code)}
+                                        ></EmojiBadge>
+                                    </div>
+                                );
+                            })}
                         </Text>
                     </div>
                 </Card.Section>
@@ -252,7 +313,8 @@ export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Cont
                         control: {
                             '&[data-active]': {
                                 border: 'none',
-                                background: theme.colorScheme === 'dark' ? theme.colors.gray[7] : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
+                                background:
+                                    theme.colorScheme === 'dark' ? theme.colors.gray[7] : 'linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);',
                                 color: theme.colorScheme === 'dark' ? 'white' : 'black',
                             },
                         },
