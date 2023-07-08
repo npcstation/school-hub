@@ -67,7 +67,7 @@ interface EmojiData {
 }
 
 function BadgeShow({ id }: { id: string }) {
-    return <em-emoji set='twitter' class={'icons'} id={id} size='13px'></em-emoji>;
+    return <em-emoji set='twitter' class={'icons'} id={id} size='10px'></em-emoji>;
 }
 
 export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) {
@@ -118,7 +118,7 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
     return (
         <>
             {markdownLoaded ? <></> : <InfoLoad waitingfor='Markdown Rendering' />}
-            <NoStyleCard pt={0} style={{ display: markdownLoaded ? '' : 'none' }}>
+            <NoStyleCard className='cardt' pt={0} style={{ display: markdownLoaded ? '' : 'none' }}>
                 {headerAlert}
                 <Card.Section
                     withBorder
@@ -145,13 +145,22 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                 <Card.Section p={15} pl={10}>
                     <Text size={14.5}>{Content.content.length === 0 ? ' ' : <MarkdownRender md={Content.content} vid={tid} />}</Text>
                 </Card.Section>
-                <Card.Section withBorder p={6} pl={15}>
+                <Card.Section withBorder p={7} pt={6} pl={10}>
                     <div className='bottomBar'>
                         <Text color='dimmed' fw={700} size={13}>
-                            举报 · &nbsp;
+                            <Badge size='sm' radius='xl' color='blue'>
+                                <span style={{ textTransform: 'none' }}>修改</span>
+                            </Badge>
+                            &nbsp;
+                            <Badge size='sm' radius='xl' color='red'>
+                                <span>举报</span>
+                            </Badge>
+                            &nbsp;
                             <Popover radius='md' withinPortal width={350} withArrow shadow='md'>
                                 <Popover.Target>
-                                    <span>Emoji</span>
+                                    <Badge size='sm' radius='xl' color='green'>
+                                        <span style={{ textTransform: 'none' }}>Emoji</span>
+                                    </Badge>
                                 </Popover.Target>
                                 <Popover.Dropdown p={0}>
                                     <div>
@@ -159,19 +168,9 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                                     </div>
                                 </Popover.Dropdown>
                             </Popover>
-                            &nbsp;·&nbsp;
-                            <Badge
-                                color='indigo'
-                                h={18}
-                                variant='light'
-                                radius='xl'
-                                leftSection={
-                                    <div style={{position: 'relative', marginLeft: '-10px'}}>
-                                        <BadgeShow id='grinning' />
-                                    </div>
-                                }
-                            >
-                                233
+                            &nbsp;
+                            <Badge size='sm' color='indigo' variant='light' pr={5} pl={6} leftSection={<BadgeShow id='grinning' />}>
+                                12
                             </Badge>
                         </Text>
                     </div>

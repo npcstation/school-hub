@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem } from '@mantine/core';
+import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem, Indicator, Modal, Select } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { NoStyleCard, StandardCard } from '../components/card';
 import { IconDiscountCheck, IconX } from '@tabler/icons-react';
@@ -19,6 +19,8 @@ import { alarm } from '../styles/alarm';
 import moment from 'moment';
 import { Discuss } from '../components/discuss';
 import { InfoLoad } from '../components/load';
+import { useDisclosure, useToggle } from '@mantine/hooks';
+import { standardSelect } from '../styles/select';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -126,7 +128,7 @@ export default function DiscussPage() {
                 {loaded ? (
                     status ? (
                         <Grid>
-                            <Grid.Col sm={12} xs={12} lg={8}>
+                            <Grid.Col xs={12} lg={8}>
                                 <div style={{ display: 'none' }}>
                                     {/*预加载*/}
                                     <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
@@ -175,6 +177,24 @@ export default function DiscussPage() {
                                         }),
                                     }}
                                 ></Discuss>
+
+                            </Grid.Col>
+                            <Grid.Col xs={12} lg={4}>
+                                <StandardCard title='讨论详情'>
+                                    <Group position='apart'>
+                                        <Text fw={700} size={13}>
+                                            回复
+                                        </Text>
+                                        <Text size={13}>{discuss.commentCount}</Text>
+                                    </Group>
+                                    <Group position='apart'>
+                                        <Text fw={700} size={13}>
+                                            讨论ID
+                                        </Text>
+                                        <Text size={13}>{did}</Text>
+                                    </Group>
+                                </StandardCard>
+                                <Space h={10}></Space>
                             </Grid.Col>
                         </Grid>
                     ) : (
