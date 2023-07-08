@@ -1,34 +1,18 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem } from '@mantine/core';
+import { createStyles, Avatar, Container, Grid } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
-import { NoStyleCard, StandardCard } from '../components/card';
-import { IconDiscountCheck, IconX } from '@tabler/icons-react';
+import { StandardCard } from '../components/card';
+import { IconDiscountCheck } from '@tabler/icons-react';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
-import { init } from 'emoji-mart';
-import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
-import Vditor from 'vditor';
 // import { BlockSuitEditor } from '../components/editor';
-import { IconHeading } from '@tabler/icons-react';
 import { DiscussSchema, fetchDiscussError, handleInfo } from '../handlers/discussHandler';
 import { useParams } from 'react-router-dom';
-import { notifications } from '@mantine/notifications';
-import { alarm } from '../styles/alarm';
-import moment from 'moment';
 import { Discuss } from '../components/discuss';
 import { InfoLoad } from '../components/load';
 
 const useStyles = createStyles((theme) => ({}));
-
-declare global {
-    namespace JSX {
-        interface IntrinsicElements {
-            'em-emoji': { set: string; id: string; size: string, class: string };
-        }
-    }
-}
 
 // class BadgeShow extends React.Component {
 //     componentDidMount() {
