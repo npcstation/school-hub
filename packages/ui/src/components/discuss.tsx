@@ -221,7 +221,7 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                                     </div>
                                 </Popover.Dropdown>
                             </Popover>
-                            &nbsp;·&nbsp;
+                            &nbsp;
                             {responds.map((item) => {
                                 return (
                                     <div key={item.code} style={{ marginLeft: '0.125rem', marginRight: '0.125rem', display: 'inline-flex' }}>
@@ -284,7 +284,7 @@ export function Comment({ content, user, sendTime, reaction }: CommentProps) {
                             </div>
                         </Popover.Dropdown>
                     </Popover>
-                    &nbsp;·&nbsp;
+                    &nbsp;
                 </Text>
             </Card.Section>
         </NoStyleCard>
