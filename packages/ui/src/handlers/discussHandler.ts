@@ -8,6 +8,12 @@ interface CreateProp {
     content: string;
 }
 
+interface CreateCommentProp {
+    token: string;
+    did: number;
+    content: string;
+}
+
 interface InfoProp {
     did: number;
 }
@@ -27,6 +33,16 @@ interface Response {
     msg?: string;
     type?: string;
     data?: unknown;
+    param?: string;
+}
+
+interface CreateComment extends Response {
+    status: 'success' | 'error';
+    msg?: string;
+    type?: string;
+    data?: {
+        did: number;
+    };
     param?: string;
 }
 
@@ -122,6 +138,11 @@ export const fetchDiscussError: {
     unknown: '后端未知错误',
     default: '',
 };
+
+export async function handleCreateComment(commentData: CreateCommentProp): Promise<CreateComment> {
+    const data = await fetch('discuss', 'createComment', commentData);
+    return data;
+}
 
 export async function handleCreate(discussData: CreateProp): Promise<CreateResponse> {
     const data = await fetch('discuss', 'create', discussData);

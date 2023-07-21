@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem, Indicator, Modal, Select } from '@mantine/core';
+import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem, Indicator, Modal, Select, Input } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { StandardCard } from '../components/card';
+import { NoStyleCard } from '../components/card';
+import { useForm } from '@mantine/form';
+import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
 import { IconDiscountCheck } from '@tabler/icons-react';
+import { handleCreateComment, createError } from '../handlers/discussHandler';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
@@ -13,6 +17,7 @@ import { Discuss } from '../components/discuss';
 import { InfoLoad } from '../components/load';
 import { useDisclosure, useToggle } from '@mantine/hooks';
 import { standardSelect } from '../styles/select';
+import Vditor from 'vditor';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -48,6 +53,7 @@ interface EmojiData {
 }
 
 export default function DiscussPage() {
+    const [contentVditor, setContentVditor] = useState({});
     function onEmojiSelected(emoji: EmojiData) {
         // TODO: Emoji Selection
         alert(emoji.native);
@@ -83,7 +89,11 @@ export default function DiscussPage() {
 
     const param = useParams();
     const did = parseInt(param.id || '-1', 10);
-
+    const createForm = useForm({
+        initialValues: {
+            did: did
+        },
+    });
     useEffect(() => {
         if (did === -1) {
             setLoaded(true);
@@ -161,7 +171,37 @@ export default function DiscussPage() {
                                         }),
                                     }}
                                 ></Discuss>
-
+                                <Space h={4} />
+                                <NoStyleCard>
+                                    <form
+                                        onSubmit={createForm.onSubmit(async (data) => {
+                                            const response = await handleCreateComment({
+                                                ...data,
+                                                content: (contentVditor as Vditor).getValue(),
+                                                token: localStorage.getItem('token') || '',
+                                            });
+                                            console.info('技术参数');
+                                            console.info(response);
+                                            console.info((contentVditor as Vditor).getValue());
+                                        })}
+                                    >
+                                        <Input.Wrapper
+                                            id='content'
+                                            description='*正文部分, 支持markdown语法'
+                                            required={true}
+                                            inputWrapperOrder={['input', 'description', 'label', 'error']}
+                                        >
+                                            <Space h={4} />
+                                            <VditorProvider fontLimit={3000} minHeight={300} id='create-vditor' setVd={setContentVditor} />
+                                            {<VditorThemeChangeProvider vditor={contentVditor as Vditor} />}
+                                        </Input.Wrapper>
+                                        <Space h={10} />
+                                        <Button className='shadowButton' type='submit' radius={'xl'}>
+                                            发表评论
+                                        </Button>
+                                    </form>
+                                </NoStyleCard>
+                                
                             </Grid.Col>
                             <Grid.Col xs={12} lg={4}>
                                 <StandardCard title='讨论详情'>
@@ -176,7 +216,7 @@ export default function DiscussPage() {
                                             讨论ID
                                         </Text>
                                         <Text size={13}>{did}</Text>
-                                    </Group>
+                                    </Group>                   
                                 </StandardCard>
                                 <Space h={10}></Space>
                             </Grid.Col>

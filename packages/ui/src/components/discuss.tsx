@@ -264,7 +264,7 @@ export function Comment({ content, user, sendTime, reaction }: CommentProps) {
                 </div>
                 <div>
                     <Text size={12.5} color='dimmed'>
-                        {user.name} · {sendTime /* 需要转化 */}
+                        {user.name} · {moment(sendTime * 1000).format('YYYY-MM-DD HH:mm:ss')}
                     </Text>
                     <Text size={14.5} pt={5} pb={5}>
                         <MarkdownRender md={content} vid={(++contentID).toString()} />
