@@ -67,6 +67,7 @@ export interface DiscussProp {
     pageNumber: number;
     nowPage: number;
     Comments: CommentProps[];
+    onPageChange: Function;
 }
 
 interface EmojiData {
@@ -291,17 +292,26 @@ export function Comment({ content, user, sendTime, reaction }: CommentProps) {
     );
 }
 
-export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Content }: DiscussProp) {
-    const comments = Comments.map((item) => (
-        <div key={item.id}>
-            <Comment id={item.id} content={item.content} reaction={item.reaction} user={item.user} sendTime={item.sendTime} />
-        </div>
-    ));
+export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Content, onPageChange }: DiscussProp) {
+    const getCommentComp = () => {
+        return Comments.map((item) => (
+            <div key={item.id}>
+                <Comment id={item.id} content={item.content} reaction={item.reaction} user={item.user} sendTime={item.sendTime} />
+            </div>
+        ));
+    }
+    const [comments,setComments] = useState(getCommentComp());
+    const handlePageChange = (value: number) => {
+        onPageChange(value);
+    }
+    useEffect(() => {
+        setComments(getCommentComp());
+    }, [Comments]);
     return (
         <>
             <DiscussContentCard DiscussId={DiscussId} Header={Header} Content={Content} />
             {comments}
-            <Space h={4}></Space>
+            <Space h={10}></Space>
             <NoStyleCard>
                 <Pagination
                     position='center'
@@ -309,6 +319,7 @@ export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Cont
                     defaultValue={nowPage}
                     size={'sm'}
                     color='gray'
+                    onChange={handlePageChange}
                     styles={(theme) => ({
                         control: {
                             '&[data-active]': {

@@ -16,6 +16,8 @@ interface CreateCommentProp {
 
 interface InfoProp {
     did: number;
+    limit: number;
+    page: number;
 }
 
 interface RespondProp {

@@ -94,6 +94,7 @@ export default function DiscussPage() {
             did: did
         },
     });
+    var [nowPage, setNowPage] = useState(1);
     useEffect(() => {
         if (did === -1) {
             setLoaded(true);
@@ -101,7 +102,7 @@ export default function DiscussPage() {
             setErrorMsg('帖子不存在');
             return;
         }
-        handleInfo({ did }).then((response) => {
+        handleInfo({ did: did, limit: 10,page: nowPage}).then((response) => {
             if (response.status === 'success') {
                 if (response.data) {
                     setDiscuss(response.data);
@@ -115,7 +116,18 @@ export default function DiscussPage() {
             }
         });
     }, [did]);
-
+    const getCommentWithPage = (value: number) => {
+        handleInfo({ did: did, limit: 10,page: value}).then((response) => {
+            if (response.status === 'success') {
+                if (response.data) {
+                    setNowPage(value);
+                    setDiscuss(response.data);
+                }
+            } else {
+                setErrorMsg(response.type ? fetchDiscussError[response.type] || '后端未知错误' : '后端未知错误');
+            }
+        });
+    }
     return (
         <>
             <Container>
@@ -152,8 +164,9 @@ export default function DiscussPage() {
                                             })),
                                         };
                                     })}
+                                    onPageChange={getCommentWithPage}
                                     pageNumber={discuss.commentCount / 10 + 1}
-                                    nowPage={1}
+                                    nowPage={nowPage}
                                     Content={{
                                         title: discuss.title,
                                         content: discuss.content,
@@ -171,7 +184,7 @@ export default function DiscussPage() {
                                         }),
                                     }}
                                 ></Discuss>
-                                <Space h={4} />
+                                <Space h={10} />
                                 <NoStyleCard>
                                     <form
                                         onSubmit={createForm.onSubmit(async (data) => {
@@ -182,7 +195,15 @@ export default function DiscussPage() {
                                             });
                                             console.info('技术参数');
                                             console.info(response);
-                                            console.info((contentVditor as Vditor).getValue());
+                                            handleInfo({ did: did, limit: 10, page: nowPage}).then((response) => {
+                                                if (response.status === 'success') {
+                                                    if (response.data) {
+                                                        setDiscuss(response.data);
+                                                    }
+                                                } else {
+                                                    setErrorMsg(response.type ? fetchDiscussError[response.type] || '后端未知错误' : '后端未知错误');
+                                                }
+                                            });
                                         })}
                                     >
                                         <Input.Wrapper

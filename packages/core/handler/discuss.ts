@@ -23,11 +23,13 @@ interface DiscussSchemaExtra {
 class DiscussHandler extends Handler {
     @perm('discuss', 'view')
     @param('did', DefaultType.Number)
-    async postInfo(did: string) {
+    @param('limit', DefaultType.Number)
+    @param('page', DefaultType.Number)
+    async postInfo(did: string, limit: string, page: string) {
         try {
             const discussData = await discuss.find(parseInt(did));
             const author = await user.getbyId(discussData.author);
-            const comments = await comment.listComments(parseInt(did));
+            const comments = await comment.listComments(parseInt(did), parseInt(limit), (parseInt(page) - 1) * parseInt(limit));
             const commentsWithName = await Promise.all(
                 comments.map(async (comment) => {
                     const author = await user.getbyId(comment.authorId);
