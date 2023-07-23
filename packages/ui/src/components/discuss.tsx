@@ -66,7 +66,7 @@ export interface DiscussProp {
     pageNumber: number;
     nowPage: number;
     Comments: CommentProps[];
-    onPageChange: Function;
+    onPageChange: (arg0: number) => void;
 }
 
 interface EmojiData {

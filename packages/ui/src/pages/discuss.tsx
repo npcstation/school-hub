@@ -96,7 +96,7 @@ export default function DiscussPage() {
             did: did
         },
     });
-    var [nowPage, setNowPage] = useState(1);
+    const [nowPage, setNowPage] = useState(1);
     useEffect(() => {
         if (did === -1) {
             setLoaded(true);
