@@ -30,7 +30,6 @@ global.Project = {
 
 Object.assign(global.Project, argv);
 
-
 if (argv.debug) {
     global.Project.env = 'dev';
     global.Project.loglevel = 'DEBUG';
@@ -85,14 +84,13 @@ async function run() {
             const Handler = await fs.readdirSync(path.join(global.Project.core, 'handler'));
             await RunAll(Handler, path.join(global.Project.core, 'handler'), 'handler');
         } else {
-            logger.info(`without prepare! do not use it in PROD.`);
+            logger.info('without prepare! do not use it in PROD.');
         }
-        argv.test ? await require(path.join(process.cwd(), global.Project.core, 'test', 'index.js')) : {};
-        // if (argv.test && argv.stopAfterTest) {
-        // 	process.exit(0);
-        // }
+        if (argv.test) {
+            await require(path.join(process.cwd(), global.Project.core, 'test', 'index.js')); 
+        }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 

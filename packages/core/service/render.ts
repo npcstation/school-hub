@@ -11,8 +11,9 @@ export async function RenderFromPage(datas = {}) {
         '<!--DEVSERVER-->',
         global.Project.env === 'prod'
             ? `
-        <link rel="stylesheet" href="/${manifest['index.css'].file}" />
-        <script type="module" src="/${manifest['index.html'].file}"></script>
+        <link rel="stylesheet" href="/${manifest['src/main.css'].file}" />
+        <link rel="stylesheet" href="/${manifest['src/main.tsx'].css[0]}" />
+        <script type="module" src="/${manifest['src/main.tsx'].file}"></script>
         <script>window.web = ${JSON.stringify(datas)}</script>
         `
             : `
@@ -35,6 +36,6 @@ export async function apply() {
     templateHTML['RenderHTML'] = (await fs.readFileSync(path.join(__dirname, '..', '..', 'ui', 'index.html'))).toString();
     if (global.Project.env === 'prod') {
         manifest = JSON.parse(await fs.readFileSync(path.join(__dirname, '..', '..', 'ui', 'dist', 'manifest.json')).toString());
-        console.log(manifest);
+        // console.log(manifest);
     }
 }

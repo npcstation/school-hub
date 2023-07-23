@@ -15,7 +15,8 @@
     "rules": {
         "quotes": [1, "single"],
         "no-tabs": 1,
-        "@typescript-eslint/type-annotation-spacing": "error"
+        "@typescript-eslint/type-annotation-spacing": "error",
+        "no-console": ["error", {"allow": ["warn", "error", "info"]}]
     },
     "settings": {
         "react": {

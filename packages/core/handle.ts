@@ -62,12 +62,22 @@ async function handle(ctx: KoaContext, Handler) {
                 await h[step](args);
             }
         }
-        ctx = h.ctx;
     } catch (err) {
-        ctx.body = JSON.stringify({
-            error: err,
-        });
-        ctx.response.status = 500;
+        if (['perm', 'validation'].includes(err?.errorType)) {
+            ctx.body = JSON.stringify({
+                status: 'error',
+                type: err?.errorType,
+                param: err?.errorParam
+            });
+            ctx.response.status = 200;
+        } else {
+            console.error(err);
+            ctx.body = JSON.stringify({
+                status: 'error',
+                error: err,
+            });
+            ctx.response.status = 500;
+        }
     }
 }
 

@@ -35,11 +35,9 @@ export function Feedback({ status, title, msg, links }: any) {
             style: string;
         }[]
     ).map((item) => (
-        <>
-            <a href={item.link}>
-                <Button mr={4} color={item.color || 'indigo'} variant={item.style || 'filled'}>{item.title}</Button>
-            </a>
-        </>
+        <a key={item.title} href={item.link}>
+            <Button mr={4} color={item.color || 'indigo'} variant={item.style || 'filled'}>{item.title}</Button>
+        </a>
     ));
     return (
         <Container>
@@ -62,6 +60,22 @@ export function Feedback({ status, title, msg, links }: any) {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     link as any
                 }
+            </StandardCard>
+        </Container>
+    );
+}
+
+
+export function ErrorShow({ errmsg, from }: any) {
+    const { classes, cx, theme } = useStyles();
+    return (
+        <Container>
+            <StandardCard title='Error'>
+                { errmsg }
+                发生意料之外的错误。<br />
+                错误处理来自{from === 'ui' ? '前端' : '后端'}。<br />
+                本页面请截图发给以下邮箱<br />
+                smallfang@rotriw.tech
             </StandardCard>
         </Container>
     );

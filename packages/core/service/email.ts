@@ -94,7 +94,8 @@ export class EmailService {
 }
 
 const from: string = global.Project.config?.email?.from || 'noreply';
-const urls: Map<string, SMTPConfig> = global.Project.config.smtp;
+const urls: Map<string, SMTPConfig> = global.Project.config?.smtp;
+
 
 export async function apply() {
     await emails.init();

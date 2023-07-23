@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MantineProvider, ColorScheme } from '@mantine/core';
+import { MantineProvider, ColorScheme, createEmotionCache } from '@mantine/core';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Root } from './structure/root';
 import HomePage from './pages/home';
@@ -8,11 +8,17 @@ import store from './store/store';
 import { Provider } from 'react-redux';
 import { Notifications } from '@mantine/notifications';
 import * as Direct from './interfaces/interface';
+import DiscussPage from './pages/discuss';
+import './app.css';
+import { DiscussCreatePage } from './pages/discussCreate';
+
+const myCache = createEmotionCache({ key: 'school-hub' });
 
 declare global {
     interface Window {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         web?: any;
+        nowPage: string;
     }
 }
 
@@ -41,12 +47,15 @@ function App() {
                 localStorage.setItem('colorScheme', 'light');
             }
         }
+        const setItemEvent = new Event('changeTheme');
+        window.dispatchEvent(setItemEvent);
     }
 
     return (
         <>
             <Provider store={store}>
                 <MantineProvider
+                    emotionCache={myCache}
                     withGlobalStyles
                     withNormalizeCSS
                     theme={{
@@ -63,10 +72,8 @@ function App() {
                 >
                     {window?.web?.type === 'back' ? (
                         <Root onThemeChange={onThemeChange} type='direct'>
-                            {
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                (Direct as any)[window?.web?.template](window?.web?.data)
-                            }
+                            {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            (Direct as any)[window?.web?.template](window?.web?.data)}
                         </Root>
                     ) : (
                         <>
@@ -76,6 +83,8 @@ function App() {
                                     <Route path='' element={<Root type='route' onThemeChange={onThemeChange} />}>
                                         <Route path='' element={<HomePage></HomePage>} />
                                         <Route path='login' element={<LoginPage></LoginPage>} />
+                                        <Route path='discuss/:id' element={<DiscussPage></DiscussPage>} />
+                                        <Route path='discuss/create' element={<DiscussCreatePage></DiscussCreatePage>} />
                                     </Route>
                                 </Routes>
                             </BrowserRouter>

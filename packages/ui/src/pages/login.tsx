@@ -1,6 +1,6 @@
 import { useToggle, upperFirst, useMediaQuery } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { handleLogin, handleRegister, loginError, registerError } from './loginHandler';
+import { handleLogin, handleRegister, loginError, registerError } from '../handlers/loginHandler';
 import { notifications } from '@mantine/notifications';
 import {
     TextInput,
@@ -111,11 +111,11 @@ export default function LoginPage() {
     const minBirthYear = currDate.getFullYear() - (currDate.getMonth() + 1 < 9 ? 18 : 17);
 
     const largeScreen = useMediaQuery('(min-width: 512px)');
-    const largestScreen = useMediaQuery('(min-width: 700px)');
-
+    // const largestScreen = useMediaQuery('(min-width: 700px)');
+    
     return (
-        <Container miw={rem(400)} w={!largestScreen ? '95%' : '30%'}>
-            <StandardCard pt={theme.spacing.xs}>
+        <Container miw={rem(400)} className='loginCard' >
+            <StandardCard pt={theme.spacing.xs} >
                 <Text size='lg' weight={700} c={standardTitleColor(theme)} mb='sm'>
                     {type}
                 </Text>
@@ -129,7 +129,8 @@ export default function LoginPage() {
                                     <>
                                         {value.status === 'success'
                                             ? '您的帐号已经准备就绪。即将跳转至登录界面。'
-                                            : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] || ''}`}
+                                            : `错误！${registerError[value.type || ''] || '未知错误'}${registerError[value.param || 'default'] ||
+                                                  ''}`}
                                         {value.status === 'error' ? <br /> : <></>}
                                         {value.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
                                     </>
@@ -140,8 +141,8 @@ export default function LoginPage() {
 
                                 styles: alarm(value.status),
                             });
-                            console.log('技术参数');
-                            console.log(value);
+                            console.info('技术参数');
+                            console.info(value);
                             if (value.status === 'success') {
                                 setTimeout(() => {
                                     if (window.web?.disableJump !== true) {
@@ -282,7 +283,7 @@ export default function LoginPage() {
 
                         <Group position='apart' mt='xl'>
                             <Anchor component='button' type='button' color='dimmed' onClick={() => toggle()} size='xs'>
-                                {type === '注册' ? '已经有账号了? 点这里登录' : '还没有账号吗? 点这里注册'}
+                                已经有账号了? 点这里登录
                             </Anchor>
                             <Button type='submit' radius='xl'>
                                 {upperFirst(type)}
@@ -293,6 +294,9 @@ export default function LoginPage() {
                     <form
                         onSubmit={loginForm.onSubmit(async (data) => {
                             const value = await handleLogin(data);
+                            // if (!value.data || value.data?.token) {
+                            //     value.status === 'error';
+                            // }
                             notifications.show({
                                 title: value.status === 'success' ? '' : '登录失败',
                                 message: (
@@ -309,8 +313,8 @@ export default function LoginPage() {
                                 withCloseButton: false,
                                 styles: alarm(value.status),
                             });
-                            console.log('技术参数');
-                            console.log(value);
+                            console.info('技术参数');
+                            console.info(value);
                             if (value.status === 'success') {
                                 setTimeout(() => {
                                     if (window.web?.disableJump !== true) {
@@ -324,6 +328,8 @@ export default function LoginPage() {
                                         });
                                     }
                                 }, 2000);
+
+                                localStorage.setItem('token', value.data?.token || '');
                             }
                         })}
                     >
@@ -337,7 +343,13 @@ export default function LoginPage() {
                                 {...loginForm.getInputProps('email')}
                             />
 
-                            <PasswordInput name='password' required label='密码' placeholder='您的密码（要保密！）' {...loginForm.getInputProps('password')} />
+                            <PasswordInput
+                                name='password'
+                                required
+                                label='密码'
+                                placeholder='您的密码（要保密！）'
+                                {...loginForm.getInputProps('password')}
+                            />
                         </Stack>
 
                         <Group position='apart' mt='xl'>

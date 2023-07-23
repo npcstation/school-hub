@@ -18,13 +18,25 @@ export class EmailType extends BasicType {
 }
 
 export class StringType extends BasicType {
+    lengthLimit: [number, number];
+    constructor(length: [number, number] = [-1, Infinity]) {
+        super()
+        this.lengthLimit = length;
+    }
     verify(data: any): boolean {
-        return typeof data === 'string';
+        return typeof data === 'string' ? data.length >= this.lengthLimit[0] && data.length <= this.lengthLimit[1] : false;
     }
 }
 export class NumberType extends BasicType {
     verify(data: any): boolean {
-        return typeof data === 'number';
+        const TypeOf = typeof data;
+        if (TypeOf !== 'string' && TypeOf !== 'number') {
+            return false;
+        }
+        if (TypeOf === 'number') {
+            return true;
+        }
+        return !isNaN(Number(data));
     }
 }
 export class BooleanType extends BasicType {
@@ -35,7 +47,6 @@ export class BooleanType extends BasicType {
 
 export class UserType extends BasicType {
     verify(data: any): boolean {
-        console.log(data);
         return (
             typeof data.username === 'string' &&
             typeof data.pwd === 'string' &&
@@ -45,6 +56,25 @@ export class UserType extends BasicType {
             typeof data.gravatarLink === 'string' &&
             typeof data.description === 'string'
         );
+    }
+}
+
+export class DiscussType extends BasicType {
+    verify(data: any): boolean {
+        return (
+            typeof data.author === 'string' &&
+            typeof data.topic === 'string' &&
+            typeof data.title === 'string' &&
+            typeof data.content === 'string' &&
+            typeof data.createdTime === 'number' &&
+            typeof data.lastModified === 'number'
+        );
+    }
+}
+
+export class AnyType extends BasicType {
+    verify(): boolean {
+        return true;
     }
 }
 
@@ -63,10 +93,13 @@ export function NumberLimitIn(...prop) {
     };
 }
 
+
 export const DefaultType = {
     Email: new EmailType(),
     Number: new NumberType(),
     String: new StringType(),
     Boolean: new BooleanType(),
     User: new UserType(),
+    Discuss: new DiscussType(),
+    Any: new AnyType(),
 };

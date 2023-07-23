@@ -1,9 +1,23 @@
-import { Button, Container, Flex, Footer, Group, Text, rem, useMantineTheme } from '@mantine/core';
+import { Button, Container, Flex, Footer, Group, Space, Text, rem, useMantineTheme } from '@mantine/core';
+import { useToggle } from '@mantine/hooks';
 import { IconBrandGithub, IconSun, IconMoon } from '@tabler/icons-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
     const theme = useMantineTheme();
+
+    const [displaysStyles, cgDisplaysStyles] = useToggle(['', 'none']);
+
+    useEffect(() => {
+        function changeFooter() {
+            cgDisplaysStyles();
+        }
+        window.addEventListener('changeFooter', changeFooter);
+
+        return () => {
+            window.removeEventListener('changeFooter', changeFooter);
+        };
+    }, []);
 
     return (
         <Footer
@@ -14,15 +28,18 @@ export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
                     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : 'white',
                 },
             }}
+            className='fts'
             fixed={false}
             height='auto'
             p='md'
+            style={{
+                display: displaysStyles,
+            }}
         >
             <Container>
                 <Flex justify='space-between' align='center' direction='row'>
                     <div>
-                        <Text size={21.5}>在线校园系统</Text>
-                        <Text>北京市八一学校 - NPC Station</Text>
+                        {/* <Text size={21.5}>开源</Text> */}
                         <Group spacing='xs' mt={rem('4px')} ml={rem('-2px')}>
                             <Button
                                 onClick={() => {
@@ -65,11 +82,17 @@ export function AppFooter({ onThemeChange }: { onThemeChange: () => void }) {
                                 size='xs'
                                 compact
                             >
-                                Change Theme
+                                Change Style
                             </Button>
                         </Group>
+                        <Space h={45}></Space>
+                        <Text color='dimmed' fw={800} size={12.5}>
+                            在线校园系统
+                        </Text>
+                        <Text color='dimmed' fw={800} size={10}>
+                            &copy; 北京市八一学校 - NPC Station - ver <span style={{ fontWeight: 500 }}>α</span>
+                        </Text>
                     </div>
-                    <Text>alpha</Text>
                 </Flex>
             </Container>
         </Footer>
