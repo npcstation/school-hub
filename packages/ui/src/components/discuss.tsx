@@ -14,7 +14,6 @@ import { EmojiBadge } from './emojibadge';
 import { notifications } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { alarm } from '../styles/alarm';
-import { useAsync } from 'react-use';
 
 declare global {
     namespace JSX {

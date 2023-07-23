@@ -5,7 +5,7 @@ import { StandardCard } from '../components/card';
 import { NoStyleCard } from '../components/card';
 import { useForm } from '@mantine/form';
 import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
-import { IconDiscountCheck } from '@tabler/icons-react';
+import { IconCheck, IconDiscountCheck, IconX } from '@tabler/icons-react';
 import { handleCreateComment, createError } from '../handlers/discussHandler';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
@@ -18,6 +18,8 @@ import { InfoLoad } from '../components/load';
 import { useDisclosure, useToggle } from '@mantine/hooks';
 import { standardSelect } from '../styles/select';
 import Vditor from 'vditor';
+import { notifications } from '@mantine/notifications';
+import { alarm } from '../styles/alarm';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -193,6 +195,22 @@ export default function DiscussPage() {
                                                 content: (contentVditor as Vditor).getValue(),
                                                 token: localStorage.getItem('token') || '',
                                             });
+                                            notifications.show({
+                                                title: response.status === 'success' ? '' : '评论失败',
+                                                message: (
+                                                    <>
+                                                        {response.status === 'success'
+                                                            ? '评论成功'
+                                                            : `错误！${createError[response.type || ''] || '未知错误'}${createError[response.param || 'default'] || ''}。`}
+                                                        {response.status === 'error' ? <br /> : <></>}
+                                                        {response.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
+                                                    </>
+                                                ),
+                                                color: response.status === 'error' ? 'red' : 'green',
+                                                icon: response.status === 'error' ? <IconX /> : <IconCheck />,
+                                                withCloseButton: false,
+                                                styles: alarm(response.status),
+                                            });
                                             console.info('技术参数');
                                             console.info(response);
                                             handleInfo({ did: did, limit: 10, page: nowPage}).then((response) => {
@@ -206,6 +224,7 @@ export default function DiscussPage() {
                                             });
                                         })}
                                     >
+                                        <Text size={15} fw={700}>发表评论</Text>
                                         <Input.Wrapper
                                             id='content'
                                             description='*正文部分, 支持markdown语法'
