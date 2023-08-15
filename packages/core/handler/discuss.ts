@@ -1,11 +1,11 @@
-import { perm } from '../declare/perm';
-import { DefaultType } from '../declare/type';
-import { Handler, Route } from '../handle';
-import { DiscussSchema, RespondProps, discuss } from '../model/discuss';
-import { param } from '../utils/decorate';
-import { token as tokenModel } from '../model/token';
-import { CommentSchema, comment } from '../model/comment';
-import { user } from '../model/user';
+import {perm} from '../declare/perm';
+import {DefaultType} from '../declare/type';
+import {Handler, Route} from '../handle';
+import {DiscussSchema, RespondProps, discuss} from '../model/discuss';
+import {param} from '../utils/decorate';
+import {token as tokenModel} from '../model/token';
+import {CommentSchema, comment} from '../model/comment';
+import {user} from '../model/user';
 
 interface CommentSchemaExtra {
     authorName: string;
@@ -225,6 +225,15 @@ class DiscussHandler extends Handler {
     @param('did', DefaultType.Number)
     @param('content', DefaultType.String)
     async postCreateComment(token: string, did: number, content: string) {
+        if (content.length > 1000 || content.length <= 10) {
+            this.ctx.body = {
+                status: 'error',
+                type: 'validation',
+                param: 'content',
+            };
+            return;
+        }
+
         try {
             const authorId = await tokenModel.stripId(token);
             const data = await comment.create({

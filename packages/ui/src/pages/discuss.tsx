@@ -19,26 +19,26 @@ import {
     Select,
     Input,
 } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
-import { StandardCard } from '../components/card';
-import { NoStyleCard } from '../components/card';
-import { useForm } from '@mantine/form';
-import { VditorProvider, VditorThemeChangeProvider } from '../components/editor';
-import { IconCheck, IconDiscountCheck, IconX } from '@tabler/icons-react';
-import { handleCreateComment, createError } from '../handlers/discussHandler';
+import React, {useEffect, useState} from 'react';
+import {StandardCard} from '../components/card';
+import {NoStyleCard} from '../components/card';
+import {useForm} from '@mantine/form';
+import {VditorProvider, VditorThemeChangeProvider} from '../components/editor';
+import {IconCheck, IconDiscountCheck, IconX} from '@tabler/icons-react';
+import {handleCreateComment, createError} from '../handlers/discussHandler';
 // import { noBorderAlarm } from '../styles/alarm';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import Picker from '@emoji-mart/react';
 // import { BlockSuitEditor } from '../components/editor';
-import { DiscussSchema, fetchDiscussError, handleInfo } from '../handlers/discussHandler';
-import { useParams } from 'react-router-dom';
-import { Discuss } from '../components/discuss';
-import { InfoLoad } from '../components/load';
-import { useDisclosure, useToggle } from '@mantine/hooks';
-import { standardSelect } from '../styles/select';
+import {DiscussSchema, fetchDiscussError, handleInfo} from '../handlers/discussHandler';
+import {useParams} from 'react-router-dom';
+import {Discuss} from '../components/discuss';
+import {InfoLoad} from '../components/load';
+import {useDisclosure, useToggle} from '@mantine/hooks';
+import {standardSelect} from '../styles/select';
 import Vditor from 'vditor';
-import { notifications } from '@mantine/notifications';
-import { alarm } from '../styles/alarm';
+import {notifications} from '@mantine/notifications';
+import {alarm} from '../styles/alarm';
 
 const useStyles = createStyles((theme) => ({}));
 
@@ -57,7 +57,7 @@ const useStyles = createStyles((theme) => ({}));
 // }
 
 const righticon = (
-    <Avatar size={24} color='indigo'>
+    <Avatar size={24} color="indigo">
         18
     </Avatar>
 );
@@ -75,12 +75,13 @@ interface EmojiData {
 
 export default function DiscussPage() {
     const [contentVditor, setContentVditor] = useState({});
+
     function onEmojiSelected(emoji: EmojiData) {
         // TODO: Emoji Selection
         alert(emoji.native);
     }
 
-    const { classes, cx, theme } = useStyles();
+    const {classes, cx, theme} = useStyles();
     const [opened, setOpened] = useState(false);
     // init({ data });
     const [replyVditor, setReplyVditor] = useState({});
@@ -123,7 +124,7 @@ export default function DiscussPage() {
             setErrorMsg('帖子不存在');
             return;
         }
-        handleInfo({ did: did, limit: 10, page: nowPage }).then((response) => {
+        handleInfo({did: did, limit: 10, page: nowPage}).then((response) => {
             if (response.status === 'success') {
                 if (response.data) {
                     setDiscuss(response.data);
@@ -138,7 +139,7 @@ export default function DiscussPage() {
         });
     }, [did]);
     const getCommentWithPage = (value: number) => {
-        handleInfo({ did: did, limit: 10, page: value }).then((response) => {
+        handleInfo({did: did, limit: 10, page: value}).then((response) => {
             if (response.status === 'success') {
                 if (response.data) {
                     setNowPage(value);
@@ -156,9 +157,9 @@ export default function DiscussPage() {
                     status ? (
                         <Grid>
                             <Grid.Col xs={12} lg={8}>
-                                <div style={{ display: 'none' }}>
+                                <div style={{display: 'none'}}>
                                     {/*预加载*/}
-                                    <Picker theme={theme.colorScheme} set={'twitter'} locale='zh' data={data} />
+                                    <Picker theme={theme.colorScheme} set={'twitter'} locale="zh" data={data}/>
                                 </div>
                                 <Discuss
                                     DiscussId={did}
@@ -166,7 +167,7 @@ export default function DiscussPage() {
                                         enable: discuss.official,
                                         title: '已认证的官方消息',
                                         description: discuss.officialNotice,
-                                        icon: <IconDiscountCheck />,
+                                        icon: <IconDiscountCheck/>,
                                         color: theme.colors.green[8],
                                     }}
                                     Comments={discuss.comments.map((comment) => {
@@ -206,13 +207,24 @@ export default function DiscussPage() {
                                         }),
                                     }}
                                 ></Discuss>
-                                <Space h={10} />
+                                <Space h={10}/>
                                 <NoStyleCard>
                                     <form
                                         onSubmit={createForm.onSubmit(async (data) => {
+                                            const content = (contentVditor as Vditor).getValue();
+                                            if (content.length <= 10 || content.length > 1000) {
+                                                notifications.show({
+                                                    title: '评论失败',
+                                                    message: '评论内容不能过短或过长',
+                                                    color: 'red',
+                                                    icon: <IconX/>,
+                                                    styles: alarm('error'),
+                                                });
+                                                return;
+                                            }
                                             const response = await handleCreateComment({
                                                 ...data,
-                                                content: (contentVditor as Vditor).getValue(),
+                                                content,
                                                 token: localStorage.getItem('token') || '',
                                             });
                                             notifications.show({
@@ -222,20 +234,20 @@ export default function DiscussPage() {
                                                         {response.status === 'success'
                                                             ? '评论成功'
                                                             : `错误！${createError[response.type || ''] || '未知错误'}${createError[
-                                                                  response.param || 'default'
-                                                              ] || ''}。`}
-                                                        {response.status === 'error' ? <br /> : <></>}
+                                                            response.param || 'default'
+                                                                ] || ''}。`}
+                                                        {response.status === 'error' ? <br/> : <></>}
                                                         {response.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
                                                     </>
                                                 ),
                                                 color: response.status === 'error' ? 'red' : 'green',
-                                                icon: response.status === 'error' ? <IconX /> : <IconCheck />,
+                                                icon: response.status === 'error' ? <IconX/> : <IconCheck/>,
                                                 withCloseButton: false,
                                                 styles: alarm(response.status),
                                             });
                                             console.info('技术参数');
                                             console.info(response);
-                                            handleInfo({ did: did, limit: 10, page: nowPage }).then((response) => {
+                                            handleInfo({did: did, limit: 10, page: nowPage}).then((response) => {
                                                 if (response.status === 'success') {
                                                     if (response.data) {
                                                         setDiscuss(response.data);
@@ -250,31 +262,32 @@ export default function DiscussPage() {
                                             发表评论
                                         </Text>
                                         <Input.Wrapper
-                                            id='content'
-                                            description='*正文部分, 支持markdown语法'
+                                            id="content"
+                                            description="*正文部分, 支持markdown语法"
                                             required={true}
                                             inputWrapperOrder={['input', 'description', 'label', 'error']}
                                         >
-                                            <Space h={4} />
-                                            <VditorProvider fontLimit={3000} minHeight={300} id='create-vditor' setVd={setContentVditor} />
-                                            {<VditorThemeChangeProvider vditor={contentVditor as Vditor} />}
+                                            <Space h={4}/>
+                                            <VditorProvider fontLimit={3000} minHeight={300} id="create-vditor"
+                                                            setVd={setContentVditor}/>
+                                            {<VditorThemeChangeProvider vditor={contentVditor as Vditor}/>}
                                         </Input.Wrapper>
-                                        <Space h={10} />
-                                        <Button className='shadowButton' type='submit' radius={'xl'}>
+                                        <Space h={10}/>
+                                        <Button className="shadowButton" type="submit" radius={'xl'}>
                                             发表评论
                                         </Button>
                                     </form>
                                 </NoStyleCard>
                             </Grid.Col>
                             <Grid.Col xs={12} lg={4}>
-                                <StandardCard title='讨论详情'>
-                                    <Group position='apart'>
+                                <StandardCard title="讨论详情">
+                                    <Group position="apart">
                                         <Text fw={700} size={13}>
                                             回复
                                         </Text>
                                         <Text size={13}>{discuss.commentCount}</Text>
                                     </Group>
-                                    <Group position='apart'>
+                                    <Group position="apart">
                                         <Text fw={700} size={13}>
                                             讨论ID
                                         </Text>
@@ -285,12 +298,12 @@ export default function DiscussPage() {
                             </Grid.Col>
                         </Grid>
                     ) : (
-                        <StandardCard title='帖子详情'>加载讨论失败，错误信息：{errorMsg}</StandardCard>
+                        <StandardCard title="帖子详情">加载讨论失败，错误信息：{errorMsg}</StandardCard>
                     )
                 ) : (
                     <Grid>
                         <Grid.Col sm={12} xs={12} lg={8}>
-                            <InfoLoad waitingfor='Discuss Data' />
+                            <InfoLoad waitingfor="Discuss Data"/>
                         </Grid.Col>
                     </Grid>
                 )}
