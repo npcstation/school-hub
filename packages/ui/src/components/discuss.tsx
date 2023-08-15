@@ -8,7 +8,7 @@ import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data/sets/14/twitter.json';
 import moment from 'moment';
 import { MarkdownRender } from './markdown';
-import { handleRespond } from '../handlers/discussHandler';
+import { handleRespond, handleRevokeRespond } from '../handlers/discussHandler';
 import { InfoLoad } from './load';
 import { EmojiBadge } from './emojibadge';
 import { notifications } from '@mantine/notifications';
@@ -50,6 +50,7 @@ export interface ContentType {
     reaction: {
         code: string;
         count: number;
+        isSelected: boolean;
     }[];
 }
 
@@ -136,11 +137,13 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
             emoji: emoji.native,
         });
         if (resp.status === 'success') {
-            setResponds([...responds, { code: emoji.native, count: 1 }]);
+            setResponds([...responds, { code: emoji.native, count: 1, isSelected: true }]);
         }
     }
 
     async function onExistingEmojiClicked(emoji: string) {
+        const incEmoji = responds.find((e) => e.code === emoji);
+
         const token: string = localStorage.getItem('token') || '';
         // eslint-disable-next-line no-console
         console.log(emoji);
@@ -155,17 +158,46 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
             });
             return;
         }
-        const resp = await handleRespond({
-            token,
-            did: DiscussId,
-            emoji: emoji,
-        });
-        if (resp.status === 'success') {
-            const incEmoji = responds.find((e) => e.code === emoji);
+
+        if (incEmoji?.isSelected) {
+            const resp = await handleRevokeRespond({
+                token,
+                did: DiscussId,
+                emoji: emoji,
+            });
             if (incEmoji) {
-                incEmoji.count++;
+                incEmoji.count--;
+                incEmoji.isSelected = false;
+
+                if (incEmoji.count === 0) {
+                    setResponds(responds.filter((e) => e.code !== emoji));
+                }
+            }
+            if (resp.status !== 'success') {
+                notifications.show({
+                    title: '取消回应时发生错误',
+                    message: '请确认登录状态或重新刷新页面。',
+                    color: 'red',
+                    icon: <IconX />,
+                    styles: alarm('error'),
+                });
+            }
+        } else {
+            const resp = await handleRespond({
+                token,
+                did: DiscussId,
+                emoji: emoji,
+            });
+            if (resp.status === 'success') {
+                // const incEmoji = responds.find((e) => e.code === emoji);
+                if (incEmoji) {
+                    incEmoji.count++;
+                    incEmoji.isSelected = true;
+                }
             }
         }
+
+        setResponds([...responds]);
     }
 
     return (
@@ -228,6 +260,7 @@ export function DiscussContentCard({ DiscussId, Header, Content }: HeaderProps) 
                                         <EmojiBadge
                                             native={item.code}
                                             count={item.count}
+                                            isSelected={item.isSelected}
                                             onClick={() => onExistingEmojiClicked(item.code)}
                                         ></EmojiBadge>
                                     </div>
@@ -298,11 +331,11 @@ export function Discuss({ DiscussId, Header, Comments, pageNumber, nowPage, Cont
                 <Comment id={item.id} content={item.content} reaction={item.reaction} user={item.user} sendTime={item.sendTime} />
             </div>
         ));
-    }
-    const [comments,setComments] = useState(getCommentComp());
+    };
+    const [comments, setComments] = useState(getCommentComp());
     const handlePageChange = (value: number) => {
         onPageChange(value);
-    }
+    };
     useEffect(() => {
         setComments(getCommentComp());
     }, [Comments]);

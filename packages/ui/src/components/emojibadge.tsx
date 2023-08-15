@@ -4,15 +4,16 @@ import React from 'react';
 interface EmojiBadgeProp {
     native: string;
     count: number;
+    isSelected?: boolean;
     onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
-export function EmojiBadge({ native, count, onClick }: EmojiBadgeProp) {
+export function EmojiBadge({ native, count, isSelected, onClick }: EmojiBadgeProp) {
     return (
         <Badge
-            color='indigo'
+            color={isSelected ? 'blue' : 'indigo'}
             size='xs'
-            variant='light'
+            variant={isSelected ? 'filled' : 'light'}
             radius='xl'
             leftSection={
                 <div style={{ position: 'relative', marginLeft: '-0.25rem' }}>

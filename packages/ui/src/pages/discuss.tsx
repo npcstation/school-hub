@@ -1,5 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createStyles, Badge, Avatar, Popover, Button, Container, Space, Alert, Grid, Text, Card, Group, Pagination, rem, Indicator, Modal, Select, Input } from '@mantine/core';
+import {
+    createStyles,
+    Badge,
+    Avatar,
+    Popover,
+    Button,
+    Container,
+    Space,
+    Alert,
+    Grid,
+    Text,
+    Card,
+    Group,
+    Pagination,
+    rem,
+    Indicator,
+    Modal,
+    Select,
+    Input,
+} from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { StandardCard } from '../components/card';
 import { NoStyleCard } from '../components/card';
@@ -93,7 +112,7 @@ export default function DiscussPage() {
     const did = parseInt(param.id || '-1', 10);
     const createForm = useForm({
         initialValues: {
-            did: did
+            did: did,
         },
     });
     const [nowPage, setNowPage] = useState(1);
@@ -104,7 +123,7 @@ export default function DiscussPage() {
             setErrorMsg('帖子不存在');
             return;
         }
-        handleInfo({ did: did, limit: 10,page: nowPage}).then((response) => {
+        handleInfo({ did: did, limit: 10, page: nowPage }).then((response) => {
             if (response.status === 'success') {
                 if (response.data) {
                     setDiscuss(response.data);
@@ -119,7 +138,7 @@ export default function DiscussPage() {
         });
     }, [did]);
     const getCommentWithPage = (value: number) => {
-        handleInfo({ did: did, limit: 10,page: value}).then((response) => {
+        handleInfo({ did: did, limit: 10, page: value }).then((response) => {
             if (response.status === 'success') {
                 if (response.data) {
                     setNowPage(value);
@@ -129,7 +148,7 @@ export default function DiscussPage() {
                 setErrorMsg(response.type ? fetchDiscussError[response.type] || '后端未知错误' : '后端未知错误');
             }
         });
-    }
+    };
     return (
         <>
             <Container>
@@ -182,6 +201,7 @@ export default function DiscussPage() {
                                             return {
                                                 code: v.emoji,
                                                 count: v.count,
+                                                isSelected: v.isSelected,
                                             };
                                         }),
                                     }}
@@ -201,7 +221,9 @@ export default function DiscussPage() {
                                                     <>
                                                         {response.status === 'success'
                                                             ? '评论成功'
-                                                            : `错误！${createError[response.type || ''] || '未知错误'}${createError[response.param || 'default'] || ''}。`}
+                                                            : `错误！${createError[response.type || ''] || '未知错误'}${createError[
+                                                                  response.param || 'default'
+                                                              ] || ''}。`}
                                                         {response.status === 'error' ? <br /> : <></>}
                                                         {response.status === 'error' ? '若您还需要知道更多信息请查看控制台。' : ''}
                                                     </>
@@ -213,7 +235,7 @@ export default function DiscussPage() {
                                             });
                                             console.info('技术参数');
                                             console.info(response);
-                                            handleInfo({ did: did, limit: 10, page: nowPage}).then((response) => {
+                                            handleInfo({ did: did, limit: 10, page: nowPage }).then((response) => {
                                                 if (response.status === 'success') {
                                                     if (response.data) {
                                                         setDiscuss(response.data);
@@ -224,7 +246,9 @@ export default function DiscussPage() {
                                             });
                                         })}
                                     >
-                                        <Text size={15} fw={700}>发表评论</Text>
+                                        <Text size={15} fw={700}>
+                                            发表评论
+                                        </Text>
                                         <Input.Wrapper
                                             id='content'
                                             description='*正文部分, 支持markdown语法'
@@ -241,7 +265,6 @@ export default function DiscussPage() {
                                         </Button>
                                     </form>
                                 </NoStyleCard>
-                                
                             </Grid.Col>
                             <Grid.Col xs={12} lg={4}>
                                 <StandardCard title='讨论详情'>
@@ -256,7 +279,7 @@ export default function DiscussPage() {
                                             讨论ID
                                         </Text>
                                         <Text size={13}>{did}</Text>
-                                    </Group>                   
+                                    </Group>
                                 </StandardCard>
                                 <Space h={10}></Space>
                             </Grid.Col>

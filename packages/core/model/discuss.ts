@@ -23,6 +23,7 @@ export class DiscussSchema {
 export class RespondProps {
     emoji: string;
     count: number;
+    isSelected: boolean;
 }
 
 type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
@@ -118,6 +119,37 @@ export class DiscussModel {
         return;
     }
 
+    async revokeRespondWithDiscussId(uid: number, did: number, emoji: string) {
+        if (!this.emojiCheck(emoji)) {
+            throw new ValidationError('emoji');
+        }
+        if ((await this.idExist(did)) === false) {
+            throw new NotFoundError('discuss', 'did');
+        }
+        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        if (data.deleted) {
+            throw new NotFoundError('discuss', 'did');
+        }
+        const users = data.responds[emoji] || [];
+        if (!users.includes(uid)) {
+            throw new NotFoundError('discuss', 'uid');
+        }
+        users.splice(users.indexOf(uid), 1);
+        if (users.length === 0) {
+            delete data.responds[emoji];
+        } else {
+            data.responds[emoji] = users;
+        }
+        await db.update(
+            'discuss',
+            {
+                did,
+            },
+            data
+        );
+        return;
+    }
+
     async info(did: number) {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
@@ -145,12 +177,16 @@ export class DiscussModel {
         return data;
     }
 
-    async getResponds(did: number) {
+    async getResponds(did: number, requestUser: number) {
         const data = (await db.getone('discuss', { did })) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
-        const responds: RespondProps[] = Object.entries(data.responds).map(([emoji, users]) => ({ emoji, count: users.length }));
+        const responds: RespondProps[] = Object.entries(data.responds).map(([emoji, users]) => ({
+            emoji,
+            count: users.length,
+            isSelected: users.includes(requestUser),
+        }));
         return responds;
     }
 

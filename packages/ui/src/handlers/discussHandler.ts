@@ -92,6 +92,7 @@ export interface CommentSchema {
 interface RespondProps {
     emoji: string;
     count: number;
+    isSelected: boolean;
 }
 
 export interface DiscussSchema {
@@ -160,6 +161,12 @@ export async function handleRespond(respondData: RespondProp): Promise<RespondRe
     const data = await fetch('discuss', 'respond', respondData);
     return data;
 }
+
+export async function handleRevokeRespond(respondData: RespondProp): Promise<RespondResponse> {
+    const data = await fetch('discuss', 'revokeRespond', respondData);
+    return data;
+}
+
 
 export async function handleFetchResponds(fetchRespondData: FetchRespondProp): Promise<FetchRespondResponse> {
     const data = await fetch('discuss', 'fetchResponds', fetchRespondData);

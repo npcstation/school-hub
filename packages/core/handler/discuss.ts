@@ -25,8 +25,11 @@ class DiscussHandler extends Handler {
     @param('did', DefaultType.Number)
     @param('limit', DefaultType.Number)
     @param('page', DefaultType.Number)
-    async postInfo(did: string, limit: string, page: string) {
+    @param('token', DefaultType.String)
+    async postInfo(did: string, limit: string, page: string, token: string) {
         try {
+            const requester = await tokenModel.stripId(token);
+
             const discussData = await discuss.find(parseInt(did));
             const author = await user.getbyId(discussData.author);
             const comments = await comment.listComments(parseInt(did), parseInt(limit), (parseInt(page) - 1) * parseInt(limit));
@@ -42,7 +45,7 @@ class DiscussHandler extends Handler {
                 })
             );
             const commentCount = await comment.commentCount(parseInt(did));
-            const respondData = await discuss.getResponds(parseInt(did));
+            const respondData = await discuss.getResponds(parseInt(did), requester);
             // remove omit => will show respond user in ui
             const data: Omit<DiscussSchema, 'responds'> & DiscussSchemaExtra = {
                 ...discussData,
@@ -67,9 +70,12 @@ class DiscussHandler extends Handler {
 
     @perm('discuss', 'view')
     @param('did', DefaultType.String)
-    async postFetchResponds(did: string) {
+    @param('token', DefaultType.String)
+    async postFetchResponds(did: string, token: string) {
         try {
-            const data = await discuss.getResponds(parseInt(did));
+            const requester = await tokenModel.stripId(token);
+
+            const data = await discuss.getResponds(parseInt(did), requester);
             this.ctx.body = {
                 status: 'success',
                 responds: data,
@@ -126,6 +132,26 @@ class DiscussHandler extends Handler {
         try {
             const author = await tokenModel.stripId(token);
             await discuss.respondWithDiscussId(author, did, emoji);
+            this.ctx.body = {
+                status: 'success',
+            };
+        } catch (err) {
+            this.ctx.body = {
+                status: 'error',
+                type: err?.errorType || 'unknown',
+                param: err?.errorParam || '',
+            };
+        }
+    }
+
+    @perm('discuss', 'view')
+    @param('token', DefaultType.String)
+    @param('did', DefaultType.Number)
+    @param('emoji', DefaultType.String)
+    async postRevokeRespond(token: string, did: number, emoji: string) {
+        try {
+            const author = await tokenModel.stripId(token);
+            await discuss.revokeRespondWithDiscussId(author, did, emoji);
             this.ctx.body = {
                 status: 'success',
             };
