@@ -257,8 +257,32 @@ class DiscussHandler extends Handler {
             };
         }
     }
+
+    @perm('discuss', 'view')
+    @param('limit', DefaultType.Number)
+    @param('page', DefaultType.Number)
+    @param('token', DefaultType.String)
+    async postHotDiscussList(limit: string, page: string, token: string) {
+        try {
+            const requester = await tokenModel.stripId(token);
+
+            const data = await discuss.getRecentHotDiscuss(parseInt(limit), parseInt(page));
+            this.ctx.body = {
+                status: 'success',
+                data,
+            };
+        } catch (err) {
+            this.ctx.body = {
+                status: 'error',
+                type: err?.errorType || 'unknown',
+                param: err?.errorParam || '',
+            };
+        }
+    }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export function apply() {
     Route('Discuss', '/discuss', DiscussHandler);
     Route('Discuss', '/discuss/:did', DiscussHandler);

@@ -112,7 +112,7 @@ class CommentModel {
     }
 
     emojiCheck(emoji: string): boolean {
-        const regex = /^\p{Extended_Pictographic}$/u;
+        const regex = /^\p{Emoji_Presentation}$/u;
         return regex.test(emoji);
     }
 

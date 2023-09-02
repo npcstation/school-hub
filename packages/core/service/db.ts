@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Filter, MongoClient, UpdateFilter } from 'mongodb';
+import {AggregateOptions, Filter, MongoClient, UpdateFilter} from 'mongodb';
 
 class dbClass {
     url: string;
@@ -74,6 +74,15 @@ class dbClass {
         const database = client.db(this.dbname);
         const coll = database.collection(model);
         const res = await coll.deleteMany(where, options)
+        client.close();
+        return res;
+    }
+
+    async aggregate(model: string, pipeline: object[], options: AggregateOptions = {}) {
+        const client = new MongoClient(this.url);
+        const database = client.db(this.dbname);
+        const coll = database.collection(model);
+        const res = await coll.aggregate(pipeline, options).toArray();
         client.close();
         return res;
     }

@@ -1,8 +1,8 @@
-import { isNull } from 'lodash';
-import { registerPerm } from '../declare/perm';
-import { db } from '../service/db';
-import { DuplicateError, NotFoundError, ValidationError } from '../declare/error';
-import { comment } from './comment';
+import {isNull} from 'lodash';
+import {registerPerm} from '../declare/perm';
+import {db} from '../service/db';
+import {DuplicateError, NotFoundError, ValidationError} from '../declare/error';
+import {comment} from './comment';
 
 export class DiscussSchema {
     did?: number;
@@ -30,16 +30,16 @@ type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
 
 export class DiscussModel {
     async genDId() {
-        const newID = (await db.getone('count', { type: 'discussId' }))?.count + 1 || 1;
+        const newID = (await db.getone('count', {type: 'discussId'}))?.count + 1 || 1;
         if (newID === 1) {
-            await db.insert('count', { type: 'discussId', count: newID });
+            await db.insert('count', {type: 'discussId', count: newID});
         }
-        await db.update('count', { type: 'discussId' }, { count: newID });
+        await db.update('count', {type: 'discussId'}, {count: newID});
         return newID;
     }
 
     async create(data: Omit<DiscussSchema, 'did'>) {
-        const { author, topic, tags, title, content, createdTime, lastModified, responds, deleted, official, officialNotice } = data;
+        const {author, topic, tags, title, content, createdTime, lastModified, responds, deleted, official, officialNotice} = data;
         const did = await this.genDId();
         await db.insert('discuss', {
             did,
@@ -88,7 +88,7 @@ export class DiscussModel {
     }
 
     emojiCheck(emoji: string): boolean {
-        const regex = /^\p{Extended_Pictographic}$/u;
+        const regex = /^\p{Emoji_Presentation}$/u;
         return regex.test(emoji);
     }
 
@@ -99,7 +99,7 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        const data = (await db.getone('discuss', {did})) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
@@ -126,7 +126,7 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        const data = (await db.getone('discuss', {did})) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
@@ -154,7 +154,7 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        const data = (await db.getone('discuss', {did})) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
@@ -168,7 +168,7 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = await db.getone('discuss', { did });
+        const data = await db.getone('discuss', {did});
         delete data._id;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
@@ -178,7 +178,7 @@ export class DiscussModel {
     }
 
     async getResponds(did: number, requestUser: number) {
-        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        const data = (await db.getone('discuss', {did})) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
@@ -194,7 +194,7 @@ export class DiscussModel {
         if ((await this.idExist(did)) === false) {
             throw new NotFoundError('discuss', 'did');
         }
-        const data = (await db.getone('discuss', { did })) as DiscussSchema;
+        const data = (await db.getone('discuss', {did})) as DiscussSchema;
         if (data.deleted) {
             throw new NotFoundError('discuss', 'did');
         }
@@ -209,6 +209,61 @@ export class DiscussModel {
         };
         await comment.create(commentData);
         return;
+    }
+
+    async getHotDiscuss(limit: number, page: number): Promise<any> {
+        const data = await db.aggregate('discuss', [
+            {$match: {deleted: false}},
+            {
+                $lookup: {
+                    from: 'comment', let: {did: '$did'}, pipeline: [
+                        {$match: {$expr: {$eq: ['$did', '$$did']}}},
+                        {$count: 'commentCount'},
+                    ], as: 'commentCount'
+                }
+            },
+            {$unwind: {path: '$commentCount', preserveNullAndEmptyArrays: true}},
+            {$addFields: {commentCount: {$ifNull: ['$commentCount.commentCount', 0]}}},
+            {$set: {commentCount: '$commentCount'}},
+            {$sort: {commentCount: -1, did: -1}},
+            {$unset: ['responds', 'deleted', '_id']},
+            {$skip: limit * (page - 1)},
+            {$limit: limit},
+        ],);
+        return data;
+    }
+
+    async getRecentHotDiscuss(limit: number, page: number): Promise<any> {
+        const data = await db.aggregate('discuss', [
+            {$match: {deleted: false}},
+            {
+                $lookup: {
+                    from: 'comment', let: {did: '$did'}, pipeline: [
+                        {$match: {$expr: {$eq: ['$did', '$$did']}}},
+                        {$count: 'commentCount'},
+                    ], as: 'commentCount'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'comment', let: {did: '$did'}, pipeline: [
+                        {$match: {$expr: {$and: [{$eq: ['$did', '$$did']}, {$gt: ['$createdTime', Date.now() / 1000 - 15 * 24 * 60 * 60]}]}}},
+                        {$count: 'recentCommentCount'},
+                    ], as: 'recentCommentCount'
+                }
+            },
+            {$unwind: {path: '$commentCount', preserveNullAndEmptyArrays: true}},
+            {$unwind: {path: '$recentCommentCount', preserveNullAndEmptyArrays: true}},
+            {$addFields: {commentCount: {$ifNull: ['$commentCount.commentCount', 0]}}},
+            {$addFields: {recentCommentCount: {$ifNull: ['$recentCommentCount.recentCommentCount', 0]}}},
+            {$set: {commentCount: '$commentCount'}},
+            {$set: {recentCommentCount: '$recentCommentCount'}},
+            {$sort: {recentCommentCount: -1, commentCount: -1, did: -1}},
+            {$unset: ['responds', 'deleted', '_id']},
+            {$skip: limit * (page - 1)},
+            {$limit: limit},
+        ],);
+        return data;
     }
 }
 
