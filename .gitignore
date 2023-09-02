@@ -25,3 +25,6 @@ dist-ssr
 
 config.json
 test*.ts
+
+# Tests
+*.http
