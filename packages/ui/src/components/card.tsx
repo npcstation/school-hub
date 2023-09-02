@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Card, Group, Text, useMantineTheme, createStyles, TextProps } from '@mantine/core';
 import React from 'react';
-import * as utils from '@mantine/utils';
 import { PaperProps } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({

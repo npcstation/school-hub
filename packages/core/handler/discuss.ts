@@ -261,10 +261,9 @@ class DiscussHandler extends Handler {
     @perm('discuss', 'view')
     @param('limit', DefaultType.Number)
     @param('page', DefaultType.Number)
-    @param('token', DefaultType.String)
-    async postHotDiscussList(limit: string, page: string, token: string) {
+    async postHotDiscussList(limit: string, page: string) {
         try {
-            const requester = await tokenModel.stripId(token);
+            // const requester = await tokenModel.stripId(token);
 
             const data = await discuss.getRecentHotDiscuss(parseInt(limit), parseInt(page));
             this.ctx.body = {

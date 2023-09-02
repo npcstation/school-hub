@@ -3,6 +3,7 @@ import {registerPerm} from '../declare/perm';
 import {db} from '../service/db';
 import {DuplicateError, NotFoundError, ValidationError} from '../declare/error';
 import {comment} from './comment';
+import {Document} from 'mongodb';
 
 export class DiscussSchema {
     did?: number;
@@ -211,8 +212,8 @@ export class DiscussModel {
         return;
     }
 
-    async getHotDiscuss(limit: number, page: number): Promise<any> {
-        const data = await db.aggregate('discuss', [
+    async getHotDiscuss(limit: number, page: number): Promise<Document[]> {
+        return await db.aggregate('discuss', [
             {$match: {deleted: false}},
             {
                 $lookup: {
@@ -230,11 +231,10 @@ export class DiscussModel {
             {$skip: limit * (page - 1)},
             {$limit: limit},
         ],);
-        return data;
     }
 
-    async getRecentHotDiscuss(limit: number, page: number): Promise<any> {
-        const data = await db.aggregate('discuss', [
+    async getRecentHotDiscuss(limit: number, page: number): Promise<Document[]> {
+        return await db.aggregate('discuss', [
             {$match: {deleted: false}},
             {
                 $lookup: {
@@ -263,7 +263,6 @@ export class DiscussModel {
             {$skip: limit * (page - 1)},
             {$limit: limit},
         ],);
-        return data;
     }
 }
 
