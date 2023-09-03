@@ -29,6 +29,10 @@ export class RespondProps {
 
 type DiscussUpdatedSchema = Omit<Partial<DiscussSchema>, 'did'>;
 
+export type DiscussListElementSchema = Omit<Omit<DiscussSchema, 'deleted'>, 'responds'> & {
+    recentCommentCount: number;
+};
+
 export class DiscussModel {
     async genDId() {
         const newID = (await db.getone('count', {type: 'discussId'}))?.count + 1 || 1;
@@ -233,8 +237,8 @@ export class DiscussModel {
         ],);
     }
 
-    async getRecentHotDiscuss(limit: number, page: number): Promise<Document[]> {
-        return await db.aggregate('discuss', [
+    async getRecentHotDiscuss(limit: number, page: number): Promise<DiscussListElementSchema[]> {
+         return await db.aggregate<DiscussListElementSchema>('discuss', [
             {$match: {deleted: false}},
             {
                 $lookup: {
@@ -263,6 +267,14 @@ export class DiscussModel {
             {$skip: limit * (page - 1)},
             {$limit: limit},
         ],);
+    }
+
+    async count(): Promise<number> {
+        const count = await db.aggregate<{count: number}>('discuss', [
+            {$match: {deleted: false}},
+            {$count: 'count'},
+        ],);
+        return count[0].count;
     }
 }
 

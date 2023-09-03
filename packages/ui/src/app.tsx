@@ -11,6 +11,7 @@ import * as Direct from './interfaces/interface';
 import DiscussPage from './pages/discuss';
 import './app.css';
 import { DiscussCreatePage } from './pages/discussCreate';
+import DiscussListPage from './pages/discussList';
 
 const myCache = createEmotionCache({ key: 'school-hub' });
 
@@ -83,6 +84,7 @@ function App() {
                                     <Route path='' element={<Root type='route' onThemeChange={onThemeChange} />}>
                                         <Route path='' element={<HomePage></HomePage>} />
                                         <Route path='login' element={<LoginPage></LoginPage>} />
+                                        <Route path='discuss' element={<DiscussListPage></DiscussListPage>} />
                                         <Route path='discuss/:id' element={<DiscussPage></DiscussPage>} />
                                         <Route path='discuss/create' element={<DiscussCreatePage></DiscussCreatePage>} />
                                     </Route>

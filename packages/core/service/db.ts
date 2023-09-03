@@ -78,11 +78,11 @@ class dbClass {
         return res;
     }
 
-    async aggregate(model: string, pipeline: object[], options: AggregateOptions = {}) {
+    async aggregate<T>(model: string, pipeline: object[], options: AggregateOptions = {}) {
         const client = new MongoClient(this.url);
         const database = client.db(this.dbname);
         const coll = database.collection(model);
-        const res = await coll.aggregate(pipeline, options).toArray();
+        const res = await coll.aggregate<T>(pipeline, options).toArray();
         client.close();
         return res;
     }

@@ -1,4 +1,4 @@
-import { fetch } from '../interfaces/data';
+import {fetch} from '../interfaces/data';
 
 interface CreateProp {
     token: string;
@@ -28,6 +28,12 @@ interface RespondProp {
 
 interface FetchRespondProp {
     did: number;
+}
+
+interface FetchDiscussListProp {
+    limit: number;
+    page: number;
+    token: string;
 }
 
 interface Response {
@@ -76,6 +82,15 @@ interface FetchRespondResponse extends Response {
     param?: string;
 }
 
+interface FetchDiscussListResponse extends Response {
+    status: 'success' | 'error';
+    msg?: string;
+    data?: DiscussListElementSchema[];
+    count?: number;
+    type?: string;
+    param?: string;
+}
+
 export interface CommentSchema {
     cid: number;
     did: number;
@@ -113,6 +128,23 @@ export interface DiscussSchema {
     commentCount: number;
     comments: CommentSchema[];
     parsedResponds: RespondProps[];
+}
+
+export interface DiscussListElementSchema {
+    did?: number;
+    author: number;
+    topic: string;
+    tags: Array<string>;
+    title: string;
+    content: string;
+    createdTime: number;
+    lastModified: number;
+    official: boolean;
+    officialNotice: string;
+    authorName: string;
+    authorAvatar: string;
+    commentCount: number;
+    recentCommentCount: number;
 }
 
 interface InfoResponse extends Response {
@@ -170,5 +202,10 @@ export async function handleRevokeRespond(respondData: RespondProp): Promise<Res
 
 export async function handleFetchResponds(fetchRespondData: FetchRespondProp): Promise<FetchRespondResponse> {
     const data = await fetch('discuss', 'fetchResponds', fetchRespondData);
+    return data;
+}
+
+export async function handleFetchDiscussList(fetchDiscussListData: FetchDiscussListProp): Promise<FetchDiscussListResponse> {
+    const data = await fetch('discuss', 'hotDiscussList', fetchDiscussListData);
     return data;
 }

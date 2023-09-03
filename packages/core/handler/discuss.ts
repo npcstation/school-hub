@@ -1,7 +1,7 @@
 import {perm} from '../declare/perm';
 import {DefaultType} from '../declare/type';
 import {Handler, Route} from '../handle';
-import {DiscussSchema, RespondProps, discuss} from '../model/discuss';
+import {DiscussSchema, RespondProps, discuss, DiscussListElementSchema} from '../model/discuss';
 import {param} from '../utils/decorate';
 import {token as tokenModel} from '../model/token';
 import {CommentSchema, comment} from '../model/comment';
@@ -263,12 +263,25 @@ class DiscussHandler extends Handler {
     @param('page', DefaultType.Number)
     async postHotDiscussList(limit: string, page: string) {
         try {
-            // const requester = await tokenModel.stripId(token);
+            const data: DiscussListElementSchema[] = await discuss.getRecentHotDiscuss(parseInt(limit), parseInt(page));
+            const respData: (DiscussListElementSchema & CommentSchemaExtra)[] = []
 
-            const data = await discuss.getRecentHotDiscuss(parseInt(limit), parseInt(page));
+            const count = await discuss.count();
+
+            for (const datum of data) {
+                const author = await user.getbyId(datum.author);
+                const respDatum: DiscussListElementSchema & CommentSchemaExtra = {
+                    ...datum,
+                    authorName: author.username,
+                    authorAvatar: author.gravatarLink,
+                };
+                respData.push(respDatum);
+            }
+
             this.ctx.body = {
                 status: 'success',
-                data,
+                count,
+                data: respData,
             };
         } catch (err) {
             this.ctx.body = {
